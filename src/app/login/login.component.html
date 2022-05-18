@@ -1,0 +1,238 @@
+<div *ngIf="paso==1">
+    <div class="grid">
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <label class="centrarTexto titulo">
+                INICIAR SESIÓN
+            </label>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12"></div>                        
+        
+        <div class="col-2 md:col-4 lg:col-4"></div>
+        <div class="col-8 md:col-4 lg:col-4">
+            <div class="grid">
+                <!-- NÚMERO DE IDENTIFICACIÓN -->
+                <div class="col-12">
+                    <label>Número de identificación</label>
+                </div>
+                <div class="col-12 centrar">
+                    <div class="p-inputgroup anchoInput">
+                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                        <p-inputNumber 
+                            class="centrarTextoInput "
+                            [(ngModel)]="numeroIdentificacion"
+                            [minFractionDigits]="0" [maxFractionDigits]="0"
+                            [useGrouping]="false"
+                            [maxlength]="10"  
+                            autocomplete="off"                      
+                        >
+                        </p-inputNumber>
+                    </div>
+                    
+                </div>
+        
+                <!-- CLAVE -->
+                <div class="col-12">
+                    <label>Clave</label>
+                </div>
+                <div class="col-12 centrar">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="password"></i></span>
+                        <input         
+                        type="password" 
+                        [(ngModel)]="clave"
+                        [maxlength]="10"
+                        class="anchoInput"
+                        autocomplete="off"
+                        pInputText />
+                    </div>                    
+                </div>
+
+                <div class="col-12">
+                    <button class="botonGuardar" label="Iniciar Sesión" type="submit" (click)="iniciarSesion()" pButton ></button>   
+                </div>
+
+            </div>
+        </div>
+        <div class="col-12 centrar">
+            <label class="subrayadoNegro" (click)="procesoRegistrar()">Registrarse</label>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+        <div class="col-12 md:col-12 lg:col-12"></div>
+    </div>
+</div>
+
+<div *ngIf="paso==2">
+    <form #formRegistro="ngForm" (ngSubmit)="registrar()">
+        <div class="grid">        
+            <div class="col-12 md:col-12 lg:col-12 centrar">
+                <label class="centrarTexto titulo">
+                    REGISTRO
+                </label>
+            </div>
+            <div class="col-2 md:col-1 lg:col-3"></div>
+            <div class="col-9 md:col-10 lg:col-6">
+                <div class="grid">                    
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <label for="float-input">Nombre</label>
+                                </div>
+                                <div class="col-12">
+                                    <span class="ui-float-label">
+                                        <input 
+                                            #inputnombre="ngModel"
+                                            name="inputnombre"
+                                            id="id-inputnombre"
+                                            class="anchoInput"
+                                            id="float-input" 
+                                            type="text" 
+                                            pInputText 
+                                            [(ngModel)]="nombre"
+                                            required
+                                            autocomplete="off">                         
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <label for="float-input">Apellido</label>
+                                </div>
+                                <div class="col-12">
+                                    <span class="ui-float-label">
+                                        <input 
+                                            #inputapellido="ngModel"
+                                            name="inputapellido"
+                                            id="id-inputapellido"
+                                            class="anchoInput" 
+                                            id="float-input" 
+                                            type="text" 
+                                            pInputText 
+                                            [(ngModel)]="apellido"
+                                            required
+                                            autocomplete="off"> 
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <label for="float-input">Número de identificación</label>
+                                </div>
+                                <div class="col-12">    
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>                
+                                        <p-inputNumber 
+                                            #inputNumeroIdentificacion="ngModel"
+                                            name="inputNumeroIdentificacion"
+                                            id="id-inputNumeroIdentificacion"
+                                            class="centrarTextoInput"
+                                            [(ngModel)]="numeroIdentificacionRegistro"
+                                            [minFractionDigits]="0" [maxFractionDigits]="0"
+                                            [useGrouping]="false"
+                                            [maxlength]="10"
+                                            [required]="true"
+                                            autocomplete="off"
+                                        >
+                                        </p-inputNumber>                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <label for="float-input">Seleccione una opción</label>
+                                </div>
+                                <div class="col-12">
+                                    <p-dropdown 
+                                        #inputSelectRol="ngModel"
+                                        name="inputSelectRol"
+                                        id="id-inputSelectRol"
+                                        [options]="rol" 
+                                        optionLabel="nombre" 
+                                        [(ngModel)]="rolRegistro"
+                                        class="anchoDropDown"
+                                        autocomplete="off"
+                                        >
+                                    </p-dropdown>                            
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <label for="float-input">Clave</label>
+                                </div>
+                                <div class="col-12">
+                                    <span class="ui-float-label">
+                                        <input 
+                                            #inputClave="ngModel"
+                                            name="inputClave"
+                                            id="id-inputClave"
+                                            class="anchoInput" 
+                                            id="float-input" 
+                                            type="password" 
+                                            pInputText 
+                                            [(ngModel)]="claveRegistro"
+                                            required
+                                            autocomplete="off">                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <label for="float-input">Confirmar</label>
+                                </div>
+                                <div class="col-12">
+                                    <span class="ui-float-label">
+                                        <input 
+                                            #inputConfirmacionClave="ngModel"
+                                            name="inputConfirmacionClave"
+                                            id="id-inputConfirmacionClave"
+                                            class="anchoInput" 
+                                            id="float-input" 
+                                            type="password" 
+                                            pInputText 
+                                            [(ngModel)]="claveConfirmarRegistro"
+                                            required
+                                            autocomplete="off">                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <button class="botonVolver" label="Volver" (click)="volver()" pButton type="button" ></button>
+                        </div>
+                        
+                        <div class="col-11 md:col-6 lg:col-6">     
+                            <button class="botonGuardar" label="Registrar" type="submit" [disabled]="formRegistro.invalid" pButton ></button>   
+                        </div>
+                    
+                </div>               
+
+            </div>
+        </div>
+    </form>
+</div>

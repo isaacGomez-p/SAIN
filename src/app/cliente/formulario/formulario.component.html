@@ -1,0 +1,56 @@
+<div class="grid">
+    <div class="col-1 md:col-1 lg:col-1"></div>
+    <div class="col-10 md:col-10 lg:col-10">
+        <p-table [value]="preguntas">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Pregunta</th>
+                    <th>Respuesta</th>                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-p>
+                <tr *ngIf="p.section == section">
+                    <td>{{p.descripcion}}</td>
+                    <td>
+                        <div *ngIf="p.tipo == 'text'">
+                            <textarea [rows]="p.height" pInputTextarea 
+                            [autoResize]=true 
+                            style="width: 100%;" 
+                            [(ngModel)]="p.answer"
+                            ></textarea>
+                        </div>
+                        <div *ngIf="p.tipo == 'number'" style="width: 100%;">
+                            <p-inputNumber  [(ngModel)]="p.answer" 
+                                class="centrarTextoInput"
+                                mode="decimal" 
+                                [minFractionDigits]="0" 
+                                [maxFractionDigits]="0"
+                                [useGrouping]="false"
+                                [maxlength]="10"  
+                                autocomplete="off" ></p-inputNumber>                           
+                        </div>
+                        <div *ngIf="p.tipo == 'moneda'" style="width: 100%;">
+                            <p-inputNumber  [(ngModel)]="p.answer" 
+                                class="centrarTextoInput"
+                                mode="currency" currency="COP" locale="es-CO"
+                                [minFractionDigits]="0" 
+                                [maxFractionDigits]="0"                                
+                                [maxlength]="12"  
+                                autocomplete="off" ></p-inputNumber>                           
+                        </div>
+                    </td>                    
+                </tr>
+            </ng-template>
+        </p-table>
+        
+    </div>
+    <div class="col-12 md:col-12 lg:col-12"></div>
+    <div class="col-1 md:col-6 lg:col-1"></div>
+    <div class="col-1 md:col-6 lg:col-5">
+        <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==1" class="botonSiguiente">Anterior</button>
+    </div>
+    <div class="col-10 md:col-6 lg:col-5">
+        <button mat-raised-button color="primary" (click)="siguiente()" class="botonSiguiente">Siguiente</button>
+        
+    </div>
+</div>
