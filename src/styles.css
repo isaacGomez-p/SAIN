@@ -6,10 +6,10 @@
     --colorLetraTitulo: white;
     --colorBotonVolver: gray;
     --colorFondoPagina: rgb(230, 230, 255);
-    --tamanoLetraHeader: 40px;
-    --tamanoLetraFooter: 50px;
+    --tamanoLetraHeader: 30px;
+    --tamanoLetraFooter: 30px;
     --tamanoLetraGrande: 45px;
-    --tamanoLetraPequena: 20px;
+    --tamanoLetraPequena: 15px;
 }
 
 body{
