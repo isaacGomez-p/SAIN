@@ -1,1 +1,155 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root{
+    --colorHeader: rgb(136, 60, 174);
+    --colorFooter: black;
+    --colorLetraTitulo: white;
+    --colorBotonVolver: gray;
+    --colorFondoPagina: rgb(230, 230, 255);
+    --tamanoLetraHeader: 40px;
+    --tamanoLetraFooter: 50px;
+    --tamanoLetraGrande: 45px;
+    --tamanoLetraPequena: 20px;
+}
+
+body{
+    width: 100%;   
+    height: 100%; 
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    font-size: 25px;
+    color: black;
+    overflow-x: hidden;
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html {
+    padding: 0;
+    height: 100%; 
+}
+.fondoPagina{  
+    background: linear-gradient(var(--colorFondoPagina), white);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -100;
+    left: 0px;
+    top: 0px;
+}
+.cuadroFondo{
+    background: white;
+    border-radius: 12px;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+}
+.cuadroHeader{
+    width: 100%;    
+    background: var(--colorHeader);
+}
+
+.cuadroFooter{
+    width: 100%;    
+    background: var(--colorFooter);
+    bottom: 0 !important;
+}
+
+.letraHeader{
+    color: var(--colorLetraTitulo);
+    font-size: var(--tamanoLetraHeader);
+}
+.letraPequena{
+    font-size: var(--tamanoLetraPequena);
+}
+.letraHeader:hover{
+    color: yellow;
+    cursor: pointer;
+}
+.letraFooter{
+    color: var(--colorLetraTitulo);
+    font-size: var(--tamanoLetraFooter);
+}
+
+.centrarTexto{
+    display: table;
+    margin: 0 auto;
+}
+
+.centrar{
+    margin: auto;
+    text-align: center;
+}
+
+.centrarTextoInput{
+    text-align: center;
+}
+
+.centrarTextoVertical{
+    align-self: center !important;
+}
+
+.ui-float-label>label {
+    color: blue;
+    font-size: 20px;
+}
+
+.ui-float-label {
+    display: block;
+    position: relative;
+
+}
+
+.anchoInput{
+    width: 100%;
+}
+
+.botonVolver{
+    width: 100%;
+    background-color: var(--colorBotonVolver) !important;
+    border-color: var(--colorBotonVolver) !important;
+}
+
+.botonGuardar{
+    width: 100%;
+    font-size: 18px ;
+}
+.anchoInputNumber{
+    display: grid;
+}
+.anchoDropDown{
+    display: grid;
+}
+.p-inputtext {    
+    background: white !important;        
+}
+.titulo{
+    font-size: var(--tamanoLetraGrande);    
+}
+.bordeInputDerecha{
+    border-right: 12px !important;
+}
+.subrayadoNegro{
+    text-decoration: underline black;
+}
+.subrayadoNegro:hover{
+    opacity: 70%;
+    cursor: pointer;
+}
+
+.imagenLogo{
+    align-self: center;
+    text-align: center;
+}
+.botonSiguiente{
+    width: 100%;
+    border-radius: 12px !important;
+}
+/*.p-inputnumber, .p-inputnumber {
+    display: grid !important;
+}*/
