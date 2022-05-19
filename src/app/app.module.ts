@@ -28,6 +28,9 @@ import { InicioComponent } from './inicio/inicio.component';
 import { LoginModule } from './login/login.module';
 import {TableModule} from 'primeng/table';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import { HttpClientModule } from '@angular/common/http';
+import { MenuPrincipalComponent } from './cliente/menu-principal/menu-principal.component';
+import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,9 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
     RevisionComponent,
     AsignacionComponent,
     VerificacionComponent,
-    InicioComponent
+    InicioComponent,
+    MenuPrincipalComponent,
+    HojaDeVidaComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +60,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
     MatButtonModule,
     LoginModule,
     TableModule,
-    InputTextareaModule
+    InputTextareaModule,
+    HttpClientModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

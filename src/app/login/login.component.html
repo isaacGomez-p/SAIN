@@ -22,17 +22,22 @@
                 <div class="col-12 centrar">
                     <div class="p-inputgroup anchoInput">
                         <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                        <p-inputNumber 
-                            class="centrarTextoInput "
-                            [(ngModel)]="numeroIdentificacion"
-                            [minFractionDigits]="0" [maxFractionDigits]="0"
-                            [useGrouping]="false"
-                            [maxlength]="10"  
-                            autocomplete="off"                      
-                        >
-                        </p-inputNumber>
-                    </div>
-                    
+                        <input  
+                            #inputLoginEmail="ngModel"
+                            name="inputLoginEmail"
+                            [class.in-invalid]="inputLoginEmail.invalid && inputLoginEmail.touched"
+                            [(ngModel)]="emailLogin"                            
+                            class="anchoInput"
+                            autocomplete="off"
+                            pattern="^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$"
+                            [maxlength]="30"
+                            pInputText
+                            required />
+                        <!--<div *ngIf="inputLoginEmail.errors && (inputLoginEmail.invalid || inputLoginEmail.touched)">
+                            <small [class.ocultar]="inputLoginEmail.errors && inputLoginEmail.errors.required"> Campo Requerido </small>
+                            <small [class.ocultar]="inputLoginEmail.errors && inputLoginEmail.errors.pattern"> Formato de correo incorrecto </small>                            
+                        </div>-->
+                    </div>                    
                 </div>
         
                 <!-- CLAVE -->
@@ -43,12 +48,12 @@
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="password"></i></span>
                         <input         
-                        type="password" 
-                        [(ngModel)]="clave"
-                        [maxlength]="10"
-                        class="anchoInput"
-                        autocomplete="off"
-                        pInputText />
+                            type="password" 
+                            [(ngModel)]="clave"
+                            [maxlength]="15"
+                            class="anchoInput"
+                            autocomplete="off"
+                            pInputText />
                     </div>                    
                 </div>
 
@@ -103,6 +108,7 @@
                                             type="text" 
                                             pInputText 
                                             [(ngModel)]="nombre"
+                                            [maxlength]="15"
                                             required
                                             autocomplete="off">                         
                                     </span>
@@ -124,6 +130,7 @@
                                             id="float-input" 
                                             type="text" 
                                             pInputText 
+                                            [maxlength]="15"
                                             [(ngModel)]="apellido"
                                             required
                                             autocomplete="off"> 
@@ -180,6 +187,27 @@
                         <div class="col-11 md:col-6 lg:col-6">
                             <div class="grid">
                                 <div class="col-12">
+                                    <label for="float-input">Correo Electrónico</label>
+                                </div>
+                                <div class="col-12">
+                                    <span class="ui-float-label">
+                                        <input                                             
+                                            name="inputCorreoElectronico"
+                                            id="id-inputCorreoElectronico"
+                                            class="anchoInput"                                                                                        
+                                            pattern="^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$"
+                                            pInputText 
+                                            [maxlength]="30"
+                                            [(ngModel)]="emailRegistro"
+                                            required
+                                            autocomplete="off">                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11 md:col-6 lg:col-6">
+                            <div class="grid">
+                                <div class="col-12">
                                     <label for="float-input">Clave</label>
                                 </div>
                                 <div class="col-12">
@@ -191,6 +219,7 @@
                                             class="anchoInput" 
                                             id="float-input" 
                                             type="password" 
+                                            [maxlength]="15"
                                             pInputText 
                                             [(ngModel)]="claveRegistro"
                                             required
@@ -214,6 +243,7 @@
                                             id="float-input" 
                                             type="password" 
                                             pInputText 
+                                            [maxlength]="15"
                                             [(ngModel)]="claveConfirmarRegistro"
                                             required
                                             autocomplete="off">                        
@@ -221,7 +251,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+                        <div class="col-12 md:col-12 lg:col-12"></div>
                         <div class="col-11 md:col-6 lg:col-6">
                             <button class="botonVolver" label="Volver" (click)="volver()" pButton type="button" ></button>
                         </div>
