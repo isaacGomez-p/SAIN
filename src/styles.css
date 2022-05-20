@@ -7,7 +7,7 @@
     --colorBotonVolver: gray;
     --colorFondoPagina: rgb(230, 230, 255);
     --tamanoLetraHeader: 30px;
-    --tamanoLetraFooter: 30px;
+    --tamanoLetraFooter: 20px;
     --tamanoLetraGrande: 45px;
     --tamanoLetraPequena: 15px;
 }
@@ -149,6 +149,14 @@ html {
 .botonSiguiente{
     width: 100%;
     border-radius: 12px !important;
+    padding-left: 30%;
+}
+#left {
+    width: 100%;
+  }
+  
+#right {
+    width: 100%;
 }
 /*.p-inputnumber, .p-inputnumber {
     display: grid !important;

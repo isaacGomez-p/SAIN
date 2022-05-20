@@ -10,10 +10,12 @@ import { HojaDeVidaService } from 'src/app/service/hoja-de-vida.service';
 })
 export class HojaDeVidaComponent implements OnInit {
 
+  cargando: boolean = false;
+
   hojasDeVida = [
     {
       id: 1,
-      description : "Eduf7",
+      description : "Eduardo Fierro",
       estado: 'Espera',
       user : {
           userId : 1
@@ -21,7 +23,7 @@ export class HojaDeVidaComponent implements OnInit {
     },
     {
       id: 2,
-      description : "Tinoco",
+      description : "Carlos Tinoco",
       estado: 'Espera',
       user : {
           userId : 2
@@ -33,10 +35,20 @@ export class HojaDeVidaComponent implements OnInit {
     private hojaDeVidaService: HojaDeVidaService) { }
 
   ngOnInit(): void {
+    window.localStorage.removeItem("idHV");
+    if(window.localStorage.getItem("hv") !== null){
+      this.hojasDeVida = JSON.parse(window.localStorage.getItem("hv")  || '{}');
+    }    
   }
 
   verHojaDeVida(id: number){
     this.hojaDeVidaService.guardarIdHojaDevida(id);
+    window.localStorage.setItem("idHV", id.toString());
+    this.router.navigate(["/formulario"], {skipLocationChange:true})
+  }
+
+  agregar(){
+    window.localStorage.setItem("hv", JSON.stringify(this.hojasDeVida));
     this.router.navigate(["/formulario"], {skipLocationChange:true})
   }
 
