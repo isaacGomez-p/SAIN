@@ -1,4 +1,5 @@
 import { QuestionsEntity } from "./questionsEntity";
+import { ResumeEntity } from "./resumeEntity";
 import { UserEntity } from "./userEntity";
 
 export class AnswerEntity{
@@ -7,7 +8,7 @@ export class AnswerEntity{
     description: string; //Respuesta
     verified: boolean;
     creationDate: Date;
-    user: UserEntity;
-    hojaDeVida: number;
+    userMod: UserEntity;
+    resumes: ResumeEntity;
     questions: QuestionsEntity;
 }

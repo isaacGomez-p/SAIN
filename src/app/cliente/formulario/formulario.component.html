@@ -80,9 +80,11 @@
         <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==1 || cargando" class="botonSiguiente">Anterior</button>
     </div>
     <div class="col-1 md:col-1 lg:col-1 sm:col-2"></div>
-    <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" >
-        <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>
-        
+    <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar"  >
+        <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
+    </div>
+    <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="registrar" >
+        <button mat-raised-button color="primary" (click)="registrarPreguntas()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
     </div>
     </div>
     

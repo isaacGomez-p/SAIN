@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Rol } from '../model/rol';
 import { UserEntity } from '../model/userEntity';
-import { GeneralService } from '../service/general.service';
-import { HojaDeVidaService } from '../service/hoja-de-vida.service';
+import { GeneralService } from '../service/general/general.service';
+import { HojaDeVidaService } from '../service/hojaDeVida/hoja-de-vida.service';
+
 
 @Component({
   selector: 'app-login',

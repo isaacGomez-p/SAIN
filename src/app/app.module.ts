@@ -18,6 +18,7 @@ import {CheckboxModule} from 'primeng/checkbox';
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
 
 //Components
 import { FormularioComponent } from './cliente/formulario/formulario.component';
@@ -31,6 +32,8 @@ import {TableModule} from 'primeng/table';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { HttpClientModule } from '@angular/common/http';
 import { MenuPrincipalComponent } from './cliente/menu-principal/menu-principal.component';
+import { CommonModule } from '@angular/common';
+import { HojaDeVidaModule } from './cliente/hoja-de-vida/hoja-de-vida.module';
 import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.component';
 
 @NgModule({
@@ -47,6 +50,7 @@ import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.compone
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     FormsModule,
     AppRoutingModule,
     InputNumberModule,
@@ -63,7 +67,8 @@ import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.compone
     TableModule,
     InputTextareaModule,
     HttpClientModule,
-    CheckboxModule
+    CheckboxModule,
+    MatDialogModule    
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

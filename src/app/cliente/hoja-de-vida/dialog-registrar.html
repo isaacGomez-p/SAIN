@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>Install Angular</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="grid">
+        <div class="col-11 md:col-11 lg:col-11">
+            <label for="float-input">Número de identificación</label>
+        </div>
+        <div class="col-11 md:col-11 lg:col-11">
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>                
+                <p-inputNumber 
+                    #inputNumeroIdentificacion="ngModel"
+                    name="inputNumeroIdentificacion"
+                    id="id-inputNumeroIdentificacion"
+                    class="centrarTextoInput"
+                    [(ngModel)]="numeroIdentificacionRegistro"
+                    [minFractionDigits]="0" [maxFractionDigits]="0"
+                    [useGrouping]="false"
+                    [maxlength]="10"
+                    [required]="true"
+                    autocomplete="off"
+                >
+                </p-inputNumber>                        
+            </div>
+        </div>
+        <div class="col-11 md:col-11 lg:col-11">
+            <label>Nombre</label>
+        </div>
+        <div class="col-11 md:col-11 lg:col-11">
+            <div class="p-inputgroup anchoInput">
+                <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                <input  
+                    #inputLoginEmail="ngModel"
+                    name="inputNombre"                
+                    [(ngModel)]="nombre"                            
+                    class="anchoInput"
+                    autocomplete="off"                
+                    [maxlength]="60"
+                    pInputText
+                    required />
+                <!--<div *ngIf="inputLoginEmail.errors && (inputLoginEmail.invalid || inputLoginEmail.touched)">
+                    <small [class.ocultar]="inputLoginEmail.errors && inputLoginEmail.errors.required"> Campo Requerido </small>
+                    <small [class.ocultar]="inputLoginEmail.errors && inputLoginEmail.errors.pattern"> Formato de correo incorrecto </small>                            
+                </div>-->
+            </div>                    
+        </div>
+
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="crear()" cdkFocusInitial>Crear</button>
+</mat-dialog-actions>

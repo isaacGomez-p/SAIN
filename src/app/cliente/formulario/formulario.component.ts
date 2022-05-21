@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { AnswerEntity } from 'src/app/model/answerEntity';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { UserEntity } from 'src/app/model/userEntity';
-import { HojaDeVidaService } from 'src/app/service/hoja-de-vida.service';
 import { RespuestaService } from 'src/app/service/respuesta/respuesta.service';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
+import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
 
 
 @Component({
@@ -20,7 +20,9 @@ export class FormularioComponent implements OnInit {
   btnText: string = "Siguiente";
   listaRespuestas: AnswerEntity[] = [];
   adding: number = 0;
-
+  
+  seccionMayor:number=0;
+  registrar: boolean = false;
   campo : string = "algo";
 //TODO perfil operativo
   preguntas = [
@@ -89,11 +91,12 @@ export class FormularioComponent implements OnInit {
   
   constructor(private respuestaService: RespuestaService,
     private hojaDeVidaService: HojaDeVidaService,
+    private answerService: RespuestaService,
     private router: Router
     ) { }
 
   ngOnInit(): void {
-   
+   console.log(this.hojaDeVidaService.obtenerIdHojaDeVida())
     this.cargarDatosHojaDeVida();
     if(window.localStorage.getItem("idHV") !== null){
       this.adding = Number(JSON.parse(window.localStorage.getItem("idHV") || '0'));
@@ -125,6 +128,15 @@ export class FormularioComponent implements OnInit {
     }
   }
 
+  cargarDatoUltimaSeccion(){
+    this.preguntas.map((item)=>{
+      if(item.section>=this.seccionMayor){
+        this.seccionMayor = item.section;
+      }
+    })
+    this.seccionMayor;
+  }
+
   cargarDatosHojaDeVida(){
     /*this.respuestaService.get(1).subscribe(data=>{
       if(data.status === 200){
@@ -153,11 +165,14 @@ export class FormularioComponent implements OnInit {
           question.resultado = item.resultado;
           respuesta.questions = question;
           question.date = new Date();
-          respuesta.hojaDeVida = this.hojaDeVidaService.obtenerIdHojaDeVida();
+          let hojaDeVida = new ResumeEntity();
+          hojaDeVida.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
+          respuesta.resumes = hojaDeVida;
           let user = new UserEntity();
           user.userId = this.hojaDeVidaService.obtenerIdUser();
-          respuesta.user = user;
+          respuesta.userMod = user;
           respuesta.verified = false;
+          respuesta.creationDate = new Date();
           console.log(respuesta)        
           //his.listaRespuestas.push(respuesta);       
           if(window.localStorage.getItem("lis") === null){
@@ -167,6 +182,11 @@ export class FormularioComponent implements OnInit {
             this.listaRespuestas.push(respuesta);         
             window.localStorage.setItem("lis", JSON.stringify(this.listaRespuestas));   
           }
+          console.log("______________")
+          this.answerService.save(respuesta).subscribe((data)=>{
+            console.log(data)
+          })
+          console.log("______________")
                       /*let nuevo = {
               id: 3,
               description : "Maria Prieto",
@@ -185,16 +205,15 @@ export class FormularioComponent implements OnInit {
             }
           })*/
         }
-      })  
+      })
       if(window.localStorage.getItem("lis") === null){
         console.log("nulo")
         window.localStorage.setItem("lis", JSON.stringify(this.listaRespuestas));
       }      
     } 
     this.section++;
+    /*
     if(this.section == 3){
-      
-
         let nuevo = {
           id: this.getRandomArbitrary(0,100000),
           description : this.listaRespuestas[this.listaRespuestas.length-5].description,
@@ -224,12 +243,19 @@ export class FormularioComponent implements OnInit {
       nuevoHV.
       nuevoHV.status = 'Espera';*/
       
-    }    
-    this.btnText = "Finalizar";
-    //console.log("sec")
-  }
+    //} 
 
-  
+    /*if(this.section >= this.seccionMayor){
+      this.registrar = true;
+      this.btnText = "Finalizar";
+    }*/
+
+    //console.log("sec")
+  }  
+
+  registrarPreguntas(){
+    
+  }
 
   getRandomArbitrary(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

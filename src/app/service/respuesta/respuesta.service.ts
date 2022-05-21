@@ -12,7 +12,7 @@ export class RespuestaService {
 
   private _controller =  environment.URL + "answer/";
   private _save = this._controller + "save";
-  private _get = this._controller + "save";
+  private _findByUser = this._controller + "findByUser";
 
   constructor(private http: HttpClient) { }
 
@@ -24,7 +24,7 @@ export class RespuestaService {
     let hojaDeVida = {
       id: id
     }
-    return this.http.post<ResponseService>(this._save, hojaDeVida);
+    return this.http.post<ResponseService>(this._findByUser, hojaDeVida);
   }
 
 

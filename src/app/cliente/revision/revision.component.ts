@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {PrimeIcons} from 'primeng/api';
-import { GeneralService } from 'src/app/service/general.service';
 
 @Component({
   selector: 'app-revision',
