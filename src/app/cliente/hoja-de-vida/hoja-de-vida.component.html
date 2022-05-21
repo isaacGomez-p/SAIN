@@ -1,7 +1,17 @@
 <app-menu-principal></app-menu-principal>
 <br>
 <br>
+<div>
+    <div>
+        <p-timeline [value]="events">
+            <ng-template pTemplate="content" let-event>
+                {{event.status}}
+            </ng-template>
+        </p-timeline>
+    </div>
+</div>
 <br>
+
 <div class="grid">
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">

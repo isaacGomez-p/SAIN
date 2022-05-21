@@ -3,11 +3,15 @@
 <div class="grid">
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
-        <p-table [value]="preguntas">
+        <p-table [value]="preguntas" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Pregunta</th>
-                    <th>Respuesta</th>                    
+                    <th>Criterio</th>
+                    <th>Respuesta</th> 
+                    <th *ngIf="adding > 0">Verificado</th>   
+                    <th *ngIf="adding > 0">Fec. Verificación</th>  
+                    <th *ngIf="adding > 0">Verificado Por</th>   
+                    <th *ngIf="adding > 0">Resultado</th>           
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-p>
@@ -40,7 +44,32 @@
                                 [maxlength]="12"  
                                 autocomplete="off" ></p-inputNumber>                           
                         </div>
-                    </td>                    
+                    </td>  
+                    <td *ngIf="adding > 0"> 
+                        <div *ngIf="p.verified == 'si'">
+                            <label class="colorSi"> Si </label>
+                        </div>
+                        <div *ngIf="p.verified == 'no'">
+                            <label class="colorNo"> No </label>
+                        </div>                        
+                    </td>             
+                    <td *ngIf="adding > 0">
+                        <div>
+                            <label>{{p.date | date:'short'}}</label>
+                        </div>
+                    </td>     
+                    <td *ngIf="adding > 0">
+                        <div>
+                            <label>{{p.por}}</label>
+                        </div>
+                    </td>
+                    <td *ngIf="adding > 0">
+                        <div class="field-checkbox">
+                            <p-checkbox [(ngModel)]="p.resultado" [binary]="true" inputId="binary"></p-checkbox>
+                            <label for="binary" *ngIf="p.resultado"> Correcto </label>
+                            <label for="binary" *ngIf="!p.resultado"> Incorrecto </label>
+                        </div>
+                    </td>
                 </tr>
             </ng-template>
         </p-table>

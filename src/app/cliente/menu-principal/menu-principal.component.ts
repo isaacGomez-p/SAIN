@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class MenuPrincipalComponent implements OnInit {
 
   nombre: string = "Isaac"
-  rol: string = "Cliente"
+  rol: string = "Proveedor"
   constructor() { }
 
   ngOnInit(): void {

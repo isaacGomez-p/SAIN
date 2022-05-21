@@ -13,6 +13,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import { MessageService } from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import {TimelineModule} from 'primeng/timeline';
+import {CheckboxModule} from 'primeng/checkbox';
 
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
@@ -61,7 +62,8 @@ import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.compone
     LoginModule,
     TableModule,
     InputTextareaModule,
-    HttpClientModule
+    HttpClientModule,
+    CheckboxModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

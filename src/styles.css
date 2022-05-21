@@ -10,6 +10,8 @@
     --tamanoLetraFooter: 20px;
     --tamanoLetraGrande: 45px;
     --tamanoLetraPequena: 15px;
+    --colorSi : green;
+    --colorNo : red;
 }
 
 body{
@@ -150,6 +152,12 @@ html {
     width: 100%;
     border-radius: 12px !important;
     padding-left: 30%;
+}
+#siLabel{
+    color: var(--colorSi)
+}
+#noLabel{
+    color: var(--colorNo)
 }
 #left {
     width: 100%;

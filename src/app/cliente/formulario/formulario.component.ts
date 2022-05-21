@@ -7,6 +7,7 @@ import { HojaDeVidaService } from 'src/app/service/hoja-de-vida.service';
 import { RespuestaService } from 'src/app/service/respuesta/respuesta.service';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
 
+
 @Component({
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
@@ -18,17 +19,22 @@ export class FormularioComponent implements OnInit {
   cargando: boolean = false;
   btnText: string = "Siguiente";
   listaRespuestas: AnswerEntity[] = [];
+  adding: number = 0;
 
   campo : string = "algo";
-
+//TODO perfil operativo
   preguntas = [
     {
       id: 1,     
-      descripcion: "Como se llama",   
+      descripcion: "Nombre",   
       height: 1,
       section: 1,
       answer: "",
-      tipo: 'text'
+      tipo: 'text',
+      verified: "si",
+      date: new Date(),
+      por: "Proveedor 1",
+      resultado : false
     },
     {
       id: 2,     
@@ -36,23 +42,35 @@ export class FormularioComponent implements OnInit {
       height: 1,
       section: 1,
       answer: "",
-      tipo: 'number'
+      tipo: 'text',
+      verified: "no",
+      date: new Date(),
+      por: "Proveedor 1",
+      resultado : false
     },
     {
       id: 3,     
       descripcion: "Antecedentes",      
       height: 5,
-      section: 2,
+      section: 1,
       answer: "",
-      tipo: 'text'
+      tipo: 'text',
+      verified: "si",
+      date: new Date(),
+      por: "Proveedor 2",
+      resultado : false
     },
     {
       id: 4,     
-      descripcion: "Aspiración salarial",      
+      descripcion: "Referencia familiar",      
       height: 1,
       section: 2,
       answer: "",
-      tipo: 'moneda'
+      tipo: 'text',
+      verified: "no",
+      date: new Date(),
+      por: "Proveedor 2",
+      resultado : false
     },
     {
       id: 5,     
@@ -60,32 +78,50 @@ export class FormularioComponent implements OnInit {
       height: 2,
       section: 2,
       answer: "",
-      tipo: 'text'
+      tipo: 'text',
+      verified: "si",
+      date: new Date(),
+      por: "Proveedor 3",
+      resultado : false
     },
   ]
 
+  
   constructor(private respuestaService: RespuestaService,
     private hojaDeVidaService: HojaDeVidaService,
     private router: Router
     ) { }
 
   ngOnInit(): void {
+   
     this.cargarDatosHojaDeVida();
     if(window.localStorage.getItem("idHV") !== null){
+      this.adding = Number(JSON.parse(window.localStorage.getItem("idHV") || '0'));
       console.log("algooo" + Number(JSON.parse(window.localStorage.getItem("idHV") || '0')));
       let id = Number(JSON.parse(window.localStorage.getItem("idHV") || '0'));
+      let count : number = 0;
       this.preguntas.map((pregunta) => {
         let lista2 : [] = JSON.parse(window.localStorage.getItem("hv")  || '{}');
           lista2.map((resume) =>{
-            if(id ===  Number(resume['id'])){
-              console.log("algo")
+            if(id ===  Number(resume['id'])){              
               let list3: AnswerEntity[] = resume['list']
-              list3.map((answer) => {                
-                  pregunta.answer = answer.description;                              
+              console.log("algo" + JSON.stringify(list3));
+              //pregunta.answer = list3[count].description;
+              list3.map((answer) => {
+                if(pregunta.id === answer.questions.questionId){
+                  pregunta.answer = answer.description;
+                  pregunta.resultado = answer.questions.resultado;  
+                  pregunta.date = new Date();
+                  //pregunta.resultado = answer.                            
+                  console.log("-" +pregunta.answer);
+                }                                  
               })
+              //count++;
             }
           })    
       })
+    }else{
+      this.adding = 0;
     }
   }
 
@@ -104,15 +140,19 @@ export class FormularioComponent implements OnInit {
   }
 
   siguiente(){
+    console.log("this.adding" + this.adding);   
     this.cargando = false;
     if(this.section <= 2){
       this.preguntas.map((item)=>{
         if(item.answer !== null && this.section == item.section){
           let respuesta = new AnswerEntity();
           respuesta.description = item.answer.toString();
+          console.log("respuestaa" + respuesta.description);
           let question = new QuestionsEntity();
           question.questionId = item.id;
+          question.resultado = item.resultado;
           respuesta.questions = question;
+          question.date = new Date();
           respuesta.hojaDeVida = this.hojaDeVidaService.obtenerIdHojaDeVida();
           let user = new UserEntity();
           user.userId = this.hojaDeVidaService.obtenerIdUser();
@@ -153,29 +193,43 @@ export class FormularioComponent implements OnInit {
     } 
     this.section++;
     if(this.section == 3){
-      let nuevo = {
-        id: this.getRandomArbitrary(0,100000),
-        description : this.listaRespuestas[this.listaRespuestas.length-5].description,
-        estado: 'Espera',
-        user : {
-          userId : 1
-        },
-        creationDate : new Date(),
-        list : this.listaRespuestas
-      }
+      
+
+        let nuevo = {
+          id: this.getRandomArbitrary(0,100000),
+          description : this.listaRespuestas[this.listaRespuestas.length-5].description,
+          estado: 'Espera',
+          user : {
+            userId : 1
+          },
+          creationDate : new Date(),
+          list : this.listaRespuestas
+        }
+
+        let hvv : any[] = JSON.parse(window.localStorage.getItem("hv")  || '{}');
+        if(this.adding >0){
+          hvv.forEach((element,index)=>{
+            if(element.id === this.adding) hvv.splice(index,1);
+          });       
+          nuevo.id = this.adding;  
+        }
+        hvv.push(nuevo);
+        window.localStorage.setItem("hv", JSON.stringify(hvv));
+        this.router.navigate(["/hojaDeVida"], {skipLocationChange:true})
+      
+      
       /*let nuevoHV = new ResumeEntity();
       nuevoHV.name = this.listaRespuestas[0].description;
       nuevoHV.answerEntities = this.listaRespuestas;
       nuevoHV.
       nuevoHV.status = 'Espera';*/
-      let hvv : any[] = JSON.parse(window.localStorage.getItem("hv")  || '{}');
-      hvv.push(nuevo);
-      window.localStorage.setItem("hv", JSON.stringify(hvv));
-      this.router.navigate(["/hojaDeVida"], {skipLocationChange:true})
+      
     }    
     this.btnText = "Finalizar";
     //console.log("sec")
   }
+
+  
 
   getRandomArbitrary(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
