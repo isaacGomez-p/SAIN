@@ -41,7 +41,8 @@
                 <tr>
                     <td>{{h.numberId}}</td>
                     <td>{{h.name}}</td>   
-                    <td>{{h.verified}}</td>
+                    <td *ngIf="h.verified" class="siLabel"> Si </td>
+                    <td *ngIf="!h.verified" class="noLabel"> No </td>
                     <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
                     <td *ngIf="h.userBy != null">{{h.userBy.name}}</td>
@@ -50,7 +51,8 @@
                     <td>{{h.observation}}</td>
                     <td>
                         <button mat-button color="primary" (click)="verHojaDeVida(h)">Ver</button>
-                    </td>         
+                    </td>      
+                    <td> <button mat-button color="primary" (click)="asignar(h)">Asignar</button> </td>   
                 </tr>
             </ng-template>
         </p-table>

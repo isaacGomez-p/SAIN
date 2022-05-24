@@ -20,6 +20,7 @@ export class HojaDeVidaService {
   private user : UserEntity;
   private resume: ResumeEntity | null;
   private editar: boolean;
+  private userLogin: UserEntity;
 
   constructor(private http: HttpClient) { }
 
@@ -49,6 +50,14 @@ export class HojaDeVidaService {
 
   public obtenerUser() : UserEntity{
     return this.user;
+  }
+
+  public guardarUserLogin(userLogin : UserEntity){
+    this.userLogin = userLogin;
+  }
+
+  public obtenerUserLogin() : UserEntity{
+    return this.userLogin;
   }
 
   public guardarUser(user: UserEntity){

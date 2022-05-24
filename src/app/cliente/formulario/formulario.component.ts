@@ -132,26 +132,39 @@ export class FormularioComponent implements OnInit {
       }
     })
 
-    this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
-      this.preguntas.map(itemP=>{
-        if(item.questions.questionId == itemP.questionId){
-          itemP.answerObjeto = new AnswerEntity();
-          itemP.answerObjeto.verified = item.verified;
-          itemP.answerObjeto.userMod = item.userMod;
-          itemP.answerObjeto.verifiedDate = item.verifiedDate;
-          itemP.answerObjeto.result = item.result;
-          itemP.answerObjeto.answerId = item.answerId;
-//          itemP.answerObjeto.
-        }else{
-          itemP.answerObjeto = new AnswerEntity();
-        }
+    
+
+    if(this.hojaDeVidaService.obtenerResume() != undefined 
+        && this.hojaDeVidaService.obtenerResume() != null 
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities 
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities != undefined 
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 1){
+      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
+        console.log("anserss?" + JSON.stringify(item));
+        this.preguntas.map(itemP=>{
+          console.log("?b?" + JSON.stringify(itemP));
+          if(item.questions.questionId == itemP.questionId){
+            console.log("pregunta" + JSON.stringify(item));
+            itemP.answerObjeto = new AnswerEntity();
+            itemP.answerObjeto.verified = item.verified;
+            itemP.answerObjeto.userMod = item.userMod;
+            itemP.answerObjeto.verifiedDate = item.verifiedDate;
+            itemP.answerObjeto.result = item.result;
+            itemP.answerObjeto.answerId = item.answerId;
+            itemP.answer = item.description;
+  //          itemP.answerObjeto.
+          }else{
+            itemP.answerObjeto = new AnswerEntity();
+          }
+        })
+        
       })
-      
-    })
+    }
+    
         
     
 
-    this.cargarDatoUltimaSeccion();
+  this.cargarDatoUltimaSeccion();
 
   }
 
@@ -165,6 +178,7 @@ export class FormularioComponent implements OnInit {
     }
     
     console.log(this.section);    
+    console.log("datos actuales" + JSON.stringify(this.preguntas))
 
 
     if(this.section === this.seccionMayor){
@@ -185,12 +199,9 @@ export class FormularioComponent implements OnInit {
     this.preguntas.map((item)=>{
       if(item.answer != null && item.answer != ""){
         let answerEntities = new AnswerEntity();
-        if(this.adding === 1){      
-          console.log("_________ entro editar " + JSON.stringify(item.answerObjeto));
-                        
+        if(this.adding === 1){                              
           answerEntities.answerId = item.answerObjeto.answerId          
           answerEntities.verified = item.answerObjeto.verified;
-          console.log("_________ " + answerEntities.verified);
           resume!.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
         }else{
           answerEntities.verified = false;
@@ -205,9 +216,9 @@ export class FormularioComponent implements OnInit {
           let user = new UserEntity();
           user = resume?.userCreate;
           answerEntities.userMod = user;
-        }         
-        
+        }        
         resume!.answerEntities.push(answerEntities);
+        //resume?.userAssign = 
       }
     })    
     this.hojaDeVidaService.save(resume!).subscribe((data)=>{

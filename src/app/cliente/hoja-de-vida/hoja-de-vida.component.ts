@@ -69,6 +69,7 @@ export class HojaDeVidaComponent implements OnInit {
   cargarDatos(){
     this.cargando = true;
     let user = new UserEntity();
+    console.log("obetnerUserId" + this.hojaDeVidaService.obtenerIdUser())
     user.userId = this.hojaDeVidaService.obtenerIdUser();    
     this.hojaDeVidaService.findByUser(user).subscribe((data)=>{
       if(data.result.length === 0){
@@ -113,7 +114,7 @@ export class HojaDeVidaComponent implements OnInit {
   }
 
   verHojaDeVida(hojaDeVida: ResumeEntity){
-    console.log(hojaDeVida)
+    console.log('asi llega'+ JSON.stringify(hojaDeVida));
     this.hojaDeVidaService.guardarIdHojaDevida(hojaDeVida.resumeId);
     this.hojaDeVidaService.guardarResume(hojaDeVida);    
     this.hojaDeVidaService.guardarEstaEditando(true);
@@ -121,12 +122,12 @@ export class HojaDeVidaComponent implements OnInit {
     this.generalService.navegar("formulario");    
   }
 
-  agregar(){
+  asignar(){
     //let resume = new ResumeEntity();
     //resume.
     //this.hojaDeVidaService.save()
     this.hojaDeVidaService.guardarResume(null);
-    const dialogRef = this.dialog.open(RegistrarDialog);
+    const dialogRef = this.dialog.open(AsignarDialog);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -142,7 +143,7 @@ export class HojaDeVidaComponent implements OnInit {
   selector: 'dialog-registrar',
   templateUrl: 'dialog-registrar.html',
 })
-export class RegistrarDialog {
+export class AsignarDialog {
 
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
@@ -186,5 +187,73 @@ export class RegistrarDialog {
   cerrarDialog(){
     this.dialogRef.close();
   }
+
+}
+
+asignar(){
+  //let resume = new ResumeEntity();
+  //resume.
+  //this.hojaDeVidaService.save()
+  this.hojaDeVidaService.guardarResume(null);
+  const dialogRef = this.dialog.open(RegistrarDialog);
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(`Dialog result: ${result}`);
+  });    
+  //window.localStorage.setItem("hv", JSON.stringify(this.hojasDeVida));
+  //
+}
+
+}
+
+
+@Component({
+selector: 'dialog-registrar',
+templateUrl: 'dialog-registrar.html',
+})
+export class RegistrarDialog {
+
+constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
+  @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
+  private hojaDeVidaService: HojaDeVidaService,
+  private generalService: GeneralService,
+  private router: Router){
+
+  }
+
+numeroIdentificacionRegistro: number;
+nombre: string;
+
+crear(){
+  let resumeEntity = new ResumeEntity();
+  resumeEntity.name = this.nombre;
+  resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
+  resumeEntity.verified = false;
+  resumeEntity.recommendation = "En Espera";
+  resumeEntity.status = "W";
+  resumeEntity.process = "Perfil 01"
+  let user = new UserEntity();  
+  user.userId = this.hojaDeVidaService.obtenerIdUser();
+  resumeEntity.userCreate = user;
+  resumeEntity.userAssign = user;    
+  this.hojaDeVidaService.guardarUser(user);
+  this.hojaDeVidaService.guardarResume(resumeEntity);
+  this.hojaDeVidaService.guardarEstaEditando(false);
+  this.cerrarDialog();
+  this.generalService.navegar("formulario");    
+  /*this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
+    console.log(data)
+    if(data.status === 201){
+      let objeto = JSON.parse(JSON.stringify(data.result));
+      this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
+      this.cerrarDialog();
+      
+    }            
+  })*/
+}
+
+cerrarDialog(){
+  this.dialogRef.close();
+}
 
 }

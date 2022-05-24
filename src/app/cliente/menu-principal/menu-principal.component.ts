@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserEntity } from 'src/app/model/userEntity';
+import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
 
 @Component({
   selector: 'app-menu-principal',
@@ -7,11 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuPrincipalComponent implements OnInit {
 
-  nombre: string = "Isaac"
-  rol: string = "Proveedor"
-  constructor() { }
+  user : UserEntity
+  nombre: string = ""
+  rol: string = ""
+  constructor(private hojaDeVidaService: HojaDeVidaService) { }
 
   ngOnInit(): void {
+    if(this.hojaDeVidaService.obtenerUserLogin() != undefined &&
+      this.hojaDeVidaService.obtenerUserLogin() != null){
+        this.user = this.hojaDeVidaService.obtenerUserLogin();
+
+        this.nombre = this.user.name;
+        switch(this.user.role){
+          case 1:
+            this.rol = "Admin";
+            break;
+          case 2:
+            this.rol = "Cliente";
+            break;
+          case 3:
+            this.rol = "Proveedor";
+            break;  
+        }
+      }
   }
 
 }

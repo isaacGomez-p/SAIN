@@ -50,9 +50,9 @@ export class LoginComponent implements OnInit {
   }
 
   iniciarSesion(){   
-    this.hojaDeVidaService.guardarIdUser(1);
-    this.generalService.navegar("hojaDeVida");        
-    /*     
+    //this.hojaDeVidaService.guardarIdUser(1);
+      
+         
     if(this.emailLogin == null || this.emailLogin == undefined){
       this.messageService.add({severity:'error', summary:'Por favor ingrese un número de identificación'});
       return;
@@ -69,13 +69,18 @@ export class LoginComponent implements OnInit {
     this.generalService.login(user).subscribe(data=>{
       console.log(data)
       if(data.status === 200){
-        this.hojaDeVidaService.guardarIdUser(dasdsads);
-        this.messageService.add({severity:'success', summary:'Bienvenido'});        
+        let user = new UserEntity();
+        user = data.result as unknown as UserEntity;
+        this.hojaDeVidaService.guardarUserLogin(user);
+        this.hojaDeVidaService.guardarIdUser(user.userId);
+        this.messageService.add({severity:'success', summary:'Bienvenido'});     
+        this.generalService.navegar("hojaDeVida");         
+        console.log("idUsuario" + this.hojaDeVidaService.obtenerIdUser());
       }else if (data.status === 404 || data.status === 409){
         this.messageService.add({severity:'error', summary:'Datos incorrectos'});
       }      
     })
-    */
+    
   }
 
   procesoRegistrar(){
