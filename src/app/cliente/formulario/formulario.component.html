@@ -16,16 +16,16 @@
             </ng-template>
             <ng-template pTemplate="body" let-p>
                 <tr *ngIf="p.section == section">
-                    <td>{{p.descripcion}}</td>
+                    <td>{{p.description}}</td>
                     <td>
-                        <div *ngIf="p.tipo == 'text'">
+                        <div *ngIf="p.type == 'text'">
                             <textarea [rows]="p.height" pInputTextarea 
                             [autoResize]=true 
                             style="width: 100%;" 
                             [(ngModel)]="p.answer"
                             ></textarea>
                         </div>
-                        <div *ngIf="p.tipo == 'number'" style="width: 100%;">
+                        <div *ngIf="p.type == 'number'" style="width: 100%;">
                             <p-inputNumber  [(ngModel)]="p.answer" 
                                 class="centrarTextoInput"
                                 mode="decimal" 
@@ -35,7 +35,7 @@
                                 [maxlength]="10"  
                                 autocomplete="off" ></p-inputNumber>                           
                         </div>
-                        <div *ngIf="p.tipo == 'moneda'" style="width: 100%;">
+                        <div *ngIf="p.type == 'moneda'" style="width: 100%;">
                             <p-inputNumber  [(ngModel)]="p.answer" 
                                 class="centrarTextoInput"
                                 mode="currency" currency="COP" locale="es-CO"
@@ -46,11 +46,11 @@
                         </div>
                     </td>  
                     <td *ngIf="adding > 0"> 
-                        <div *ngIf="p.verified == 'si'">
-                            <label class="colorSi"> Si </label>
+                        <div *ngIf="p.answerObjeto != undefined && p.answerObjeto.verified == 'si'">
+                            <label class="siLabel"> Si </label>
                         </div>
-                        <div *ngIf="p.verified == 'no'">
-                            <label class="colorNo"> No </label>
+                        <div *ngIf="p.answerObjeto == undefined || p.answerObjeto.verified == 'no' || p.answerObjeto == null || p.answerObjeto.verified == ''">
+                            <label class="noLabel"> No </label>
                         </div>                        
                     </td>             
                     <td *ngIf="adding > 0">
@@ -65,9 +65,9 @@
                     </td>
                     <td *ngIf="adding > 0">
                         <div class="field-checkbox">
-                            <p-checkbox [(ngModel)]="p.resultado" [binary]="true" inputId="binary"></p-checkbox>
-                            <label for="binary" *ngIf="p.resultado"> Correcto </label>
-                            <label for="binary" *ngIf="!p.resultado"> Incorrecto </label>
+                            <p-checkbox [(ngModel)]="p.answerObjeto.result" [binary]="true" inputId="binary"></p-checkbox>
+                            <label for="binary" *ngIf="p.answerObjeto != undefined && p.answerObjeto.result"> Correcto </label>
+                            <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.result"> Incorrecto </label>
                         </div>
                     </td>
                 </tr>
@@ -77,7 +77,7 @@
     <div class="col-12 md:col-12 lg:col-12"></div>
     <div class="col-1 md:col-6 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="left">
-        <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==1 || cargando" class="botonSiguiente">Anterior</button>
+        <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==0 || cargando" class="botonSiguiente">Anterior</button>
     </div>
     <div class="col-1 md:col-1 lg:col-1 sm:col-2"></div>
     <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar"  >

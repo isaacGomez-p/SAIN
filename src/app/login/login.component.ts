@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
 
   iniciarSesion(){   
     this.hojaDeVidaService.guardarIdUser(1);
-    this.router.navigate(["/hojaDeVida"], {skipLocationChange:true})
+    this.generalService.navegar("hojaDeVida");        
     /*     
     if(this.emailLogin == null || this.emailLogin == undefined){
       this.messageService.add({severity:'error', summary:'Por favor ingrese un número de identificación'});
@@ -70,8 +70,7 @@ export class LoginComponent implements OnInit {
       console.log(data)
       if(data.status === 200){
         this.hojaDeVidaService.guardarIdUser(dasdsads);
-        this.messageService.add({severity:'success', summary:'Bienvenido'});
-        this.router.navigate(["/hojaDeVida"], {skipLocationChange:true})
+        this.messageService.add({severity:'success', summary:'Bienvenido'});        
       }else if (data.status === 404 || data.status === 409){
         this.messageService.add({severity:'error', summary:'Datos incorrectos'});
       }      

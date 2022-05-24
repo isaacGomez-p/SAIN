@@ -17,6 +17,9 @@ export class HojaDeVidaService {
 
   private idHojaDeVida: number;
   private idUser: number;
+  private user : UserEntity;
+  private resume: ResumeEntity | null;
+  private editar: boolean;
 
   constructor(private http: HttpClient) { }
 
@@ -43,4 +46,29 @@ export class HojaDeVidaService {
   public obtenerIdUser() : number{
     return this.idUser;
   }
+
+  public obtenerUser() : UserEntity{
+    return this.user;
+  }
+
+  public guardarUser(user: UserEntity){
+    this.user = user;
+  }
+
+  public obtenerResume() : ResumeEntity | null{
+    return this.resume;
+  }
+
+  public guardarResume(resume: ResumeEntity | null){    
+    this.resume = resume;
+  }
+
+  public estaEditando(): boolean {
+    return this.editar;
+  }
+
+  public guardarEstaEditando(estado : boolean){
+    this.editar = estado;
+  }
+
 }

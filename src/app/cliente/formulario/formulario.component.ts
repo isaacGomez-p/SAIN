@@ -6,6 +6,8 @@ import { UserEntity } from 'src/app/model/userEntity';
 import { RespuestaService } from 'src/app/service/respuesta/respuesta.service';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
 import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
+import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
+import { GeneralService } from 'src/app/service/general/general.service';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.servi
 })
 export class FormularioComponent implements OnInit {
 
-  section: number = 1;
+  section: number = 0;
   cargando: boolean = false;
   btnText: string = "Siguiente";
   listaRespuestas: AnswerEntity[] = [];
@@ -24,8 +26,8 @@ export class FormularioComponent implements OnInit {
   seccionMayor:number=0;
   registrar: boolean = false;
   campo : string = "algo";
-//TODO perfil operativo
-  preguntas = [
+  //TODO perfil operativo
+  /*preguntas = [
     {
       id: 1,     
       descripcion: "Nombre",   
@@ -87,45 +89,31 @@ export class FormularioComponent implements OnInit {
       resultado : false
     },
   ]
-
+*/
+  preguntas: QuestionsEntity[];
   
   constructor(private respuestaService: RespuestaService,
     private hojaDeVidaService: HojaDeVidaService,
-    private answerService: RespuestaService,
-    private router: Router
+    private generalService: GeneralService,    
+    private preguntasService: PreguntasService,    
     ) { }
 
-  ngOnInit(): void {
-   console.log(this.hojaDeVidaService.obtenerIdHojaDeVida())
-    this.cargarDatosHojaDeVida();
-    if(window.localStorage.getItem("idHV") !== null){
-      this.adding = Number(JSON.parse(window.localStorage.getItem("idHV") || '0'));
-      console.log("algooo" + Number(JSON.parse(window.localStorage.getItem("idHV") || '0')));
-      let id = Number(JSON.parse(window.localStorage.getItem("idHV") || '0'));
-      let count : number = 0;
-      this.preguntas.map((pregunta) => {
-        let lista2 : [] = JSON.parse(window.localStorage.getItem("hv")  || '{}');
-          lista2.map((resume) =>{
-            if(id ===  Number(resume['id'])){              
-              let list3: AnswerEntity[] = resume['list']
-              console.log("algo" + JSON.stringify(list3));
-              //pregunta.answer = list3[count].description;
-              list3.map((answer) => {
-                if(pregunta.id === answer.questions.questionId){
-                  pregunta.answer = answer.description;
-                  pregunta.resultado = answer.questions.resultado;  
-                  pregunta.date = new Date();
-                  //pregunta.resultado = answer.                            
-                  console.log("-" +pregunta.answer);
-                }                                  
-              })
-              //count++;
-            }
-          })    
-      })
+  ngOnInit(): void {      
+    console.log(this.hojaDeVidaService.obtenerResume())
+    if(this.hojaDeVidaService.estaEditando() !== null && this.hojaDeVidaService.estaEditando() == true) {
+      this.adding = 1;
     }else{
       this.adding = 0;
     }
+    this.cargarPreguntas();    
+  }
+
+  cargarPreguntas(){    
+    this.preguntasService.findAl().subscribe((data)=>{
+      console.log(data)
+      this.preguntas = data.result;
+      this.cargarDatosHojaDeVida();
+    })
   }
 
   cargarDatoUltimaSeccion(){
@@ -133,128 +121,102 @@ export class FormularioComponent implements OnInit {
       if(item.section>=this.seccionMayor){
         this.seccionMayor = item.section;
       }
-    })
-    this.seccionMayor;
+    })    
   }
 
-  cargarDatosHojaDeVida(){
-    /*this.respuestaService.get(1).subscribe(data=>{
-      if(data.status === 200){
-        this.preguntas.map((item)=>{
-          data.result.map((itemD)=>{
-            if(item.id === itemD.question_id){
-              item.answer = itemD.description;
-            }
-          })          
-        })
+  cargarDatosHojaDeVida(){    
+
+    this.preguntas.map((item)=>{          
+      if(item.section === 0 && item.description === "Nombre"){                      
+        item.answer = this.hojaDeVidaService.obtenerResume()!.name
       }
-    })*/
+    })
+
+    this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
+      this.preguntas.map(itemP=>{
+        if(item.questions.questionId == itemP.questionId){
+          itemP.answerObjeto = new AnswerEntity();
+          itemP.answerObjeto.verified = item.verified;
+          itemP.answerObjeto.userMod = item.userMod;
+          itemP.answerObjeto.verifiedDate = item.verifiedDate;
+          itemP.answerObjeto.result = item.result;
+          itemP.answerObjeto.answerId = item.answerId;
+//          itemP.answerObjeto.
+        }else{
+          itemP.answerObjeto = new AnswerEntity();
+        }
+      })
+      
+    })
+        
+    
+
+    this.cargarDatoUltimaSeccion();
+
   }
 
   siguiente(){
-    console.log("this.adding" + this.adding);   
+    
     this.cargando = false;
-    if(this.section <= 2){
-      this.preguntas.map((item)=>{
-        if(item.answer !== null && this.section == item.section){
-          let respuesta = new AnswerEntity();
-          respuesta.description = item.answer.toString();
-          console.log("respuestaa" + respuesta.description);
-          let question = new QuestionsEntity();
-          question.questionId = item.id;
-          question.resultado = item.resultado;
-          respuesta.questions = question;
-          question.date = new Date();
-          let hojaDeVida = new ResumeEntity();
-          hojaDeVida.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
-          respuesta.resumes = hojaDeVida;
-          let user = new UserEntity();
-          user.userId = this.hojaDeVidaService.obtenerIdUser();
-          respuesta.userMod = user;
-          respuesta.verified = false;
-          respuesta.creationDate = new Date();
-          console.log(respuesta)        
-          //his.listaRespuestas.push(respuesta);       
-          if(window.localStorage.getItem("lis") === null){
-            this.listaRespuestas.push(respuesta);
-          } else {
-            this.listaRespuestas = JSON.parse(window.localStorage.getItem("lis")  || '{}');
-            this.listaRespuestas.push(respuesta);         
-            window.localStorage.setItem("lis", JSON.stringify(this.listaRespuestas));   
-          }
-          console.log("______________")
-          this.answerService.save(respuesta).subscribe((data)=>{
-            console.log(data)
-          })
-          console.log("______________")
-                      /*let nuevo = {
-              id: 3,
-              description : "Maria Prieto",
-              estado: 'Espera',
-              user : {
-                  userId : 1
-              }      
-            }
-          this.hojasDeVida.push(nuevo);*/
-          /*this.respuestaService.save(respuesta).subscribe((data)=>{
-            console.log(data)
-            if(data.status === 201){
-              
-            }else{
-  
-            }
-          })*/
-        }
-      })
-      if(window.localStorage.getItem("lis") === null){
-        console.log("nulo")
-        window.localStorage.setItem("lis", JSON.stringify(this.listaRespuestas));
-      }      
-    } 
-    this.section++;
-    /*
-    if(this.section == 3){
-        let nuevo = {
-          id: this.getRandomArbitrary(0,100000),
-          description : this.listaRespuestas[this.listaRespuestas.length-5].description,
-          estado: 'Espera',
-          user : {
-            userId : 1
-          },
-          creationDate : new Date(),
-          list : this.listaRespuestas
-        }
+    if(this.section > this.seccionMayor){
+        
+    } else{
+      this.section++;  
+    }
+    
+    console.log(this.section);    
 
-        let hvv : any[] = JSON.parse(window.localStorage.getItem("hv")  || '{}');
-        if(this.adding >0){
-          hvv.forEach((element,index)=>{
-            if(element.id === this.adding) hvv.splice(index,1);
-          });       
-          nuevo.id = this.adding;  
-        }
-        hvv.push(nuevo);
-        window.localStorage.setItem("hv", JSON.stringify(hvv));
-        this.router.navigate(["/hojaDeVida"], {skipLocationChange:true})
-      
-      
-      /*let nuevoHV = new ResumeEntity();
-      nuevoHV.name = this.listaRespuestas[0].description;
-      nuevoHV.answerEntities = this.listaRespuestas;
-      nuevoHV.
-      nuevoHV.status = 'Espera';*/
-      
-    //} 
 
-    /*if(this.section >= this.seccionMayor){
+    if(this.section === this.seccionMayor){
+      console.log("________");
       this.registrar = true;
       this.btnText = "Finalizar";
-    }*/
-
-    //console.log("sec")
+    }
+   
+        
+    
   }  
 
   registrarPreguntas(){
-    
+        
+    let resume = this.hojaDeVidaService.obtenerResume();    
+    //Se inicia la lista de respuestas en caso que sea null
+    resume!.answerEntities = [];    
+    this.preguntas.map((item)=>{
+      if(item.answer != null && item.answer != ""){
+        let answerEntities = new AnswerEntity();
+        if(this.adding === 1){      
+          console.log("_________ entro editar " + JSON.stringify(item.answerObjeto));
+                        
+          answerEntities.answerId = item.answerObjeto.answerId          
+          answerEntities.verified = item.answerObjeto.verified;
+          console.log("_________ " + answerEntities.verified);
+          resume!.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
+        }else{
+          answerEntities.verified = false;
+        }
+        //Se asigna el id de la pregunta
+        let questionsEntity = new QuestionsEntity();
+        questionsEntity.questionId = item.questionId;
+        answerEntities.questions = questionsEntity;
+        answerEntities.description = item.answer; //Asigna la respuesta
+        answerEntities.creationDate = new Date();
+        if(resume?.userCreate){
+          let user = new UserEntity();
+          user = resume?.userCreate;
+          answerEntities.userMod = user;
+        }         
+        
+        resume!.answerEntities.push(answerEntities);
+      }
+    })    
+    this.hojaDeVidaService.save(resume!).subscribe((data)=>{
+      if(data != null){
+        if(data.status === 201){
+          this.generalService.navegar("hojaDeVida")
+        }
+      }
+    })
   }
 
   getRandomArbitrary(min: number, max: number) {
@@ -263,6 +225,10 @@ export class FormularioComponent implements OnInit {
 
   anterior(){
     this.btnText = "Siguiente";
-    this.section--;
+    if(this.section !== 0){
+      this.section--;
+      this.registrar = false;
+    }    
+    
   }
 }

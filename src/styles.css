@@ -153,10 +153,10 @@ html {
     border-radius: 12px !important;
     padding-left: 30%;
 }
-#siLabel{
+.siLabel{
     color: var(--colorSi)
 }
-#noLabel{
+.noLabel{
     color: var(--colorNo)
 }
 #left {

@@ -11,4 +11,6 @@ export class AnswerEntity{
     userMod: UserEntity;
     resumes: ResumeEntity;
     questions: QuestionsEntity;
+    verifiedDate: Date;
+    result: boolean;
 }

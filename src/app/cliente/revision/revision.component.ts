@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {PrimeIcons} from 'primeng/api';
+import { GeneralService } from 'src/app/service/general/general.service';
 
 @Component({
   selector: 'app-revision',
@@ -11,8 +12,7 @@ export class RevisionComponent implements OnInit {
 
   
 
-  constructor(private router: Router    
-    ) { }
+  constructor(private generalService: GeneralService) { }
 
   events: any[];
     
@@ -27,7 +27,7 @@ export class RevisionComponent implements OnInit {
   }  
 
   formulario(){
-    this.router.navigate(["/formulario"], {skipLocationChange:true})
+    this.generalService.navegar("formulario");    
   }
 
 }

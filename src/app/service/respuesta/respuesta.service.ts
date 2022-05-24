@@ -22,7 +22,7 @@ export class RespuestaService {
 
   public get(id: number) : Observable<ResponseService> {  
     let hojaDeVida = {
-      id: id
+      userId: id
     }
     return this.http.post<ResponseService>(this._findByUser, hojaDeVida);
   }

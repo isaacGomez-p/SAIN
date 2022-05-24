@@ -18,7 +18,7 @@ export class ResumeEntity {
     //Variables para el rol Cliente
     process: string; //Proceso
     score: number; //Puntuación
-    status: string; //Estado
+    status: string; //Estado: W -> ESPERA R -> REVISION  C -> CHECKED F->FINISHED
     //recommendation: string; //Recomendacion
 
     userCreate: UserEntity; //Usuario quién creo la hoja de vida

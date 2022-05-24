@@ -37,17 +37,19 @@
                     <th>Ver</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-product>
+            <ng-template pTemplate="body" let-h>
                 <tr>
-                    <td>{{product.numberId}}</td>
-                    <td>{{product.name}}</td>   
-                    <td>{{product.verified}}</td>
-                    <td>{{product.verificationDate | date:'short'}}</td>
-                    <td>{{product.userBy.name}}</td>
-                    <td>{{product.recommendation}}</td>
-                    <td>{{product.observation}}</td>
+                    <td>{{h.numberId}}</td>
+                    <td>{{h.name}}</td>   
+                    <td>{{h.verified}}</td>
+                    <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>
+                    <td *ngIf="h.userBy == null">No ha sido verificado</td>
+                    <td *ngIf="h.userBy != null">{{h.userBy.name}}</td>
+                    <td *ngIf="h.userBy == null">No ha sido verificado</td>
+                    <td>{{h.recommendation}}</td>
+                    <td>{{h.observation}}</td>
                     <td>
-                        <button mat-button color="primary" (click)="verHojaDeVida(product.id)">Ver</button>
+                        <button mat-button color="primary" (click)="verHojaDeVida(h)">Ver</button>
                     </td>         
                 </tr>
             </ng-template>
@@ -58,3 +60,4 @@
         </div>
     </div>
 </div>
+

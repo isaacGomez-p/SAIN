@@ -6,6 +6,7 @@ import { UserEntity } from 'src/app/model/userEntity';
 import { AnswerEntity } from 'src/app/model/answerEntity';
 import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
 import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GeneralService } from 'src/app/service/general/general.service';
 
 
 @Component({
@@ -46,6 +47,7 @@ export class HojaDeVidaComponent implements OnInit {
   constructor(private router: Router,
     private messageService: MessageService,
     private hojaDeVidaService: HojaDeVidaService,
+    private generalService: GeneralService,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -110,16 +112,20 @@ export class HojaDeVidaComponent implements OnInit {
     )
   }
 
-  verHojaDeVida(id: number){
-    this.hojaDeVidaService.guardarIdHojaDevida(id);
-    window.localStorage.setItem("idHV", id.toString());
-    this.router.navigate(["/formulario"], {skipLocationChange:true})
+  verHojaDeVida(hojaDeVida: ResumeEntity){
+    console.log(hojaDeVida)
+    this.hojaDeVidaService.guardarIdHojaDevida(hojaDeVida.resumeId);
+    this.hojaDeVidaService.guardarResume(hojaDeVida);    
+    this.hojaDeVidaService.guardarEstaEditando(true);
+    //window.localStorage.setItem("idHV", id.toString());
+    this.generalService.navegar("formulario");    
   }
 
   agregar(){
     //let resume = new ResumeEntity();
     //resume.
     //this.hojaDeVidaService.save()
+    this.hojaDeVidaService.guardarResume(null);
     const dialogRef = this.dialog.open(RegistrarDialog);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -141,6 +147,7 @@ export class RegistrarDialog {
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
     private hojaDeVidaService: HojaDeVidaService,
+    private generalService: GeneralService,
     private router: Router){
 
     }
@@ -154,19 +161,26 @@ export class RegistrarDialog {
     resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
     resumeEntity.verified = false;
     resumeEntity.recommendation = "En Espera";
+    resumeEntity.status = "W";
     resumeEntity.process = "Perfil 01"
     let user = new UserEntity();  
     user.userId = this.hojaDeVidaService.obtenerIdUser();
     resumeEntity.userCreate = user;
-    this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
+    resumeEntity.userAssign = user;    
+    this.hojaDeVidaService.guardarUser(user);
+    this.hojaDeVidaService.guardarResume(resumeEntity);
+    this.hojaDeVidaService.guardarEstaEditando(false);
+    this.cerrarDialog();
+    this.generalService.navegar("formulario");    
+    /*this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
       console.log(data)
       if(data.status === 201){
-        let objeto = JSON.parse(JSON.stringify(data.result));        
+        let objeto = JSON.parse(JSON.stringify(data.result));
         this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
         this.cerrarDialog();
-        this.router.navigate(["/formulario"], {skipLocationChange:true})                
+        
       }            
-    })
+    })*/
   }
 
   cerrarDialog(){
