@@ -1,24 +1,18 @@
-<h2 mat-dialog-title>Registrar hoja de vida</h2>
-<mat-dialog-content class="mat-typography">
-    <div class="grid">
-        <table mat-table [dataSource]="proveedores" >
+<h2 mat-dialog-title>Asignar</h2>
 
-            <ng-container matColumnDef="feature">
-              <th mat-header-cell *matHeaderCellDef> col 1 </th>
-              <td mat-cell *matCellDef="let element"><span>{{element.feature}}</span></td>
-            </ng-container>
-      
-            <ng-container matColumnDef="version">
-              <th mat-header-cell *matHeaderCellDef width="100px">col 2</th>
-              <td mat-cell *matCellDef="let element" width="100px"><span>{{element.version}}</span></td>
-            </ng-container>
-      
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+    <div class="grid">  
+      <div class="col-1 md:col-1 lg:col-1"></div>      
+      <div class="col-12 md:col-12 lg:col-12" *ngIf="data.hojaDeVida.userAssign != null">Asignado a: {{data.hojaDeVida.userAssign.name}}</div>
+      <div class="col-10 md:col-10 lg:col-10">
+        <p-dropdown class="anchoDropDown" [options]="proveedores" [(ngModel)]="usuarioSeleccionado" optionLabel="name"></p-dropdown>  
+      </div>
+      <div class="col-12 md:col-12 lg:col-12"></div>
+      <div class="col-12 md:col-12 lg:col-12">
+        <mat-dialog-actions align="end">
+          <button mat-raised-button mat-dialog-close>Cancel</button>
+          <button mat-raised-button color="primary" (click)="asignar()" cdkFocusInitial>Asignar</button>
+        </mat-dialog-actions>
+      </div>
+      <div class="col-12 md:col-12 lg:col-12"></div>
+    </div>    
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color="primary" (click)="crear()" cdkFocusInitial>Crear</button>
-</mat-dialog-actions>

@@ -169,3 +169,7 @@ html {
 /*.p-inputnumber, .p-inputnumber {
     display: grid !important;
 }*/
+
+.anchoDropDown{
+    display: grid;
+}

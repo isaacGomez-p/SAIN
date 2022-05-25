@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
   iniciarSesion(){   
     //this.hojaDeVidaService.guardarIdUser(1);
       
-         
+    
     if(this.emailLogin == null || this.emailLogin == undefined){
       this.messageService.add({severity:'error', summary:'Por favor ingrese un número de identificación'});
       return;
@@ -61,11 +61,12 @@ export class LoginComponent implements OnInit {
       this.messageService.add({severity:'error', summary:'Por favor ingrese una contraseña'});
       return;
     }
-
+    
     let user = new UserEntity();
     user.email = this.emailLogin;
     user.password = this.clave;
-
+    //user.email = "proveedor2@email.com";
+    //user.password = "123456"
     this.generalService.login(user).subscribe(data=>{
       console.log(data)
       if(data.status === 200){
@@ -74,8 +75,7 @@ export class LoginComponent implements OnInit {
         this.hojaDeVidaService.guardarUserLogin(user);
         this.hojaDeVidaService.guardarIdUser(user.userId);
         this.messageService.add({severity:'success', summary:'Bienvenido'});     
-        this.generalService.navegar("hojaDeVida");         
-        console.log("idUsuario" + this.hojaDeVidaService.obtenerIdUser());
+        this.generalService.navegar("hojaDeVida");                 
       }else if (data.status === 404 || data.status === 409){
         this.messageService.add({severity:'error', summary:'Datos incorrectos'});
       }      
@@ -92,12 +92,6 @@ export class LoginComponent implements OnInit {
   }
 
   registrar(){
-    console.log(this.nombre)
-    console.log(this.apellido)
-    console.log(this.numeroIdentificacionRegistro)
-    console.log(this.rolRegistro)
-    console.log(this.claveRegistro)
-    console.log(this.claveConfirmarRegistro)
 
     if(this.claveRegistro == this.claveConfirmarRegistro){    
       let user = new UserEntity();

@@ -7,6 +7,8 @@ import { AnswerEntity } from 'src/app/model/answerEntity';
 import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
 import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GeneralService } from 'src/app/service/general/general.service';
+import { RequestEntity } from 'src/app/model/requestEntity';
+import { DialogData } from 'src/app/model/dialogData';
 
 
 @Component({
@@ -122,12 +124,12 @@ export class HojaDeVidaComponent implements OnInit {
     this.generalService.navegar("formulario");    
   }
 
-  asignar(){
+  agregar(){
     //let resume = new ResumeEntity();
     //resume.
     //this.hojaDeVidaService.save()
     this.hojaDeVidaService.guardarResume(null);
-    const dialogRef = this.dialog.open(AsignarDialog);
+    const dialogRef = this.dialog.open(RegistrarDialog);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -136,73 +138,82 @@ export class HojaDeVidaComponent implements OnInit {
     //
   }
 
+  asignar(hojaDeVida : ResumeEntity){
+    
+    const dialogRef = this.dialog.open(AsignarDialog, {
+      width: '500px',
+      height: '40%',
+      data: {
+        hojaDeVida: hojaDeVida
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });   
+  }
+
 }
 
 
 @Component({
-  selector: 'dialog-registrar',
-  templateUrl: 'dialog-registrar.html',
+  selector: 'dialog-asignar',
+  templateUrl: 'dialog-asignar.html',
 })
-export class AsignarDialog {
+export class AsignarDialog implements OnInit{
 
+  proveedores: UserEntity[];
+  usuarioSeleccionado: UserEntity;
+  
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
-    @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,
-    private router: Router){
+    public dialog: MatDialog){
 
     }
 
-  numeroIdentificacionRegistro: number;
-  nombre: string;
-
-  crear(){
-    let resumeEntity = new ResumeEntity();
-    resumeEntity.name = this.nombre;
-    resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
-    resumeEntity.verified = false;
-    resumeEntity.recommendation = "En Espera";
-    resumeEntity.status = "W";
-    resumeEntity.process = "Perfil 01"
-    let user = new UserEntity();  
-    user.userId = this.hojaDeVidaService.obtenerIdUser();
-    resumeEntity.userCreate = user;
-    resumeEntity.userAssign = user;    
-    this.hojaDeVidaService.guardarUser(user);
-    this.hojaDeVidaService.guardarResume(resumeEntity);
-    this.hojaDeVidaService.guardarEstaEditando(false);
-    this.cerrarDialog();
-    this.generalService.navegar("formulario");    
-    /*this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
-      console.log(data)
-      if(data.status === 201){
-        let objeto = JSON.parse(JSON.stringify(data.result));
-        this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
-        this.cerrarDialog();
-        
-      }            
-    })*/
+  ngOnInit(): void {
+    this.cargarUsuarios();
+    console.log(this.data)
   }
+
+  cargarUsuarios(){
+    let rol = new RequestEntity();
+    rol.id = 3;
+    this.generalService.findByRole(rol).subscribe((data)=>{
+      console.log(data)
+      if(data.status === 200){
+        this.proveedores = data.result
+        console.log(this.proveedores.length);
+        
+      }
+    })
+
+
+  }
+
+  
 
   cerrarDialog(){
     this.dialogRef.close();
   }
 
-}
 
-asignar(){
-  //let resume = new ResumeEntity();
-  //resume.
-  //this.hojaDeVidaService.save()
-  this.hojaDeVidaService.guardarResume(null);
-  const dialogRef = this.dialog.open(RegistrarDialog);
 
-  dialogRef.afterClosed().subscribe(result => {
-    console.log(`Dialog result: ${result}`);
-  });    
-  //window.localStorage.setItem("hv", JSON.stringify(this.hojasDeVida));
-  //
-}
+  asignar(){
+    console.log(this.usuarioSeleccionado);
+    
+    this.data.hojaDeVida.userAssign = this.usuarioSeleccionado
+
+    this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe(data=>{
+      if(data.status === 201){
+        this.generalService.mostrarMensaje("success", "Se asignó correctamente.");
+        this.cerrarDialog()
+      }
+    })
+   
+  }
 
 }
 

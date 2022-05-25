@@ -16,43 +16,39 @@
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
         <p-table [value]="hojasDeVida" responsiveLayout="scroll" [rowsPerPageOptions]="[10,25,50]">
-            <!--<ng-template pTemplate="caption">
-                <div class="flex">
-                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-                    <span class="p-input-icon-left ml-auto">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
-                    </span>
-                </div>
-            </ng-template>-->
+           
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="numberId">Identificador<p-sortIcon field="numberId"></p-sortIcon></th>
                     <th pSortableColumn="name">Nombre Postulante<p-sortIcon field="name"></p-sortIcon></th>                    
+                    <th pSortableColumn="recommendation">Recomendación<p-sortIcon field="recommendation"></p-sortIcon></th>
                     <th pSortableColumn="verified">Verificado<p-sortIcon field="verified"></p-sortIcon></th>
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
-                    <th pSortableColumn="userBy.name">Verificado Por<p-sortIcon field="userBy.name"></p-sortIcon></th>
-                    <th pSortableColumn="recommendation">Recomendación<p-sortIcon field="recommendation"></p-sortIcon></th>
-                    <th pSortableColumn="observation">Observaciones<p-sortIcon field="observation"></p-sortIcon></th>
-                    <th>Ver</th>
+                    <th pSortableColumn="userBy.name">Verificado Por<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
+                    <th pSortableColumn="observation">Observaciones<p-sortIcon field="observation"></p-sortIcon></th>                    
+                    <th style="text-align-last: center;">Acciones</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-h>
                 <tr>
                     <td>{{h.numberId}}</td>
                     <td>{{h.name}}</td>   
+                    <td>{{h.recommendation}}</td>
                     <td *ngIf="h.verified" class="siLabel"> Si </td>
                     <td *ngIf="!h.verified" class="noLabel"> No </td>
                     <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
                     <td *ngIf="h.userBy != null">{{h.userBy.name}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
-                    <td>{{h.recommendation}}</td>
-                    <td>{{h.observation}}</td>
+                    
+                    <td>{{h.observation}}</td>                   
                     <td>
-                        <button mat-button color="primary" (click)="verHojaDeVida(h)">Ver</button>
-                    </td>      
-                    <td> <button mat-button color="primary" (click)="asignar(h)">Asignar</button> </td>   
+                        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                            <button mat-button color="primary" (click)="verHojaDeVida(h)">Ver</button>                         
+                            <button mat-button color="primary" (click)="asignar(h)">Asignar</button> 
+                        </mat-button-toggle-group>
+                        
+                    </td>   
                 </tr>
             </ng-template>
         </p-table>

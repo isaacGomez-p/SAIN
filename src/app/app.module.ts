@@ -35,6 +35,7 @@ import { MenuPrincipalComponent } from './cliente/menu-principal/menu-principal.
 import { CommonModule } from '@angular/common';
 import { HojaDeVidaModule } from './cliente/hoja-de-vida/hoja-de-vida.module';
 import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.compone
     InputTextareaModule,
     HttpClientModule,
     CheckboxModule,
-    MatDialogModule    
+    MatDialogModule,
+    MatButtonToggleModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
