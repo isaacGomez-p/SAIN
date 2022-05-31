@@ -22,7 +22,7 @@ export class ResumeEntity {
     //recommendation: string; //Recomendacion
 
     userCreate: UserEntity; //Usuario quién creo la hoja de vida
-    userAssign: UserEntity; //Usuario a quién fue asignado
+    userAssign: UserEntity | null; //Usuario a quién fue asignado
     answerEntities: AnswerEntity[]; //Respuesta a esa hoja de vida        
     creationDate : Date;            
 }

@@ -9,7 +9,7 @@ import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.servi
 })
 export class MenuPrincipalComponent implements OnInit {
 
-  user : UserEntity
+  user : UserEntity | null
   nombre: string = ""
   rol: string = ""
   constructor(private hojaDeVidaService: HojaDeVidaService) { }
@@ -19,8 +19,8 @@ export class MenuPrincipalComponent implements OnInit {
       this.hojaDeVidaService.obtenerUserLogin() != null){
         this.user = this.hojaDeVidaService.obtenerUserLogin();
 
-        this.nombre = this.user.name;
-        switch(this.user.role){
+        this.nombre = this.user!.name;
+        switch(this.user!.role){
           case 1:
             this.rol = "Admin";
             break;

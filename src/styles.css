@@ -173,3 +173,8 @@ html {
 .anchoDropDown{
     display: grid;
 }
+.textAreaObservacion{
+    width: 100%; 
+    height: 150px;
+    font-size: 22px;
+}

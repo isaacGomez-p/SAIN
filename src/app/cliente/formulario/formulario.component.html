@@ -25,7 +25,7 @@
                                     <textarea [rows]="p.height" pInputTextarea 
                                     [autoResize]=true 
                                     style="width: 100%;" 
-                                    [(ngModel)]="p.answer"
+                                    [(ngModel)]="p.answer"                                    
                                     ></textarea>
                                 </div>
                                 <div *ngIf="p.type == 'number'" style="width: 100%;">
@@ -35,6 +35,7 @@
                                         [minFractionDigits]="0" 
                                         [maxFractionDigits]="0"
                                         [useGrouping]="false"
+                                        [disabled]="habilitarEditar"
                                         [maxlength]="10"  
                                         autocomplete="off" ></p-inputNumber>                           
                                 </div>
@@ -50,7 +51,7 @@
                             </td>  
                             <td *ngIf="adding > 0"> 
                                 <div class="field-checkbox">
-                                    <p-checkbox [(ngModel)]="p.answerObjeto.verified" [binary]="true" inputId="binary"></p-checkbox>
+                                    <p-checkbox [(ngModel)]="p.answerObjeto.verified" [disabled]="!habilitarEditar" [binary]="true" inputId="binary"></p-checkbox>
                                     <label for="binary" *ngIf="p.answerObjeto != undefined && p.answerObjeto.verified" class="siLabel"> Si </label>
                                     <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.verified || p.answerObjeto == null" class="noLabel"> No </label>
                                 </div>                  
@@ -67,7 +68,7 @@
                             </td>
                             <td *ngIf="adding > 0">
                                 <div class="field-checkbox">
-                                    <p-checkbox [(ngModel)]="p.answerObjeto.result" [binary]="true" inputId="binary"></p-checkbox>
+                                    <p-checkbox [(ngModel)]="p.answerObjeto.result" [binary]="true" [disabled]="!habilitarEditar" inputId="binary"></p-checkbox>
                                     <label for="binary" *ngIf="p.answerObjeto != undefined && p.answerObjeto.result"> Correcto </label>
                                     <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.result"> Incorrecto </label>
                                 </div>

@@ -22,7 +22,7 @@ export class HojaDeVidaComponent implements OnInit {
 
   cargando: boolean = false;
   totalQuestions : number;
-
+  rol: number = 0;
   /*hojasDeVida = [
     {
       id: 1,
@@ -57,7 +57,7 @@ export class HojaDeVidaComponent implements OnInit {
     private preguntasService: PreguntasService,
     public dialog: MatDialog) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {        
     this.cargarDatos();
     //this.cargarDatosDebug();
     this.hojaDeVidaService.recCount().subscribe(data =>{
@@ -79,23 +79,49 @@ export class HojaDeVidaComponent implements OnInit {
     }*/
   }
 
-  cargarDatos(){
-   
+  cargarDatos(){    
+    this.cargando = true;
+
+    //Se asigna el rol del usuario
+    this.rol = this.hojaDeVidaService.obtenerUserLogin()!.role;
+
+    //Se busca las pregunta
     this.preguntasService.findAl().subscribe((data)=>{
       this.preguntas = data.result;
       this.totalQuestions = this.preguntas.length
     })
-    this.cargando = true;
+    
     let user = new UserEntity();
     user.userId = this.hojaDeVidaService.obtenerIdUser();    
-    this.hojaDeVidaService.findByUser(user).subscribe((data)=>{
-      if(data.result.length === 0){
-        this.messageService.add({severity:'info', summary:'No se encontraron hojas de vidas'});
-      }else{
-        this.hojasDeVida = data.result;
-      }      
-      this.cargando = false;
-    })
+    if(this.rol == 2){
+      this.hojaDeVidaService.findByUserCreate(user).subscribe((data)=>{
+        if(data.result.length === 0){
+          this.messageService.add({severity:'info', summary:'No se encontraron hojas de vidas registradas'});
+        }else{
+          this.hojasDeVida = data.result;
+        }      
+        this.cargando = false;
+      })
+    } else if(this.rol == 1) {
+      this.hojaDeVidaService.findAll(user).subscribe((data)=>{
+        if(data.result.length === 0){
+          this.messageService.add({severity:'info', summary:'No hay hojas de vida para asignar.'});
+        }else{
+          this.hojasDeVida = data.result;
+        }      
+        this.cargando = false;
+      })
+    }else if(this.rol == 3){
+      this.hojaDeVidaService.findByUserAssign(user).subscribe((data)=>{
+        if(data.result.length === 0){
+          this.messageService.add({severity:'info', summary:'Ups! No se encontraron hojas de vidas para revisar.'});
+        }else{
+          this.hojasDeVida = data.result;
+        }      
+        this.cargando = false;
+      })
+    }
+    
   }
 
   /*cargarDatosDebug(){
@@ -149,6 +175,20 @@ export class HojaDeVidaComponent implements OnInit {
     });    
     //window.localStorage.setItem("hv", JSON.stringify(this.hojasDeVida));
     //
+  }
+
+  verObservacion(hojaDeVida : ResumeEntity){
+
+    const dialogRef = this.dialog.open(ObservacionDialog, {      
+      data: {
+        hojaDeVida: hojaDeVida
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });   
+      
   }
 
   asignar(hojaDeVida : ResumeEntity){
@@ -225,10 +265,41 @@ export class AsignarDialog implements OnInit{
 
 }
 
+@Component({
+  selector: 'observacion-dialog',
+  templateUrl: 'observacion-dialog.html',
+})
+export class ObservacionDialog implements OnInit {
+  constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private hojaDeVidaService: HojaDeVidaService,
+    private generalService: GeneralService,
+    private router: Router){}
+
+  ngOnInit(): void {
+    this.data.hojaDeVida.observation
+  }
+
+  guardar(){
+    this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe((data)=>{
+      if(data.status === 201){
+        this.generalService.mostrarMensaje("success", "Observación asignada correctamente.");
+        this.cerrarDialog()
+      }
+    })
+  }
+
+  cerrarDialog(){
+    this.dialogRef.close();
+  }
+
+}
+
+
 
 @Component({
-selector: 'dialog-registrar',
-templateUrl: 'dialog-registrar.html',
+  selector: 'dialog-registrar',
+  templateUrl: 'dialog-registrar.html',
 })
 export class RegistrarDialog {
 

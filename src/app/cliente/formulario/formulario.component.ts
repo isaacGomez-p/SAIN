@@ -26,6 +26,7 @@ export class FormularioComponent implements OnInit {
   seccionMayor:number=0;
   registrar: boolean = false;
   campo : string = "algo";
+  habilitarEditar: boolean = false;
   //TODO perfil operativo
   /*preguntas = [
     {
@@ -99,6 +100,11 @@ export class FormularioComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    if(this.hojaDeVidaService.obtenerUserLogin()!.role == 3){
+      this.habilitarEditar = true;
+    }else{
+      this.habilitarEditar = false;
+    }
     this.nombre = this.hojaDeVidaService.obtenerResume()?.name;
     if(this.hojaDeVidaService.estaEditando() !== null && this.hojaDeVidaService.estaEditando() == true) {
       this.adding = 1;
@@ -213,6 +219,7 @@ export class FormularioComponent implements OnInit {
           answerEntities.userMod = user;
         }        
         resume!.answerEntities.push(answerEntities);
+        resume!.userAssign = null;
         //resume?.userAssign = 
       }
     })

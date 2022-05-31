@@ -5,6 +5,7 @@ import { ResponseService } from 'src/app/model/responseService';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
 import { UserEntity } from 'src/app/model/userEntity';
 import { environment } from 'src/environments/environment';
+import { GeneralService } from '../general/general.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,24 +14,44 @@ export class HojaDeVidaService {
 
   private _controller = environment.URL + "resume/";
   private _save = this._controller + "save";
-  private _findByUser = this._controller + "findByUser";
+  private _findByUserAssign = this._controller + "findByUserAssign";
+  private _findByUserCreate = this._controller + "findByUserCreate";
+  private _findAll = this._controller + "findAll";
   private _recCount = this._controller + "recCount";
 
   private idHojaDeVida: number;
   private idUser: number;
-  private user : UserEntity;
+  private user : UserEntity | null;
   private resume: ResumeEntity | null;
   private editar: boolean;
-  private userLogin: UserEntity;
+  private userLogin: UserEntity | null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private generalService: GeneralService) { }
+
+  public cerrarSesion(){
+    this.idHojaDeVida = 0;
+    this.idUser = 0;
+    this.user = null;
+    this.resume = null;
+    this.userLogin = null;
+    this.generalService.navegar("login");
+  }
 
   public save(user: ResumeEntity) : Observable<ResponseService> {  
     return this.http.post<ResponseService>(this._save, user);
   }
 
-  public findByUser(user: UserEntity) : Observable<ResponseService> {  
-    return this.http.post<ResponseService>(this._findByUser, user);
+  public findAll(user: UserEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._findAll, user);
+  }
+
+  public findByUserAssign(user: UserEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._findByUserAssign, user);
+  }
+
+  public findByUserCreate(user: UserEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._findByUserCreate, user);
   }
 
   public recCount() : Observable<ResponseService> {  
@@ -53,7 +74,7 @@ export class HojaDeVidaService {
     return this.idUser;
   }
 
-  public obtenerUser() : UserEntity{
+  public obtenerUser() : UserEntity | null{
     return this.user;
   }
 
@@ -61,7 +82,7 @@ export class HojaDeVidaService {
     this.userLogin = userLogin;
   }
 
-  public obtenerUserLogin() : UserEntity{
+  public obtenerUserLogin() : UserEntity | null{
     return this.userLogin;
   }
 

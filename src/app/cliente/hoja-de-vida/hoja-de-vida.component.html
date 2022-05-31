@@ -1,15 +1,21 @@
 <app-menu-principal></app-menu-principal>
 <br>
 <br>
-<div>
-    <div>
-        <p-timeline [value]="events">
-            <ng-template pTemplate="content" let-event>
-                {{event.status}}
-            </ng-template>
-        </p-timeline>
+
+<div class="grid">
+    <div class="col-1 md:col-1 lg:col-1"></div>
+    <div class="col-10 md:col-10 lg:col-10">
+        <mat-card>
+            <p-timeline [value]="events" layout="horizontal">
+                <ng-template pTemplate="content" let-event>
+                    {{event.status}}
+                </ng-template>
+            </p-timeline>
+        </mat-card>
+        
     </div>
 </div>
+
 <br>
 
 <div class="grid">
@@ -41,18 +47,20 @@
                     <td *ngIf="h.userBy != null">{{h.userBy.name}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
                     
-                    <td>{{h.observation}}</td>
+                    <td>
+                        <button mat-button color="primary" (click)="verObservacion(h)">Ver</button>
+                    </td>
                     <td>
                         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                            <button mat-button color="primary" (click)="verHojaDeVida(h)">Ver</button>                         
-                            <button mat-button color="primary" (click)="asignar(h)">Asignar</button> 
+                            <button mat-button color="primary" (click)="verHojaDeVida(h)" *ngIf="rol !== 1">Ver</button>
+                            <button mat-button color="primary" (click)="asignar(h)" *ngIf="rol == 1">Asignar</button> 
                         </mat-button-toggle-group>
                         
                     </td>   
                 </tr>
             </ng-template>
         </p-table>
-        <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" >
+        <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="rol === 2">
             <button mat-raised-button color="primary" (click)="agregar()" [disabled]="cargando" class="botonSiguiente"> <i class="fa-thin fa-plus"></i>Agregar</button>
         
         </div>

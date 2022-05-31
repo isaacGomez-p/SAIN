@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api'
+import { AppComponent } from '../app.component';
 import { Rol } from '../model/rol';
 import { UserEntity } from '../model/userEntity';
 import { GeneralService } from '../service/general/general.service';
@@ -41,12 +42,13 @@ export class LoginComponent implements OnInit {
   ]  
 
   constructor(private messageService: MessageService,
+    private appComponent: AppComponent,
     private router: Router,
     private generalService: GeneralService,
     private hojaDeVidaService: HojaDeVidaService) { }
 
   ngOnInit(): void {
-    
+    this.appComponent.inicionSesiada = false;
   }
 
   iniciarSesion(){   
@@ -68,13 +70,15 @@ export class LoginComponent implements OnInit {
     //user.email = "proveedor2@email.com";
     //user.password = "123456"
     this.generalService.login(user).subscribe(data=>{
+      console.log(data)
       if(data.status === 200){
         let user = new UserEntity();
-        user = data.result as unknown as UserEntity;
+        user = data.result as unknown as UserEntity;        
         this.hojaDeVidaService.guardarUserLogin(user);
         this.hojaDeVidaService.guardarIdUser(user.userId);
         this.messageService.add({severity:'success', summary:'Bienvenido'});     
-        this.generalService.navegar("hojaDeVida");                 
+        this.generalService.navegar("hojaDeVida");      
+        this.appComponent.inicionSesiada = true;           
       }else if (data.status === 404 || data.status === 409){
         this.messageService.add({severity:'error', summary:'Datos incorrectos'});
       }      

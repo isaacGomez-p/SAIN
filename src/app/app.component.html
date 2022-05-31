@@ -26,8 +26,11 @@
       </label>
     </div>    
     <div class="col-12 md:col-6 lg:col-1 centrarTextoVertical">
-      <label class="letraHeader centrarTexto" routerLink="/login">
+      <label class="letraHeader centrarTexto" routerLink="/login" *ngIf="!inicionSesiada">
         Login
+      </label>
+      <label class="letraHeader centrarTexto" (click)="cerrarSesion()" *ngIf="inicionSesiada">
+        Cerrar Sesión
       </label>
     </div>
   </div>  
