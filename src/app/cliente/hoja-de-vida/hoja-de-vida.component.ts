@@ -9,6 +9,8 @@ import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angu
 import { GeneralService } from 'src/app/service/general/general.service';
 import { RequestEntity } from 'src/app/model/requestEntity';
 import { DialogData } from 'src/app/model/dialogData';
+import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
+import { QuestionsEntity } from 'src/app/model/questionsEntity';
 
 
 @Component({
@@ -19,6 +21,7 @@ import { DialogData } from 'src/app/model/dialogData';
 export class HojaDeVidaComponent implements OnInit {
 
   cargando: boolean = false;
+  totalQuestions : number;
 
   /*hojasDeVida = [
     {
@@ -40,8 +43,9 @@ export class HojaDeVidaComponent implements OnInit {
   ]*/
 
   hojasDeVida: ResumeEntity[] = [];
-  lista: AnswerEntity[] = []
-
+  lista: AnswerEntity[] = [];
+  preguntas: QuestionsEntity[];
+  statusCount: Number[];
 
   events: any[];
 
@@ -50,17 +54,24 @@ export class HojaDeVidaComponent implements OnInit {
     private messageService: MessageService,
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,
+    private preguntasService: PreguntasService,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.cargarDatos();
     //this.cargarDatosDebug();
-    this.events = [
-      {status: 'Registrados: 15', date: '15/10/2020 10:30', icon: PrimeIcons.SHOPPING_CART, color: '#9C27B0', image: 'game-controller.jpg'},
-      {status: 'Espera: 10', date: '15/10/2020 14:00', icon: PrimeIcons.COG, color: '#673AB7'},
-      {status: 'Verificado: 3', date: '15/10/2020 16:15', icon: PrimeIcons.ENVELOPE, color: '#FF9800'},
-      {status: 'Terminado: 18', date: '16/10/2020 10:00', icon: PrimeIcons.CHECK, color: '#607D8B'}
-    ];
+    this.hojaDeVidaService.recCount().subscribe(data =>{
+      console.log("sq" + JSON.stringify(data.result));
+      this.statusCount = data.result;
+      this.events = [
+        {status:  this.statusCount == undefined || this.statusCount == null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0], date: '15/10/2020 10:30', icon: PrimeIcons.SHOPPING_CART, color: '#9C27B0', image: 'game-controller.jpg'},
+        {status: 'Espera: -', date: '15/10/2020 14:00', icon: PrimeIcons.COG, color: '#673AB7'},
+        {status:  this.statusCount == undefined || this.statusCount == null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[1], date: '15/10/2020 16:15', icon: PrimeIcons.ENVELOPE, color: '#FF9800'},
+        {status: this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2], date: '16/10/2020 10:00', icon: PrimeIcons.CHECK, color: '#607D8B'}
+      ];
+    })
+    
+    
 
     /*window.localStorage.removeItem("idHV");
     if(window.localStorage.getItem("hv") !== null){
@@ -69,9 +80,13 @@ export class HojaDeVidaComponent implements OnInit {
   }
 
   cargarDatos(){
+   
+    this.preguntasService.findAl().subscribe((data)=>{
+      this.preguntas = data.result;
+      this.totalQuestions = this.preguntas.length
+    })
     this.cargando = true;
     let user = new UserEntity();
-    console.log("obetnerUserId" + this.hojaDeVidaService.obtenerIdUser())
     user.userId = this.hojaDeVidaService.obtenerIdUser();    
     this.hojaDeVidaService.findByUser(user).subscribe((data)=>{
       if(data.result.length === 0){
@@ -80,11 +95,10 @@ export class HojaDeVidaComponent implements OnInit {
         this.hojasDeVida = data.result;
       }      
       this.cargando = false;
-      console.log(data);
     })
   }
 
-  cargarDatosDebug(){
+  /*cargarDatosDebug(){
     let usuario = new UserEntity();        
     this.hojasDeVida.push(
       {      
@@ -113,12 +127,12 @@ export class HojaDeVidaComponent implements OnInit {
         answerEntities: this.lista
       }
     )
-  }
+  }*/
 
   verHojaDeVida(hojaDeVida: ResumeEntity){
-    console.log('asi llega'+ JSON.stringify(hojaDeVida));
     this.hojaDeVidaService.guardarIdHojaDevida(hojaDeVida.resumeId);
     this.hojaDeVidaService.guardarResume(hojaDeVida);    
+    console.log("a verr" + JSON.stringify(hojaDeVida))
     this.hojaDeVidaService.guardarEstaEditando(true);
     //window.localStorage.setItem("idHV", id.toString());
     this.generalService.navegar("formulario");    
@@ -132,7 +146,6 @@ export class HojaDeVidaComponent implements OnInit {
     const dialogRef = this.dialog.open(RegistrarDialog);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
     });    
     //window.localStorage.setItem("hv", JSON.stringify(this.hojasDeVida));
     //
@@ -175,18 +188,14 @@ export class AsignarDialog implements OnInit{
 
   ngOnInit(): void {
     this.cargarUsuarios();
-    console.log(this.data)
   }
 
   cargarUsuarios(){
     let rol = new RequestEntity();
     rol.id = 3;
     this.generalService.findByRole(rol).subscribe((data)=>{
-      console.log(data)
       if(data.status === 200){
-        this.proveedores = data.result
-        console.log(this.proveedores.length);
-        
+        this.proveedores = data.result        
       }
     })
 
@@ -202,7 +211,6 @@ export class AsignarDialog implements OnInit{
 
 
   asignar(){
-    console.log(this.usuarioSeleccionado);
     
     this.data.hojaDeVida.userAssign = this.usuarioSeleccionado
 
@@ -239,7 +247,7 @@ crear(){
   let resumeEntity = new ResumeEntity();
   resumeEntity.name = this.nombre;
   resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
-  resumeEntity.verified = false;
+  resumeEntity.verified = 0;
   resumeEntity.recommendation = "En Espera";
   resumeEntity.status = "W";
   resumeEntity.process = "Perfil 01"
@@ -253,7 +261,6 @@ crear(){
   this.cerrarDialog();
   this.generalService.navegar("formulario");    
   /*this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
-    console.log(data)
     if(data.status === 201){
       let objeto = JSON.parse(JSON.stringify(data.result));
       this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)

@@ -36,6 +36,8 @@ import { CommonModule } from '@angular/common';
 import { HojaDeVidaModule } from './cliente/hoja-de-vida/hoja-de-vida.module';
 import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {FieldsetModule} from 'primeng/fieldset';
+import {DividerModule} from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -70,7 +72,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     HttpClientModule,
     CheckboxModule,
     MatDialogModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    FieldsetModule,
+    DividerModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

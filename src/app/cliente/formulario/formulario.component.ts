@@ -22,7 +22,7 @@ export class FormularioComponent implements OnInit {
   btnText: string = "Siguiente";
   listaRespuestas: AnswerEntity[] = [];
   adding: number = 0;
-  
+  nombre: string | undefined;
   seccionMayor:number=0;
   registrar: boolean = false;
   campo : string = "algo";
@@ -98,8 +98,8 @@ export class FormularioComponent implements OnInit {
     private preguntasService: PreguntasService,    
     ) { }
 
-  ngOnInit(): void {      
-    console.log(this.hojaDeVidaService.obtenerResume())
+  ngOnInit(): void {
+    this.nombre = this.hojaDeVidaService.obtenerResume()?.name;
     if(this.hojaDeVidaService.estaEditando() !== null && this.hojaDeVidaService.estaEditando() == true) {
       this.adding = 1;
     }else{
@@ -110,7 +110,6 @@ export class FormularioComponent implements OnInit {
 
   cargarPreguntas(){    
     this.preguntasService.findAl().subscribe((data)=>{
-      console.log(data)
       this.preguntas = data.result;
       this.cargarDatosHojaDeVida();
     })
@@ -129,6 +128,7 @@ export class FormularioComponent implements OnInit {
     this.preguntas.map((item)=>{          
       if(item.section === 0 && item.description === "Nombre"){                      
         item.answer = this.hojaDeVidaService.obtenerResume()!.name
+        //item.an
       }
     })    
     
@@ -137,12 +137,9 @@ export class FormularioComponent implements OnInit {
         && this.hojaDeVidaService.obtenerResume()!.answerEntities 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities != undefined 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){          
-      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{        
-        console.log("anserss?" + JSON.stringify(item));
+      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
         this.preguntas.map(itemP=>{
-          console.log("?b?" + JSON.stringify(itemP));
           if(item.questions.questionId == itemP.questionId){
-            console.log("pregunta" + JSON.stringify(item));
             itemP.answerObjeto = new AnswerEntity();
             itemP.answerObjeto.verified = item.verified;
             itemP.answerObjeto.userMod = item.userMod;
@@ -150,6 +147,7 @@ export class FormularioComponent implements OnInit {
             itemP.answerObjeto.result = item.result;
             itemP.answerObjeto.answerId = item.answerId;
             itemP.answer = item.description;
+            console.log("JJJ" + JSON.stringify(itemP.answerObjeto));
   //          itemP.answerObjeto.
           }else{
             itemP.answerObjeto = new AnswerEntity();
@@ -165,22 +163,14 @@ export class FormularioComponent implements OnInit {
   }
 
   siguiente(){
-    
-    console.log(this.preguntas)
-
     this.cargando = false;
     if(this.section > this.seccionMayor){
         
     } else{
       this.section++;  
     }
-    
-    console.log(this.section);    
-    console.log("datos actuales" + JSON.stringify(this.preguntas))
-
 
     if(this.section === this.seccionMayor){
-      console.log("________");
       this.registrar = true;
       this.btnText = "Finalizar";
     }
@@ -190,30 +180,33 @@ export class FormularioComponent implements OnInit {
   registrarPreguntas(){
         
     let resume = this.hojaDeVidaService.obtenerResume();    
+    console.log("Y entonces " + JSON.stringify(resume));
     //Se inicia la lista de respuestas en caso que sea null
     resume!.answerEntities = [];    
     this.preguntas.map((item)=>{
       if(item.answer != null && item.answer != ""){
         let answerEntities = new AnswerEntity();
-        console.log("___________ 1");
-        
-        if(this.adding === 1){                              
-          console.log("___________ 2");
+        if(this.adding === 1){                    
+          console.log("el id -- "+ item.answerObjeto.answerId   ); 
           answerEntities.answerId = item.answerObjeto.answerId          
-          answerEntities.result = item.answerObjeto.result;          
-          console.log(answerEntities.verified);          
+          answerEntities.result = item.answerObjeto.result;  
+          answerEntities.verified = item.answerObjeto.verified;              
           resume!.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
         }else{
-          console.log("___________ 3");
           answerEntities.verified = false;
         }
-        console.log("___________ 4");
         //Se asigna el id de la pregunta
         let questionsEntity = new QuestionsEntity();
         questionsEntity.questionId = item.questionId;
         answerEntities.questions = questionsEntity;
         answerEntities.description = item.answer; //Asigna la respuesta
         answerEntities.creationDate = new Date();
+        if(item.answerObjeto == null || item.answerObjeto == undefined || item.answerObjeto.answerId == null || item.answerObjeto.answerId){
+          
+        }else{
+          answerEntities.answerId = item.answerObjeto.answerId;
+        }
+        
         if(resume?.userCreate){
           let user = new UserEntity();
           user = resume?.userCreate;
@@ -222,8 +215,7 @@ export class FormularioComponent implements OnInit {
         resume!.answerEntities.push(answerEntities);
         //resume?.userAssign = 
       }
-    })    
-    console.log(resume)
+    })
     this.hojaDeVidaService.save(resume!).subscribe((data)=>{
       if(data != null){
         if(data.status === 201){

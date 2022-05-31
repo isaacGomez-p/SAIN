@@ -14,6 +14,7 @@ export class HojaDeVidaService {
   private _controller = environment.URL + "resume/";
   private _save = this._controller + "save";
   private _findByUser = this._controller + "findByUser";
+  private _recCount = this._controller + "recCount";
 
   private idHojaDeVida: number;
   private idUser: number;
@@ -30,6 +31,10 @@ export class HojaDeVidaService {
 
   public findByUser(user: UserEntity) : Observable<ResponseService> {  
     return this.http.post<ResponseService>(this._findByUser, user);
+  }
+
+  public recCount() : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._recCount, null);
   }
 
   public guardarIdHojaDevida(id: number){

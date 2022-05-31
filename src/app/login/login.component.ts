@@ -68,7 +68,6 @@ export class LoginComponent implements OnInit {
     //user.email = "proveedor2@email.com";
     //user.password = "123456"
     this.generalService.login(user).subscribe(data=>{
-      console.log(data)
       if(data.status === 200){
         let user = new UserEntity();
         user = data.result as unknown as UserEntity;

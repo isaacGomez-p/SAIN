@@ -9,7 +9,7 @@ export class ResumeEntity {
     name: string; //Nombre Postulante  
 
     //Variables para el rol Proveedor
-    verified: boolean; //Verificado
+    verified: number; //Verificado boolean?
     verificationDate: Date; //Fecha de Verificación
     userBy: UserEntity; //Verificado Por
     recommendation: string; //Recomendacion

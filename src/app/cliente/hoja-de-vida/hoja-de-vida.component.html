@@ -34,14 +34,14 @@
                     <td>{{h.numberId}}</td>
                     <td>{{h.name}}</td>   
                     <td>{{h.recommendation}}</td>
-                    <td *ngIf="h.verified" class="siLabel"> Si </td>
-                    <td *ngIf="!h.verified" class="noLabel"> No </td>
+                    <td *ngIf="h.verified" class="siLabel"> {{ h.verified }} / {{ totalQuestions }} </td>
+                    <td *ngIf="!h.verified" class="noLabel"> 0/{{ totalQuestions }} </td>
                     <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
                     <td *ngIf="h.userBy != null">{{h.userBy.name}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
                     
-                    <td>{{h.observation}}</td>                   
+                    <td>{{h.observation}}</td>
                     <td>
                         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                             <button mat-button color="primary" (click)="verHojaDeVida(h)">Ver</button>                         

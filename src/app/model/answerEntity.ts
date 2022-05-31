@@ -4,7 +4,7 @@ import { UserEntity } from "./userEntity";
 
 export class AnswerEntity{
 
-    answerId: number;
+    answerId: number | null;
     description: string; //Respuesta
     verified: boolean;
     creationDate: Date;
