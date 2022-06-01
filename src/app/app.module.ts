@@ -38,6 +38,8 @@ import { HojaDeVidaComponent } from './cliente/hoja-de-vida/hoja-de-vida.compone
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {FieldsetModule} from 'primeng/fieldset';
 import {DividerModule} from 'primeng/divider';
+import { ChartModule } from 'primeng/chart';
+import { ChipModule } from 'primeng/chip';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,9 @@ import {DividerModule} from 'primeng/divider';
     MatDialogModule,
     MatButtonToggleModule,
     FieldsetModule,
-    DividerModule
+    DividerModule,
+    ChartModule,
+    ChipModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

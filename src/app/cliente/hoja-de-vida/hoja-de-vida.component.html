@@ -6,11 +6,18 @@
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
         <mat-card>
+            <div class="flex align-items-center">
+                <p-chip label="{{label1}}" icon="pi pi-list" styleClass="mr-2"></p-chip>
+                <p-chip label="{{label2}}" icon="pi pi-clock" styleClass="mr-2"></p-chip>
+                <p-chip label="{{label3}}" icon="pi pi-flag" styleClass="mr-2"></p-chip>
+                <p-chip label="{{label4}}" icon="pi pi-check"  styleClass="mr-2"></p-chip>
+            </div>
+            <!--<p-chart type="doughnut" [data]="data1" [options]="chartOptions" [style]="{'width': '40%'}"></p-chart>
             <p-timeline [value]="events" layout="horizontal">
                 <ng-template pTemplate="content" let-event>
                     {{event.status}}
                 </ng-template>
-            </p-timeline>
+            </p-timeline>-->
         </mat-card>
         
     </div>

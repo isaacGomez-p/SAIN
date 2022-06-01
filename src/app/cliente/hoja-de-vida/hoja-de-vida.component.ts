@@ -20,9 +20,14 @@ import { QuestionsEntity } from 'src/app/model/questionsEntity';
 })
 export class HojaDeVidaComponent implements OnInit {
 
+  data1 : any;
   cargando: boolean = false;
   totalQuestions : number;
   rol: number = 0;
+  label1: string;
+  label2: string;
+  label3: string;
+  label4: string;
   /*hojasDeVida = [
     {
       id: 1,
@@ -46,6 +51,7 @@ export class HojaDeVidaComponent implements OnInit {
   lista: AnswerEntity[] = [];
   preguntas: QuestionsEntity[];
   statusCount: Number[];
+  chartOptions: any;
 
   events: any[];
 
@@ -61,8 +67,35 @@ export class HojaDeVidaComponent implements OnInit {
     this.cargarDatos();
     //this.cargarDatosDebug();
     this.hojaDeVidaService.recCount().subscribe(data =>{
-      console.log("sq" + JSON.stringify(data.result));
       this.statusCount = data.result;
+
+    /*this.data1 = {
+        labels: ['Registrados','En Espera','En Proceso', 'Terminado'],
+        datasets: [
+            {
+                data: [
+                  *//*,
+                  0, 
+                  this.statusCount == undefined || this.statusCount == null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[1],
+                  this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2]],
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56"
+                ],
+                hoverBackgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56"
+                    ]
+            }
+        ]
+    };
+    this.chartOptions = this.getLightTheme;*/
+      this.label1 = this.statusCount == undefined || this.statusCount == null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0];
+      this.label2 = 'En Espera: 0' ;
+      this.label3 = this.statusCount == undefined || this.statusCount == null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[1];
+      this.label4 = this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2];
       this.events = [
         {status:  this.statusCount == undefined || this.statusCount == null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0], date: '15/10/2020 10:30', icon: PrimeIcons.SHOPPING_CART, color: '#9C27B0', image: 'game-controller.jpg'},
         {status: 'Espera: -', date: '15/10/2020 14:00', icon: PrimeIcons.COG, color: '#673AB7'},
@@ -77,6 +110,18 @@ export class HojaDeVidaComponent implements OnInit {
     if(window.localStorage.getItem("hv") !== null){
       this.hojasDeVida = JSON.parse(window.localStorage.getItem("hv")  || '{}');
     }*/
+  }
+
+  getLightTheme() {
+    return {
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#495057'
+                }
+            }
+        }
+      }
   }
 
   cargarDatos(){    
@@ -157,8 +202,7 @@ export class HojaDeVidaComponent implements OnInit {
 
   verHojaDeVida(hojaDeVida: ResumeEntity){
     this.hojaDeVidaService.guardarIdHojaDevida(hojaDeVida.resumeId);
-    this.hojaDeVidaService.guardarResume(hojaDeVida);    
-    console.log("a verr" + JSON.stringify(hojaDeVida))
+    this.hojaDeVidaService.guardarResume(hojaDeVida);
     this.hojaDeVidaService.guardarEstaEditando(true);
     //window.localStorage.setItem("idHV", id.toString());
     this.generalService.navegar("formulario");    

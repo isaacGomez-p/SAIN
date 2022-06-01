@@ -153,7 +153,6 @@ export class FormularioComponent implements OnInit {
             itemP.answerObjeto.result = item.result;
             itemP.answerObjeto.answerId = item.answerId;
             itemP.answer = item.description;
-            console.log("JJJ" + JSON.stringify(itemP.answerObjeto));
   //          itemP.answerObjeto.
           }else{
             itemP.answerObjeto = new AnswerEntity();
@@ -183,17 +182,14 @@ export class FormularioComponent implements OnInit {
 
   }  
 
-  registrarPreguntas(){
-        
-    let resume = this.hojaDeVidaService.obtenerResume();    
-    console.log("Y entonces " + JSON.stringify(resume));
+  registrarPreguntas(){        
+    let resume = this.hojaDeVidaService.obtenerResume();
     //Se inicia la lista de respuestas en caso que sea null
     resume!.answerEntities = [];    
     this.preguntas.map((item)=>{
       if(item.answer != null && item.answer != ""){
         let answerEntities = new AnswerEntity();
-        if(this.adding === 1){                    
-          console.log("el id -- "+ item.answerObjeto.answerId   ); 
+        if(this.adding === 1){
           answerEntities.answerId = item.answerObjeto.answerId          
           answerEntities.result = item.answerObjeto.result;  
           answerEntities.verified = item.answerObjeto.verified;              
