@@ -1,3 +1,5 @@
+import { RolEntity } from "./rolEntity";
+
 export class UserEntity{
     userId: number;
     name: string;
@@ -5,5 +7,5 @@ export class UserEntity{
     identification: string;
     email: string;
     password: string;
-    role: number;
+    roleEntity: RolEntity;
 }

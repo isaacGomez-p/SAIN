@@ -1,4 +1,5 @@
 import { AnswerEntity } from "./answerEntity";
+import { RolEntity } from "./rolEntity";
 
 export class QuestionsEntity{
     questionId: number;
@@ -9,7 +10,7 @@ export class QuestionsEntity{
     type: string;
     answerEntities: AnswerEntity[];    
     status: String;
-
+    roles: RolEntity[];
     //No mapeado
     answer: string;
     answerObjeto: AnswerEntity

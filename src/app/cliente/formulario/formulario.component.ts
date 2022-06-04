@@ -27,6 +27,7 @@ export class FormularioComponent implements OnInit {
   registrar: boolean = false;
   campo : string = "algo";
   habilitarEditar: boolean = false;
+  rol: number = 0;
   //TODO perfil operativo
   /*preguntas = [
     {
@@ -100,23 +101,28 @@ export class FormularioComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    if(this.hojaDeVidaService.obtenerUserLogin()!.role == 3){
+    this.rol = this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId;    
+
+    if(this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId == 3){      
       this.habilitarEditar = true;
     }else{
       this.habilitarEditar = false;
     }
+
     this.nombre = this.hojaDeVidaService.obtenerResume()?.name;
-    if(this.hojaDeVidaService.estaEditando() !== null && this.hojaDeVidaService.estaEditando() == true) {
+    if(this.hojaDeVidaService.estaEditando() !== null && this.hojaDeVidaService.estaEditando() == true) {      
       this.adding = 1;
     }else{
       this.adding = 0;
     }
-    this.cargarPreguntas();    
+    this.cargarPreguntas(0);    
   }
 
-  cargarPreguntas(){    
-    this.preguntasService.findAl().subscribe((data)=>{
+  cargarPreguntas(seccion: number){
+    this.preguntasService.findAll(seccion, this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId).subscribe((data)=>{
       this.preguntas = data.result;
+      console.log(this.preguntas);
+      
       this.cargarDatosHojaDeVida();
     })
   }
@@ -124,9 +130,17 @@ export class FormularioComponent implements OnInit {
   cargarDatoUltimaSeccion(){
     this.preguntas.map((item)=>{
       if(item.section>=this.seccionMayor){
-        this.seccionMayor = item.section;
+        this.seccionMayor = item.section;        
       }
     })    
+
+    if(this.section == this.seccionMayor){
+      this.registrar = true;
+      this.btnText = "Finalizar";      
+    }
+
+    console.log("seccionMayor: " + this.seccionMayor);
+    
   }
 
   cargarDatosHojaDeVida(){    
@@ -142,7 +156,8 @@ export class FormularioComponent implements OnInit {
         && this.hojaDeVidaService.obtenerResume() != null 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities != undefined 
-        && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){          
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){  
+
       this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
         this.preguntas.map(itemP=>{
           if(item.questions.questionId == itemP.questionId){
@@ -169,7 +184,9 @@ export class FormularioComponent implements OnInit {
 
   siguiente(){
     this.cargando = false;
-    if(this.section > this.seccionMayor){
+    console.log("seccion: " + this.section);
+    
+    if(this.section >= this.seccionMayor){
         
     } else{
       this.section++;  

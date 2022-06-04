@@ -128,13 +128,13 @@ export class HojaDeVidaComponent implements OnInit {
     this.cargando = true;
 
     //Se asigna el rol del usuario
-    this.rol = this.hojaDeVidaService.obtenerUserLogin()!.role;
+    this.rol = this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId ;
 
     //Se busca las pregunta
-    this.preguntasService.findAl().subscribe((data)=>{
+    /*this.preguntasService.findAll().subscribe((data)=>{
       this.preguntas = data.result;
       this.totalQuestions = this.preguntas.length
-    })
+    })*/
     
     let user = new UserEntity();
     user.userId = this.hojaDeVidaService.obtenerIdUser();    

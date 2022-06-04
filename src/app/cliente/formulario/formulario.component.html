@@ -24,7 +24,8 @@
                                 <div *ngIf="p.type == 'text'">
                                     <textarea [rows]="p.height" pInputTextarea 
                                     [autoResize]=true 
-                                    style="width: 100%;" 
+                                    style="width: 100%;"
+                                    
                                     [(ngModel)]="p.answer"                                    
                                     ></textarea>
                                 </div>
@@ -35,7 +36,7 @@
                                         [minFractionDigits]="0" 
                                         [maxFractionDigits]="0"
                                         [useGrouping]="false"
-                                        [disabled]="habilitarEditar"
+                                    
                                         [maxlength]="10"  
                                         autocomplete="off" ></p-inputNumber>                           
                                 </div>
@@ -44,7 +45,8 @@
                                         class="centrarTextoInput"
                                         mode="currency" currency="COP" locale="es-CO"
                                         [minFractionDigits]="0" 
-                                        [maxFractionDigits]="0"                                
+                                        [maxFractionDigits]="0"
+                                    
                                         [maxlength]="12"  
                                         autocomplete="off" ></p-inputNumber>                           
                                 </div>

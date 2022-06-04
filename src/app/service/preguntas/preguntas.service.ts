@@ -15,9 +15,13 @@ export class PreguntasService {
 
   constructor(private http: HttpClient) { }
   
-  public findAl() : Observable<ResponseService> {      
+  public findAll(seccion: number, rol: number | undefined) : Observable<ResponseService> {      
+    let RequestEntity = {
+      id: seccion,
+      data: rol+""
+    }
     let question = new QuestionsEntity();
-    return this.http.post<ResponseService>(this._findAll, question);
+    return this.http.post<ResponseService>(this._findAll, RequestEntity);
   }
 
 }

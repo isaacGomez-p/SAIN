@@ -20,7 +20,7 @@ export class MenuPrincipalComponent implements OnInit {
         this.user = this.hojaDeVidaService.obtenerUserLogin();
 
         this.nombre = this.user!.name;
-        switch(this.user!.role){
+        switch(this.user!.roleEntity.roleId){
           case 1:
             this.rol = "Admin";
             break;

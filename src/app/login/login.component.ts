@@ -75,6 +75,7 @@ export class LoginComponent implements OnInit {
         user = data.result as unknown as UserEntity;        
         this.hojaDeVidaService.guardarUserLogin(user);
         this.hojaDeVidaService.guardarIdUser(user.userId);
+        console.log(this.hojaDeVidaService.obtenerUserLogin());
         this.messageService.add({severity:'success', summary:'Bienvenido'});     
         this.generalService.navegar("hojaDeVida");      
         this.appComponent.inicionSesiada = true;           
@@ -102,8 +103,8 @@ export class LoginComponent implements OnInit {
       user.lastname = this.apellido;
       user.name = this.nombre;
       user.password = this.claveRegistro;
-      user.role = this.rolRegistro.id;
-
+      user.roleEntity.roleId = this.rolRegistro.id;
+          
       this.generalService.save(user).subscribe(data=>{
         this.messageService.add({severity:'success', summary:'Agregado Correctamente'});
       })
