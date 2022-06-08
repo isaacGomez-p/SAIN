@@ -54,8 +54,12 @@ export class HojaDeVidaService {
     return this.http.post<ResponseService>(this._findByUserCreate, user);
   }
 
-  public recCount() : Observable<ResponseService> {  
-    return this.http.post<ResponseService>(this._recCount, null);
+  public recCount(user: number | null, tipo: string) : Observable<ResponseService> {  
+    let requestEntity = {
+      id: user,
+      data: tipo
+    }
+    return this.http.post<ResponseService>(this._recCount, requestEntity);
   }
 
   public guardarIdHojaDevida(id: number){

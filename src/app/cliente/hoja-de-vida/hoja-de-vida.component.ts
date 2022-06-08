@@ -65,9 +65,25 @@ export class HojaDeVidaComponent implements OnInit {
 
   ngOnInit(): void {        
     this.cargarDatos();
+    this.cargarContadores();
     //this.cargarDatosDebug();
-    this.hojaDeVidaService.recCount().subscribe(data =>{
-      this.statusCount = data.result;
+   
+    
+    
+
+    /*window.localStorage.removeItem("idHV");
+    if(window.localStorage.getItem("hv") !== null){
+      this.hojasDeVida = JSON.parse(window.localStorage.getItem("hv")  || '{}');
+    }*/
+  }
+  
+  cargarContadores() {
+    let tipo = "";
+    if(this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId == 2){
+      tipo = "userCreate"
+    }
+    this.hojaDeVidaService.recCount(this.hojaDeVidaService.obtenerUserLogin()!.userId, tipo).subscribe(data =>{
+      this.statusCount = data.result;      
 
     /*this.data1 = {
         labels: ['Registrados','En Espera','En Proceso', 'Terminado'],
@@ -103,13 +119,6 @@ export class HojaDeVidaComponent implements OnInit {
         {status: this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2], date: '16/10/2020 10:00', icon: PrimeIcons.CHECK, color: '#607D8B'}
       ];
     })
-    
-    
-
-    /*window.localStorage.removeItem("idHV");
-    if(window.localStorage.getItem("hv") !== null){
-      this.hojasDeVida = JSON.parse(window.localStorage.getItem("hv")  || '{}');
-    }*/
   }
 
   getLightTheme() {
@@ -314,6 +323,11 @@ export class AsignarDialog implements OnInit{
   templateUrl: 'observacion-dialog.html',
 })
 export class ObservacionDialog implements OnInit {
+
+  //maxInput: number = 255;
+  maxInput: number = 255;
+  cantInput: number = 0;
+
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private hojaDeVidaService: HojaDeVidaService,
@@ -321,7 +335,7 @@ export class ObservacionDialog implements OnInit {
     private router: Router){}
 
   ngOnInit(): void {
-    this.data.hojaDeVida.observation
+    this.data.hojaDeVida.observation = ""
   }
 
   guardar(){
@@ -335,6 +349,11 @@ export class ObservacionDialog implements OnInit {
 
   cerrarDialog(){
     this.dialogRef.close();
+  }
+
+  validarCaracteres(value : any){ 
+    //Cuenta el tamaño del texto ingresado   
+    this.cantInput = value.length;
   }
 
 }
