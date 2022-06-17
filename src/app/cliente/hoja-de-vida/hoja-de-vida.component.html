@@ -11,6 +11,7 @@
                 <p-chip label="{{label2}}" icon="pi pi-clock" styleClass="mr-2"></p-chip>
                 <p-chip label="{{label3}}" icon="pi pi-flag" styleClass="mr-2"></p-chip>
                 <p-chip label="{{label4}}" icon="pi pi-check"  styleClass="mr-2"></p-chip>
+                <p-chip label="{{label5}}" icon="pi pi-check"  styleClass="mr-2"></p-chip>
             </div>
             <!--<p-chart type="doughnut" [data]="data1" [options]="chartOptions" [style]="{'width': '40%'}"></p-chart>
             <p-timeline [value]="events" layout="horizontal">
@@ -46,7 +47,11 @@
                 <tr>
                     <td>{{h.numberId}}</td>
                     <td>{{h.name}}</td>   
-                    <td>{{h.recommendation}}</td>
+                    <td *ngIf="h.recommendation === 'S'">Registrado</td>
+                    <td *ngIf="h.recommendation === 'W'">En Espera</td>
+                    <td *ngIf="h.recommendation === 'P'">Procesando</td>
+                    <td *ngIf="h.recommendation === 'C'">Revisado</td>
+                    <td *ngIf="h.recommendation === 'F'">Terminado</td>
                     <td *ngIf="h.verified" class="siLabel"> {{ h.verified }} / {{ totalQuestions }} </td>
                     <td *ngIf="!h.verified" class="noLabel"> 0/{{ totalQuestions }} </td>
                     <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>

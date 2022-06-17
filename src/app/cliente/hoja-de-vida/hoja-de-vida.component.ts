@@ -12,7 +12,6 @@ import { DialogData } from 'src/app/model/dialogData';
 import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 
-
 @Component({
   selector: 'app-hoja-de-vida',
   templateUrl: './hoja-de-vida.component.html',
@@ -28,24 +27,7 @@ export class HojaDeVidaComponent implements OnInit {
   label2: string;
   label3: string;
   label4: string;
-  /*hojasDeVida = [
-    {
-      id: 1,
-      description : "Eduardo Fierro",
-      estado: 'Espera',
-      user : {
-          userId : 1
-      }      
-    },
-    {
-      id: 2,
-      description : "Carlos Tinoco",
-      estado: 'Espera',
-      user : {
-          userId : 2
-      }      
-    }
-  ]*/
+  label5: string;
 
   hojasDeVida: ResumeEntity[] = [];
   lista: AnswerEntity[] = [];
@@ -54,7 +36,6 @@ export class HojaDeVidaComponent implements OnInit {
   chartOptions: any;
 
   events: any[];
-
   
   constructor(private router: Router,
     private messageService: MessageService,
@@ -66,15 +47,6 @@ export class HojaDeVidaComponent implements OnInit {
   ngOnInit(): void {        
     this.cargarDatos();
     this.cargarContadores();
-    //this.cargarDatosDebug();
-   
-    
-    
-
-    /*window.localStorage.removeItem("idHV");
-    if(window.localStorage.getItem("hv") !== null){
-      this.hojasDeVida = JSON.parse(window.localStorage.getItem("hv")  || '{}');
-    }*/
   }
   
   cargarContadores() {
@@ -82,55 +54,20 @@ export class HojaDeVidaComponent implements OnInit {
     if(this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId == 2){
       tipo = "userCreate"
     }
+    if(this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId == 3){
+      tipo = "userAssign"
+    }
+    if(this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId == 1){
+      tipo = "admin"
+    }
     this.hojaDeVidaService.recCount(this.hojaDeVidaService.obtenerUserLogin()!.userId, tipo).subscribe(data =>{
       this.statusCount = data.result;      
-
-    /*this.data1 = {
-        labels: ['Registrados','En Espera','En Proceso', 'Terminado'],
-        datasets: [
-            {
-                data: [
-                  *//*,
-                  0, 
-                  this.statusCount == undefined || this.statusCount == null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[1],
-                  this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2]],
-                backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56"
-                ],
-                hoverBackgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56"
-                    ]
-            }
-        ]
-    };
-    this.chartOptions = this.getLightTheme;*/
-      this.label1 = this.statusCount == undefined || this.statusCount == null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0];
-      this.label2 = 'En Espera: 0' ;
-      this.label3 = this.statusCount == undefined || this.statusCount == null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[1];
-      this.label4 = this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2];
-      this.events = [
-        {status:  this.statusCount == undefined || this.statusCount == null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0], date: '15/10/2020 10:30', icon: PrimeIcons.SHOPPING_CART, color: '#9C27B0', image: 'game-controller.jpg'},
-        {status: 'Espera: -', date: '15/10/2020 14:00', icon: PrimeIcons.COG, color: '#673AB7'},
-        {status:  this.statusCount == undefined || this.statusCount == null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[1], date: '15/10/2020 16:15', icon: PrimeIcons.ENVELOPE, color: '#FF9800'},
-        {status: this.statusCount == undefined || this.statusCount == null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[2], date: '16/10/2020 10:00', icon: PrimeIcons.CHECK, color: '#607D8B'}
-      ];
+      this.label1 = this.statusCount[0] === undefined || this.statusCount[0] === null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0];
+      this.label2 = this.statusCount[1] === undefined || this.statusCount[1] === null ? 'En Espera: ' + 0 : 'En proceso: ' + this.statusCount[1];
+      this.label3 = this.statusCount[2] === undefined || this.statusCount[2] === null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[2];
+      this.label4 = this.statusCount[3] === undefined || this.statusCount[3] === null ? 'Revisado: ' +  0 : 'Revisado: ' + this.statusCount[3];
+      this.label5 = this.statusCount[4] === undefined || this.statusCount[4] === null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[4];
     })
-  }
-
-  getLightTheme() {
-    return {
-        plugins: {
-            legend: {
-                labels: {
-                    color: '#495057'
-                }
-            }
-        }
-      }
   }
 
   cargarDatos(){    
@@ -140,10 +77,9 @@ export class HojaDeVidaComponent implements OnInit {
     this.rol = this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId ;
 
     //Se busca las pregunta
-    /*this.preguntasService.findAll().subscribe((data)=>{
-      this.preguntas = data.result;
-      this.totalQuestions = this.preguntas.length
-    })*/
+    this.preguntasService.findCount().subscribe((data)=>{
+      this.totalQuestions = parseInt(data.result.toString(), 10);
+    })
     
     let user = new UserEntity();
     user.userId = this.hojaDeVidaService.obtenerIdUser();    
@@ -291,20 +227,13 @@ export class AsignarDialog implements OnInit{
         this.proveedores = data.result        
       }
     })
-
-
-  }
-
-  
+  }  
 
   cerrarDialog(){
     this.dialogRef.close();
   }
 
-
-
   asignar(){
-    
     this.data.hojaDeVida.userAssign = this.usuarioSeleccionado
 
     this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe(data=>{
@@ -312,10 +241,8 @@ export class AsignarDialog implements OnInit{
         this.generalService.mostrarMensaje("success", "Se asignó correctamente.");
         this.cerrarDialog()
       }
-    })
-   
+    })   
   }
-
 }
 
 @Component({
@@ -335,7 +262,7 @@ export class ObservacionDialog implements OnInit {
     private router: Router){}
 
   ngOnInit(): void {
-    this.data.hojaDeVida.observation = ""
+    this.data.hojaDeVida.observation = this.data.hojaDeVida.observation == null || this.data.hojaDeVida.observation == '' ? "" : this.data.hojaDeVida.observation; 
   }
 
   guardar(){

@@ -12,6 +12,7 @@ export class PreguntasService {
 
   private _controller =  environment.URL + "question/";
   private _findAll = this._controller + "findAll";  
+  private _getCount = this._controller + "getCount"
 
   constructor(private http: HttpClient) { }
   
@@ -22,6 +23,10 @@ export class PreguntasService {
     }
     let question = new QuestionsEntity();
     return this.http.post<ResponseService>(this._findAll, RequestEntity);
+  }
+
+  public findCount() : Observable<ResponseService> {
+    return this.http.post<ResponseService>(this._getCount, null);
   }
 
 }
