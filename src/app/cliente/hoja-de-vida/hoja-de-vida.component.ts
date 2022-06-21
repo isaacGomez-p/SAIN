@@ -263,6 +263,9 @@ export class ObservacionDialog implements OnInit {
 
   ngOnInit(): void {
     this.data.hojaDeVida.observation = this.data.hojaDeVida.observation == null || this.data.hojaDeVida.observation == '' ? "" : this.data.hojaDeVida.observation; 
+    if(this.data.hojaDeVida.observation.length > 0){
+      this.validarCaracteres(this.data.hojaDeVida.observation);
+    }
   }
 
   guardar(){
