@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { RequestEntity } from 'src/app/model/requestEntity';
 import { ResponseService } from 'src/app/model/responseService';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
 import { UserEntity } from 'src/app/model/userEntity';
@@ -18,6 +19,7 @@ export class HojaDeVidaService {
   private _findByUserCreate = this._controller + "findByUserCreate";
   private _findAll = this._controller + "findAll";
   private _recCount = this._controller + "recCount";
+  private _delete = this._controller + "delete";
 
   private idHojaDeVida: number;
   private idUser: number;
@@ -52,6 +54,10 @@ export class HojaDeVidaService {
 
   public findByUserCreate(user: UserEntity) : Observable<ResponseService> {  
     return this.http.post<ResponseService>(this._findByUserCreate, user);
+  }
+
+  public delete(request: RequestEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._delete, request);
   }
 
   public recCount(user: number | null, tipo: string) : Observable<ResponseService> {  

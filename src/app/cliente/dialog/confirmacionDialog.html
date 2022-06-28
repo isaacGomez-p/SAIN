@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Confirmación</h2>
+<mat-dialog-content class="mat-typography">
+    <label class="letraPequena">
+        {{data.mensaje}}
+    </label>
+  
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrarDialog('NO')">No</button>
+  <button mat-button cdkFocusInitial (click)="confirmacion()">Ok</button>
+</mat-dialog-actions>

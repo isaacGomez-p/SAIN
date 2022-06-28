@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import {TimelineModule} from 'primeng/timeline';
 import {CheckboxModule} from 'primeng/checkbox';
+import {SplitButtonModule} from 'primeng/splitbutton';
 
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
@@ -40,6 +41,7 @@ import {FieldsetModule} from 'primeng/fieldset';
 import {DividerModule} from 'primeng/divider';
 import { ChartModule } from 'primeng/chart';
 import { ChipModule } from 'primeng/chip';
+
 
 @NgModule({
   declarations: [
@@ -78,7 +80,8 @@ import { ChipModule } from 'primeng/chip';
     FieldsetModule,
     DividerModule,
     ChartModule,
-    ChipModule
+    ChipModule,
+    SplitButtonModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

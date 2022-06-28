@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {MessageService, PrimeIcons} from 'primeng/api';
+import {MenuItem, MessageService, PrimeIcons} from 'primeng/api';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
 import { UserEntity } from 'src/app/model/userEntity';
 import { AnswerEntity } from 'src/app/model/answerEntity';
@@ -11,6 +11,7 @@ import { RequestEntity } from 'src/app/model/requestEntity';
 import { DialogData } from 'src/app/model/dialogData';
 import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
+import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
 
 @Component({
   selector: 'app-hoja-de-vida',
@@ -36,6 +37,8 @@ export class HojaDeVidaComponent implements OnInit {
   chartOptions: any;
 
   events: any[];
+
+  items: MenuItem[];
   
   constructor(private router: Router,
     private messageService: MessageService,
@@ -46,9 +49,39 @@ export class HojaDeVidaComponent implements OnInit {
 
   ngOnInit(): void {        
     this.cargarDatos();
-    this.cargarContadores();
+    this.cargarContadores();    
   }
-  
+
+  eliminarDialog(hojaDeVida: ResumeEntity){
+    const dialogRef =  this.dialog.open(ConfirmacionDialog, {      
+      data: {
+        mensaje: '¿Esta seguro que desea eliminar este registro?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != undefined){
+        if(result == "SI"){
+          this.eliminar(hojaDeVida);
+        }
+      }
+    });  
+
+  }
+
+  eliminar(hojaDeVida: ResumeEntity){
+    let request = new RequestEntity();
+    request.id = hojaDeVida.resumeId;
+    this.hojaDeVidaService.delete(request).subscribe((data)=>{
+      if(data.status == 204){
+        this.generalService.mostrarMensaje("Se eliminó correctamente la hoja de vida.", "success");
+        this.cargarDatos();
+      }else{
+        this.generalService.mostrarMensaje("Error eliminado la hoja de vida.", "danger");
+      }
+    })
+  }
+
   cargarContadores() {
     let tipo = "";
     if(this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId == 2){
@@ -87,6 +120,7 @@ export class HojaDeVidaComponent implements OnInit {
       this.hojaDeVidaService.findByUserCreate(user).subscribe((data)=>{
         if(data.result.length === 0){
           this.messageService.add({severity:'info', summary:'No se encontraron hojas de vidas registradas'});
+          this.hojasDeVida = data.result;
         }else{
           this.hojasDeVida = data.result;
         }      
@@ -339,3 +373,4 @@ cerrarDialog(){
 }
 
 }
+

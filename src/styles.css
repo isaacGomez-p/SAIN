@@ -9,8 +9,9 @@
     --tamanoLetraHeader: 30px;
     --tamanoLetraFooter: 20px;
     --tamanoLetraGrande: 45px;
+    --tamanoLetraMediana: 25px;
     --tamanoLetraPequena: 15px;
-    --colorSi : green;
+    --colorSi : #0fbb36;
     --colorNo : red;
 }
 
@@ -68,6 +69,9 @@ html {
 }
 .letraPequena{
     font-size: var(--tamanoLetraPequena);
+}
+.letraMediana{
+    font-size: var(--tamanoLetraMediana);
 }
 .letraHeader:hover{
     color: yellow;

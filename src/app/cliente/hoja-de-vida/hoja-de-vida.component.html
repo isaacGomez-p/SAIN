@@ -29,8 +29,24 @@
 <div class="grid">
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
-        <p-table [value]="hojasDeVida" responsiveLayout="scroll" [rowsPerPageOptions]="[10,25,50]">
-           
+        <p-table #dt [value]="hojasDeVida" responsiveLayout="scroll"  [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+        [globalFilterFields]="['numberId','name','recommendation','verified']">
+
+            <ng-template pTemplate="caption">
+                <div class="table-header">
+                    <div class="grid">
+                        <div class="col-10 md:col-10 lg:col-9 letraMediana">
+                            Personas registradas
+                        </div>
+                        <div class="col-10 md:col-10 lg:col-3" style="align: right;">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Busqueda Global" />
+                            </span>
+                        </div>
+                    </div>                                        
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="numberId">Identificador<p-sortIcon field="numberId"></p-sortIcon></th>
@@ -41,6 +57,32 @@
                     <th pSortableColumn="userBy.name">Verificado Por<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
                     <th pSortableColumn="observation">Observaciones<p-sortIcon field="observation"></p-sortIcon></th>                    
                     <th style="text-align-last: center;">Acciones</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'numberId', 'startsWith')" placeholder="Buscar por Cédula" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'name', 'startsWith')" placeholder="Buscar por Nombre" class="p-column-filter">
+                    </th>
+                    <th>
+                        
+                    </th>
+                    <th>
+                        
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="Buscar por Fecha" class="p-column-filter">    
+                    </th>
+                    <th>
+                        
+                    </th>
+                    <th>
+                        
+                    </th>
+                    <th>
+                        
+                    </th>              
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-h>
@@ -63,9 +105,11 @@
                         <button mat-button color="primary" (click)="verObservacion(h)">Ver</button>
                     </td>
                     <td>
+                        
                         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                             <button mat-button color="primary" (click)="verHojaDeVida(h)" *ngIf="rol !== 1">Ver</button>
                             <button mat-button color="primary" (click)="asignar(h)" *ngIf="rol == 1">Asignar</button> 
+                            <button mat-button color="primary" (click)="eliminarDialog(h)" *ngIf="rol == 1 || rol == 2">Eliminar</button> 
                         </mat-button-toggle-group>
                         
                     </td>   

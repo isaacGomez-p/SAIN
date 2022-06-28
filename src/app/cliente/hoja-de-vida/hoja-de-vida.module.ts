@@ -9,8 +9,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
+import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
 @NgModule({
-  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog],
+  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog],
   imports: [
     CommonModule,
     HojaDeVidaComponentRoutingModule,    
