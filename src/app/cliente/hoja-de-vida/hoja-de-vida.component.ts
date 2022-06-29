@@ -13,6 +13,7 @@ import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
 
+
 @Component({
   selector: 'app-hoja-de-vida',
   templateUrl: './hoja-de-vida.component.html',
@@ -96,7 +97,7 @@ export class HojaDeVidaComponent implements OnInit {
     this.hojaDeVidaService.recCount(this.hojaDeVidaService.obtenerUserLogin()!.userId, tipo).subscribe(data =>{
       this.statusCount = data.result;      
       this.label1 = this.statusCount[0] === undefined || this.statusCount[0] === null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0];
-      this.label2 = this.statusCount[1] === undefined || this.statusCount[1] === null ? 'En Espera: ' + 0 : 'En proceso: ' + this.statusCount[1];
+      this.label2 = this.statusCount[1] === undefined || this.statusCount[1] === null ? 'En Espera: ' + 0 : 'En Espera: ' + this.statusCount[1];
       this.label3 = this.statusCount[2] === undefined || this.statusCount[2] === null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[2];
       this.label4 = this.statusCount[3] === undefined || this.statusCount[3] === null ? 'Revisado: ' +  0 : 'Revisado: ' + this.statusCount[3];
       this.label5 = this.statusCount[4] === undefined || this.statusCount[4] === null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[4];
@@ -330,16 +331,29 @@ export class ObservacionDialog implements OnInit {
 })
 export class RegistrarDialog {
 
+  profiles : any[];
+
 constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
   @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
   private hojaDeVidaService: HojaDeVidaService,
   private generalService: GeneralService,
   private router: Router){
+    this.profiles = [
+      {name: 'Profesional Sin Experiencia'},
+      {name: 'Profesional'},
+      {name: 'Técnico'},
+      {name: 'Tecnólogo'},
+      {name: 'Administrativo'},
+      {name: 'Recursos Humanos'}
+  ];
 
   }
 
-numeroIdentificacionRegistro: number;
-nombre: string;
+  numeroIdentificacionRegistro: number;
+  nombre: string;
+  selectedProfile: any;
+  centro: string;
+  unidad: string;
 
 crear(){
   let resumeEntity = new ResumeEntity();
@@ -348,7 +362,9 @@ crear(){
   resumeEntity.verified = 0;
   resumeEntity.recommendation = "En Espera";
   resumeEntity.status = "W";
-  resumeEntity.process = "Perfil 01"
+  resumeEntity.profile = this.selectedProfile;
+  resumeEntity.costCenter = this.centro;
+  resumeEntity.bussUnit = this.unidad;
   let user = new UserEntity();  
   user.userId = this.hojaDeVidaService.obtenerIdUser();
   resumeEntity.userCreate = user;

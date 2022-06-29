@@ -30,7 +30,7 @@
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
         <p-table #dt [value]="hojasDeVida" responsiveLayout="scroll"  [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-        [globalFilterFields]="['numberId','name','recommendation','verified']">
+        [globalFilterFields]="['numberId','costCenter','name','recommendation','verified']">
 
             <ng-template pTemplate="caption">
                 <div class="table-header">
@@ -50,11 +50,14 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="numberId">Identificador<p-sortIcon field="numberId"></p-sortIcon></th>
+                    <th pSortableColumn="costCenter">Centro de Costo<p-sortIcon field="costCenter"></p-sortIcon></th>
+                    <th pSortableColumn="bussUnit">Und. de Neg<p-sortIcon field="bussUnit"></p-sortIcon></th>
+                    <th pSortableColumn="profile">Perfil<p-sortIcon field="profile"></p-sortIcon></th>
                     <th pSortableColumn="name">Nombre Postulante<p-sortIcon field="name"></p-sortIcon></th>                    
                     <th pSortableColumn="recommendation">Recomendación<p-sortIcon field="recommendation"></p-sortIcon></th>
                     <th pSortableColumn="verified">Verificado<p-sortIcon field="verified"></p-sortIcon></th>
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
-                    <th pSortableColumn="userBy.name">Verificado Por<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
+                    <th pSortableColumn="userAssign.name">Asignado a<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
                     <th pSortableColumn="observation">Observaciones<p-sortIcon field="observation"></p-sortIcon></th>                    
                     <th style="text-align-last: center;">Acciones</th>
                 </tr>
@@ -88,6 +91,9 @@
             <ng-template pTemplate="body" let-h>
                 <tr>
                     <td>{{h.numberId}}</td>
+                    <td>{{h.costCenter}}</td>
+                    <td>{{h.bussUnit}}</td>
+                    <td>{{h.profile}}</td>
                     <td>{{h.name}}</td>   
                     <td *ngIf="h.recommendation === 'S'">Registrado</td>
                     <td *ngIf="h.recommendation === 'W'">En Espera</td>
@@ -98,8 +104,8 @@
                     <td *ngIf="!h.verified" class="noLabel"> 0/{{ totalQuestions }} </td>
                     <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>
                     <td *ngIf="h.userBy == null">No ha sido verificado</td>
-                    <td *ngIf="h.userBy != null">{{h.userBy.name}}</td>
-                    <td *ngIf="h.userBy == null">No ha sido verificado</td>
+                    <td *ngIf="h.userAssign != null">{{h.userAssign.name}}</td>
+                    <td *ngIf="h.userAssign == null">No ha sido asignado</td>
                     
                     <td>
                         <button mat-button color="primary" (click)="verObservacion(h)">Ver</button>

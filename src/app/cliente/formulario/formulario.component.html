@@ -71,8 +71,8 @@
                             <td *ngIf="adding > 0">
                                 <div class="field-checkbox">
                                     <p-checkbox [(ngModel)]="p.answerObjeto.result" [binary]="true" [disabled]="!habilitarEditar" inputId="binary"></p-checkbox>
-                                    <label for="binary" *ngIf="p.answerObjeto != undefined && p.answerObjeto.result"> Correcto </label>
-                                    <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.result"> Incorrecto </label>
+                                    <label for="binary" *ngIf="p.answerObjeto != undefined && p.answerObjeto.result"> Positivo </label>
+                                    <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.result"> Negativo </label>
                                 </div>
                             </td>
                         </tr>

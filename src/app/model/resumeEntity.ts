@@ -25,4 +25,8 @@ export class ResumeEntity {
     userAssign: UserEntity | null; //Usuario a quién fue asignado
     answerEntities: AnswerEntity[]; //Respuesta a esa hoja de vida        
     creationDate : Date;            
+
+    costCenter: string; //centro de costo
+    bussUnit: string; //unidad de negocio
+    profile: string; //perfil
 }
