@@ -58,12 +58,21 @@
                     <th pSortableColumn="verified">Verificado<p-sortIcon field="verified"></p-sortIcon></th>
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
                     <th pSortableColumn="userAssign.name">Asignado a<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
-                    <th pSortableColumn="observation">Observaciones<p-sortIcon field="observation"></p-sortIcon></th>                    
+                    <th pSortableColumn="observation">Obs.<p-sortIcon field="observation"></p-sortIcon></th>                    
                     <th style="text-align-last: center;">Acciones</th>
                 </tr>
                 <tr>
                     <th>
                         <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'numberId', 'startsWith')" placeholder="Buscar por Cédula" class="p-column-filter">
+                    </th>
+                    <th>
+                        
+                    </th>
+                    <th>
+                        
+                    </th>
+                    <th>
+                        
                     </th>
                     <th>
                         <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'name', 'startsWith')" placeholder="Buscar por Nombre" class="p-column-filter">
