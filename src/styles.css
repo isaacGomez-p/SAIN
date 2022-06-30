@@ -147,7 +147,13 @@ html {
     opacity: 70%;
     cursor: pointer;
 }
+.estado{
 
+}
+.estado:hover{
+    opacity: 70%;
+    cursor: pointer;
+}
 .imagenLogo{
     align-self: center;
     text-align: center;
@@ -181,4 +187,7 @@ html {
     width: 100%; 
     height: 150px;
     font-size: 22px;
+}
+.anchoInputBusqueda{
+    width: 80%;
 }

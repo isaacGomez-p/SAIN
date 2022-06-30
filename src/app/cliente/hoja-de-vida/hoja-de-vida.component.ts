@@ -32,6 +32,7 @@ export class HojaDeVidaComponent implements OnInit {
   label5: string;
 
   hojasDeVida: ResumeEntity[] = [];
+  hojasDeVidaAll: ResumeEntity[] = [];
   lista: AnswerEntity[] = [];
   preguntas: QuestionsEntity[];
   statusCount: Number[];
@@ -41,6 +42,8 @@ export class HojaDeVidaComponent implements OnInit {
 
   items: MenuItem[];
   
+  nombre: string | undefined;
+
   constructor(private router: Router,
     private messageService: MessageService,
     private hojaDeVidaService: HojaDeVidaService,
@@ -107,6 +110,7 @@ export class HojaDeVidaComponent implements OnInit {
   cargarDatos(){    
     this.cargando = true;
 
+    this.nombre = this.hojaDeVidaService.obtenerUserLogin()?.name;
     //Se asigna el rol del usuario
     this.rol = this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId ;
 
@@ -124,6 +128,7 @@ export class HojaDeVidaComponent implements OnInit {
           this.hojasDeVida = data.result;
         }else{
           this.hojasDeVida = data.result;
+          this.hojasDeVidaAll = this.hojasDeVida;
         }      
         this.cargando = false;
       })
@@ -133,6 +138,7 @@ export class HojaDeVidaComponent implements OnInit {
           this.messageService.add({severity:'info', summary:'No hay hojas de vida para asignar.'});
         }else{
           this.hojasDeVida = data.result;
+          this.hojasDeVidaAll = this.hojasDeVida;        
         }      
         this.cargando = false;
       })
@@ -142,6 +148,7 @@ export class HojaDeVidaComponent implements OnInit {
           this.messageService.add({severity:'info', summary:'Ups! No se encontraron hojas de vidas para revisar.'});
         }else{
           this.hojasDeVida = data.result;
+          this.hojasDeVidaAll = this.hojasDeVida;
         }      
         this.cargando = false;
       })
@@ -179,6 +186,51 @@ export class HojaDeVidaComponent implements OnInit {
       }
     )
   }*/
+
+  filtroPorEstados(filtro: number){
+    console.log("__ filtro: " + filtro);
+    
+    let texto = "";
+    switch(filtro){
+      case 1:
+        texto = 'A'
+        break;
+      case 2:
+        texto = 'S'
+        break;
+      case 3:
+        texto = 'W'
+        break;
+      case 4:
+        texto = 'P'
+        break;
+      case 5:
+        texto = 'C'
+        break;
+      case 6:
+        texto = 'F'
+        break;
+    }
+    console.log("__ " + this.hojasDeVidaAll.length);
+    
+    // 1 - TODOS
+    // 2 - REGISTRADOS
+    // 3 - EN ESPERA
+    // 4 - EN PROCESO
+    // 5 - REVISADO
+    // 6 - TERMINADO
+
+    this.hojasDeVida = [];
+
+    this.hojasDeVidaAll.map((item)=>{
+      console.log(item.recommendation);      
+      if(item.recommendation === texto){
+        console.log("__ entro");        
+        this.hojasDeVida.push(item);
+      }
+    })
+
+  }
 
   verHojaDeVida(hojaDeVida: ResumeEntity){
     this.hojaDeVidaService.guardarIdHojaDevida(hojaDeVida.resumeId);
@@ -285,25 +337,62 @@ export class AsignarDialog implements OnInit{
   templateUrl: 'observacion-dialog.html',
 })
 export class ObservacionDialog implements OnInit {
+  seleccionRecomendacion: any;
+  rol: number | undefined;
+  habilitarRecomendacion: boolean = false;
+  recomendacion: any[] = [
+    {
+      id: '1',
+      name: 'Apto'
+    },
+    {
+      id: '2',
+      name: 'No Apto'
+    }
+  ];
 
   //maxInput: number = 255;
   maxInput: number = 255;
   cantInput: number = 0;
-
+  observacion: string = "";
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,
     private router: Router){}
 
-  ngOnInit(): void {
-    this.data.hojaDeVida.observation = this.data.hojaDeVida.observation == null || this.data.hojaDeVida.observation == '' ? "" : this.data.hojaDeVida.observation; 
-    if(this.data.hojaDeVida.observation.length > 0){
-      this.validarCaracteres(this.data.hojaDeVida.observation);
+  ngOnInit(): void {    
+    this.rol = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId;
+    console.log("___ recomendacion: " + this.data.hojaDeVida.recommendation + " _ _ " + this.rol);
+    
+    if(this.data.hojaDeVida.recommendation === 'C'){
+      this.habilitarRecomendacion = true;
+    }
+    if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 2){
+      // entra como cliente
+      this.data.hojaDeVida.adminObservation = this.data.hojaDeVida.adminObservation == null || this.data.hojaDeVida.adminObservation == '' ? "" : this.data.hojaDeVida.adminObservation; 
+      if(this.data.hojaDeVida.adminObservation.length > 0){
+        this.observacion = this.data.hojaDeVida.adminObservation;
+        this.validarCaracteres(this.observacion);
+      }      
+    }else{
+      this.data.hojaDeVida.provObservation = this.data.hojaDeVida.provObservation == null || this.data.hojaDeVida.provObservation == '' ? "" : this.data.hojaDeVida.provObservation; 
+      if(this.data.hojaDeVida.provObservation.length > 0){
+        this.observacion = this.data.hojaDeVida.provObservation;
+        this.validarCaracteres(this.observacion);
+      }
     }
   }
 
   guardar(){
+    if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 3){
+      this.data.hojaDeVida.provObservation = this.observacion;
+    } else if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 1){
+      this.data.hojaDeVida.adminObservation = this.observacion;
+    }
+    if(this.habilitarRecomendacion){
+      this.data.hojaDeVida.status = this.seleccionRecomendacion.name;
+    }
     this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe((data)=>{
       if(data.status === 201){
         this.generalService.mostrarMensaje("success", "Observación asignada correctamente.");
@@ -355,14 +444,12 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
   centro: string;
   unidad: string;
 
-crear(){
+crear(){  
   let resumeEntity = new ResumeEntity();
   resumeEntity.name = this.nombre;
   resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
-  resumeEntity.verified = 0;
-  resumeEntity.recommendation = "En Espera";
-  resumeEntity.status = "W";
-  resumeEntity.profile = this.selectedProfile;
+  resumeEntity.verified = 0;  
+  resumeEntity.profile = this.selectedProfile.name;
   resumeEntity.costCenter = this.centro;
   resumeEntity.bussUnit = this.unidad;
   let user = new UserEntity();  

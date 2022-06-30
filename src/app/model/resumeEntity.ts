@@ -12,8 +12,7 @@ export class ResumeEntity {
     verified: number; //Verificado boolean?
     verificationDate: Date; //Fecha de Verificación
     userBy: UserEntity; //Verificado Por
-    recommendation: string; //Recomendacion
-    observation: string; //Observación
+    recommendation: string; //Recomendacion    
 
     //Variables para el rol Cliente
     process: string; //Proceso
@@ -29,4 +28,7 @@ export class ResumeEntity {
     costCenter: string; //centro de costo
     bussUnit: string; //unidad de negocio
     profile: string; //perfil
+
+    adminObservation: string;
+    provObservation: string;
 }

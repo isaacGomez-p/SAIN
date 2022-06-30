@@ -5,13 +5,15 @@
 <div class="grid">
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
-        <mat-card>
+        <mat-card style="width: 100%;">
             <div class="flex align-items-center">
-                <p-chip label="{{label1}}" icon="pi pi-list" styleClass="mr-2"></p-chip>
-                <p-chip label="{{label2}}" icon="pi pi-clock" styleClass="mr-2"></p-chip>
-                <p-chip label="{{label3}}" icon="pi pi-flag" styleClass="mr-2"></p-chip>
-                <p-chip label="{{label4}}" icon="pi pi-check"  styleClass="mr-2"></p-chip>
-                <p-chip label="{{label5}}" icon="pi pi-check"  styleClass="mr-2"></p-chip>
+                <label>Estados: &nbsp; &nbsp; &nbsp;</label>
+                <p-chip label="Todos" icon="pi pi-list" styleClass="mr-2" (click)="filtroPorEstados(1)" class="estado"></p-chip>
+                <p-chip label="{{label1}}" icon="pi pi-list" styleClass="mr-2" (click)="filtroPorEstados(2)" class="estado"></p-chip>
+                <p-chip label="{{label2}}" icon="pi pi-clock" styleClass="mr-2" (click)="filtroPorEstados(3)" class="estado"></p-chip>
+                <p-chip label="{{label3}}" icon="pi pi-flag" styleClass="mr-2" (click)="filtroPorEstados(4)" class="estado"></p-chip>
+                <p-chip label="{{label4}}" icon="pi pi-check"  styleClass="mr-2" (click)="filtroPorEstados(5)" class="estado"></p-chip>
+                <p-chip label="{{label5}}" icon="pi pi-check"  styleClass="mr-2" (click)="filtroPorEstados(6)" class="estado"></p-chip>
             </div>
             <!--<p-chart type="doughnut" [data]="data1" [options]="chartOptions" [style]="{'width': '40%'}"></p-chart>
             <p-timeline [value]="events" layout="horizontal">
@@ -53,17 +55,16 @@
                     <th pSortableColumn="costCenter">Centro de Costo<p-sortIcon field="costCenter"></p-sortIcon></th>
                     <th pSortableColumn="bussUnit">Und. de Neg<p-sortIcon field="bussUnit"></p-sortIcon></th>
                     <th pSortableColumn="profile">Perfil<p-sortIcon field="profile"></p-sortIcon></th>
-                    <th pSortableColumn="name">Nombre Postulante<p-sortIcon field="name"></p-sortIcon></th>                    
-                    <th pSortableColumn="recommendation">Recomendación<p-sortIcon field="recommendation"></p-sortIcon></th>
+                    <th pSortableColumn="name">Nombre Postulante<p-sortIcon field="name"></p-sortIcon></th>                                        
                     <th pSortableColumn="verified">Verificado<p-sortIcon field="verified"></p-sortIcon></th>
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
                     <th pSortableColumn="userAssign.name">Asignado a<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
-                    <th pSortableColumn="observation">Obs.<p-sortIcon field="observation"></p-sortIcon></th>                    
+                    <th >Obs.</th>                    
                     <th style="text-align-last: center;">Acciones</th>
                 </tr>
                 <tr>
                     <th>
-                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'numberId', 'startsWith')" placeholder="Buscar por Cédula" class="p-column-filter">
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'numberId', 'startsWith')" placeholder="123456" class="p-column-filter anchoInputBusqueda">
                     </th>
                     <th>
                         
@@ -75,16 +76,13 @@
                         
                     </th>
                     <th>
-                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'name', 'startsWith')" placeholder="Buscar por Nombre" class="p-column-filter">
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'name', 'startsWith')" placeholder={{nombre}} class="p-column-filter anchoInputBusqueda">
                     </th>
                     <th>
                         
-                    </th>
+                    </th>                    
                     <th>
-                        
-                    </th>
-                    <th>
-                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="Buscar por Fecha" class="p-column-filter">    
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="Buscar por Fecha" class="p-column-filter anchoInputBusqueda">    
                     </th>
                     <th>
                         
@@ -104,11 +102,6 @@
                     <td>{{h.bussUnit}}</td>
                     <td>{{h.profile}}</td>
                     <td>{{h.name}}</td>   
-                    <td *ngIf="h.recommendation === 'S'">Registrado</td>
-                    <td *ngIf="h.recommendation === 'W'">En Espera</td>
-                    <td *ngIf="h.recommendation === 'P'">Procesando</td>
-                    <td *ngIf="h.recommendation === 'C'">Revisado</td>
-                    <td *ngIf="h.recommendation === 'F'">Terminado</td>
                     <td *ngIf="h.verified" class="siLabel"> {{ h.verified }} / {{ totalQuestions }} </td>
                     <td *ngIf="!h.verified" class="noLabel"> 0/{{ totalQuestions }} </td>
                     <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>

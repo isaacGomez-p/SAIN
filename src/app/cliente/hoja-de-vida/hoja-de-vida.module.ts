@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
 @NgModule({
   declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog],
   imports: [
@@ -21,7 +22,8 @@ import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
     MatDialogModule,
     TableModule,
     MatButtonModule,
-    DropdownModule
+    DropdownModule,
+    RadioButtonModule
   ]
 })
 export class HojaDeVidaModule { }

@@ -15,6 +15,7 @@ import {ToastModule} from 'primeng/toast';
 import {TimelineModule} from 'primeng/timeline';
 import {CheckboxModule} from 'primeng/checkbox';
 import {SplitButtonModule} from 'primeng/splitbutton';
+import {RadioButtonModule} from 'primeng/radiobutton';
 
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
@@ -81,7 +82,8 @@ import { ChipModule } from 'primeng/chip';
     DividerModule,
     ChartModule,
     ChipModule,
-    SplitButtonModule
+    SplitButtonModule,
+    RadioButtonModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

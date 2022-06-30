@@ -10,12 +10,19 @@
                 autoResize="autoResize"
                 maxlength={{maxInput}}            
                 (ngModelChange)="validarCaracteres($event)"
-                [(ngModel)]="data.hojaDeVida.observation">
+                [(ngModel)]="observacion">
             </textarea>        
         </div>
         <div class="col-11 md:col-11 lg:col-11">
             <label>Carácteres actuales:{{cantInput}} - Carácteres permitidos: {{maxInput}}</label>
         </div>
+        <div class="col-11 md:col-11 lg:col-11" *ngIf="rol === 1 && habilitarRecomendacion">
+            <div *ngFor="let r of recomendacion" class="p-field-checkbox">
+                <p-radioButton [inputId]="r.id" name="r" [value]="r" [(ngModel)]="seleccionRecomendacion" ></p-radioButton>
+                <label [for]="r.id">{{r.name}}</label>
+            </div>
+        </div>
+        
     </div>
 </mat-dialog-content>
 
