@@ -31,6 +31,8 @@ export class HojaDeVidaComponent implements OnInit {
   label4: string;
   label5: string;
 
+  mostrando: string = 'Todos';
+
   hojasDeVida: ResumeEntity[] = [];
   hojasDeVidaAll: ResumeEntity[] = [];
   lista: AnswerEntity[] = [];
@@ -99,7 +101,7 @@ export class HojaDeVidaComponent implements OnInit {
     }
     this.hojaDeVidaService.recCount(this.hojaDeVidaService.obtenerUserLogin()!.userId, tipo).subscribe(data =>{
       this.statusCount = data.result;      
-      this.label1 = this.statusCount[0] === undefined || this.statusCount[0] === null ?'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0];
+      this.label1 = this.statusCount[0] === undefined || this.statusCount[0] === null ? 'Registrados: ' + 0 : 'Registrados: ' + this.statusCount[0];
       this.label2 = this.statusCount[1] === undefined || this.statusCount[1] === null ? 'En Espera: ' + 0 : 'En Espera: ' + this.statusCount[1];
       this.label3 = this.statusCount[2] === undefined || this.statusCount[2] === null ? 'En proceso: ' + 0 : 'En proceso: ' + this.statusCount[2];
       this.label4 = this.statusCount[3] === undefined || this.statusCount[3] === null ? 'Revisado: ' +  0 : 'Revisado: ' + this.statusCount[3];
@@ -156,62 +158,34 @@ export class HojaDeVidaComponent implements OnInit {
     
   }
 
-  /*cargarDatosDebug(){
-    let usuario = new UserEntity();        
-    this.hojasDeVida.push(
-      {      
-        name: 'Eduardo Fierro',
-        numberId: '10005465',
-        verified: false,
-        verificationDate: new Date(),
-        userBy: {
-          userId: 1,
-          name: 'Isacc',
-          email: '',
-          identification: '',
-          lastname: '',
-          password: '',
-          role: 1,
-        },
-        recommendation: 'Contratar',
-        creationDate: new Date(),
-        observation: 'Ninguna',
-        process: '',
-        score: 100,
-        resumeId: 1,
-        status: '',
-        userAssign: usuario,
-        userCreate: usuario,
-        answerEntities: this.lista
-      }
-    )
-  }*/
-
-  filtroPorEstados(filtro: number){
-    console.log("__ filtro: " + filtro);
-    
+  filtroPorEstados(filtro: number){    
     let texto = "";
     switch(filtro){
       case 1:
+        this.mostrando = 'Todos';
         texto = 'A'
         break;
       case 2:
+        this.mostrando = 'Registrados';
         texto = 'S'
         break;
       case 3:
+        this.mostrando = 'En Espera';
         texto = 'W'
         break;
       case 4:
+        this.mostrando = 'En Proceso';
         texto = 'P'
         break;
       case 5:
+        this.mostrando = 'Revisados';
         texto = 'C'
         break;
       case 6:
+        this.mostrando = 'Terminados';
         texto = 'F'
         break;
     }
-    console.log("__ " + this.hojasDeVidaAll.length);
     
     // 1 - TODOS
     // 2 - REGISTRADOS
@@ -223,13 +197,12 @@ export class HojaDeVidaComponent implements OnInit {
     this.hojasDeVida = [];
 
     this.hojasDeVidaAll.map((item)=>{
-      console.log(item.recommendation);      
-      if(item.recommendation === texto){
-        console.log("__ entro");        
+      if(texto === 'A'){
+        this.hojasDeVida.push(item);
+      } else if(item.recommendation === texto){
         this.hojasDeVida.push(item);
       }
     })
-
   }
 
   verHojaDeVida(hojaDeVida: ResumeEntity){
@@ -281,7 +254,6 @@ export class HojaDeVidaComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });   
   }
-
 }
 
 
@@ -363,7 +335,6 @@ export class ObservacionDialog implements OnInit {
 
   ngOnInit(): void {    
     this.rol = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId;
-    console.log("___ recomendacion: " + this.data.hojaDeVida.recommendation + " _ _ " + this.rol);
     
     if(this.data.hojaDeVida.recommendation === 'C'){
       this.habilitarRecomendacion = true;

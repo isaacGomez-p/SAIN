@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HojaDeVidaService } from './service/hojaDeVida/hoja-de-vida.service';
+import { NavigationService } from './service/NavigationService';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,15 @@ export class AppComponent {
 
   title = 'sain';
 
-  constructor(private hojaDeVidaService: HojaDeVidaService){}
+  constructor(private hojaDeVidaService: HojaDeVidaService,
+    private navigation: NavigationService){}
 
   cerrarSesion(){
     this.hojaDeVidaService.cerrarSesion();
+  }
+
+  back(): void{
+    window.history.back();
   }
 
 }

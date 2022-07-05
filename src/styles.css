@@ -148,11 +148,17 @@ html {
     cursor: pointer;
 }
 .estado{
-
+    
+}
+.estado:focus{
+    background:yellow;   
 }
 .estado:hover{
     opacity: 70%;
     cursor: pointer;
+}
+.estado:active{
+    background:red;   
 }
 .imagenLogo{
     align-self: center;

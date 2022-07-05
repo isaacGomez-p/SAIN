@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { AnswerEntity } from 'src/app/model/answerEntity';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { UserEntity } from 'src/app/model/userEntity';
@@ -8,6 +8,8 @@ import { ResumeEntity } from 'src/app/model/resumeEntity';
 import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
 import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { GeneralService } from 'src/app/service/general/general.service';
+import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogData } from 'src/app/model/dialogData';
 
 
 @Component({
@@ -97,7 +99,8 @@ export class FormularioComponent implements OnInit {
   constructor(private respuestaService: RespuestaService,
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,    
-    private preguntasService: PreguntasService,    
+    private preguntasService: PreguntasService, 
+    public dialog: MatDialog   
     ) { }
 
   ngOnInit(): void {
@@ -254,7 +257,62 @@ export class FormularioComponent implements OnInit {
     if(this.section !== 0){
       this.section--;
       this.registrar = false;
-    }    
-    
+    }       
   }
+
+  back(){
+    this.generalService.navegar("hojaDeVida")
+  }
+
+  /*verObservacion(answer : AnswerEntity){
+
+    const dialogRef = this.dialog.open(ObservacionDialog, {      
+      data: {
+        answer: answer
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });   
+      
+  }   */
 }
+/*
+@Component({
+  selector: 'observacion-dialog',
+  templateUrl: 'observacion-dialog.html',
+})
+export class ObservacionDialog implements OnInit {
+  seleccionRecomendacion: any;
+  rol: number | undefined;
+
+  //maxInput: number = 255;
+  maxInput: number = 255;
+  cantInput: number = 0;
+  observacion: string = "";
+  constructor(public dialogRef: MatDialogRef<ObservacionDialog>, 
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private hojaDeVidaService: HojaDeVidaService,
+    private generalService: GeneralService,
+    private router: Router){}
+
+  ngOnInit(): void {    
+    //Cargar observacion de acuerdo con rol
+  }
+
+  guardar(){
+    console.log(this.data.mensaje)
+  }
+
+  cerrarDialog(){
+    this.dialogRef.close();
+  }
+
+  validarCaracteres(value : any){ 
+    //Cuenta el tamaño del texto ingresado   
+    this.cantInput = value.length;
+  }
+
+}*/
+
