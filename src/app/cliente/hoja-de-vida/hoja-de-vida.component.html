@@ -41,9 +41,9 @@
                             Personas registradas - {{mostrando}}
                         </div>
                         <div class="col-10 md:col-10 lg:col-3" style="align: right;">
-                            <span class="p-input-icon-left">
+                            <span class="p-button-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Busqueda Global" />
+                                <button mat-button color="primary"  (click)="changeFilterStatus()">{{showFilterText}}</button>                                
                             </span>
                         </div>
                     </div>                                        
@@ -58,22 +58,22 @@
                     <th pSortableColumn="name">Nombre Postulante<p-sortIcon field="name"></p-sortIcon></th>                                        
                     <th pSortableColumn="verified">Verificado<p-sortIcon field="verified"></p-sortIcon></th>
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
-                    <th pSortableColumn="userAssign.name">Asignado a<p-sortIcon field="userBy.name"></p-sortIcon></th>                    
+                    <th pSortableColumn="userAssign.name">Asignado a<p-sortIcon field="userAssign.name"></p-sortIcon></th>                    
                     <th >Obs.</th>                    
                     <th style="text-align-last: center;">Acciones</th>
                 </tr>
-                <tr>
+                <tr *ngIf="showFilter">
                     <th>
                         <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'numberId', 'startsWith')" placeholder="123456" class="p-column-filter anchoInputBusqueda">
                     </th>
                     <th>
-                        
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'costCenter', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">
                     </th>
                     <th>
-                        
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'bussUnit', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">
                     </th>
                     <th>
-                        
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'profile', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">
                     </th>
                     <th>
                         <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'name', 'startsWith')" placeholder={{nombre}} class="p-column-filter anchoInputBusqueda">
@@ -82,10 +82,10 @@
                         
                     </th>                    
                     <th>
-                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="Buscar por Fecha" class="p-column-filter anchoInputBusqueda">    
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">    
                     </th>
                     <th>
-                        
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'userAssign.name', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
                     </th>
                     <th>
                         

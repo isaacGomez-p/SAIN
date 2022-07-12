@@ -31,6 +31,9 @@ export class HojaDeVidaComponent implements OnInit {
   label4: string;
   label5: string;
 
+  showFilter: boolean = false;
+  showFilterText: string = "Mostrar Filtros"
+
   mostrando: string = 'Todos';
 
   hojasDeVida: ResumeEntity[] = [];
@@ -56,6 +59,11 @@ export class HojaDeVidaComponent implements OnInit {
   ngOnInit(): void {        
     this.cargarDatos();
     this.cargarContadores();    
+  }
+
+  changeFilterStatus(){
+    this.showFilter = !this.showFilter;
+    this.showFilterText = this.showFilter ? "Ocultar Filtros" : "Mostrar Filtros";
   }
 
   eliminarDialog(hojaDeVida: ResumeEntity){

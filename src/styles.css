@@ -121,8 +121,15 @@ html {
     border-color: var(--colorBotonVolver) !important;
 }
 
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px;
+    padding: 10px;
+  }
+
 .botonGuardar{
-    width: 100%;
+    width: 532%;
     font-size: 18px ;
 }
 .anchoInputNumber{

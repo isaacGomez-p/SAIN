@@ -32,6 +32,7 @@
                             pattern="^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$"
                             [maxlength]="30"
                             pInputText
+                            (keyup.enter)="iniciarSesion()"
                             required />
                         <!--<div *ngIf="inputLoginEmail.errors && (inputLoginEmail.invalid || inputLoginEmail.touched)">
                             <small [class.ocultar]="inputLoginEmail.errors && inputLoginEmail.errors.required"> Campo Requerido </small>
@@ -53,13 +54,15 @@
                             [maxlength]="15"
                             class="anchoInput"
                             autocomplete="off"
+                            (keyup.enter)="iniciarSesion()"
                             pInputText />
                     </div>                    
                 </div>
-
-                <div class="col-12">
-                    <button class="botonGuardar" label="Iniciar Sesión" type="submit" (click)="iniciarSesion()" pButton ></button>   
-                </div>
+                <form (submit)="iniciarSesion()" action="#">
+                    <div class="col-12">
+                        <button class="botonGuardar center" label="Iniciar Sesión" pButton align:center></button>   
+                    </div>
+                </form>
 
             </div>
         </div>
