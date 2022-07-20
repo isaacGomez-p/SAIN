@@ -10,6 +10,7 @@ import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { GeneralService } from 'src/app/service/general/general.service';
 import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogData } from 'src/app/model/dialogData';
+import { ResumeAnswerDTO } from 'src/app/model/resumeAnswerDTO';
 
 
 @Component({
@@ -30,76 +31,13 @@ export class FormularioComponent implements OnInit {
   campo : string = "algo";
   habilitarEditar: boolean = false;
   rol: number = 0;
-  //TODO perfil operativo
-  /*preguntas = [
-    {
-      id: 1,     
-      descripcion: "Nombre",   
-      height: 1,
-      section: 1,
-      answer: "",
-      tipo: 'text',
-      verified: "si",
-      date: new Date(),
-      por: "Proveedor 1",
-      resultado : false
-    },
-    {
-      id: 2,     
-      descripcion: "Edad",      
-      height: 1,
-      section: 1,
-      answer: "",
-      tipo: 'text',
-      verified: "no",
-      date: new Date(),
-      por: "Proveedor 1",
-      resultado : false
-    },
-    {
-      id: 3,     
-      descripcion: "Antecedentes",      
-      height: 5,
-      section: 1,
-      answer: "",
-      tipo: 'text',
-      verified: "si",
-      date: new Date(),
-      por: "Proveedor 2",
-      resultado : false
-    },
-    {
-      id: 4,     
-      descripcion: "Referencia familiar",      
-      height: 1,
-      section: 2,
-      answer: "",
-      tipo: 'text',
-      verified: "no",
-      date: new Date(),
-      por: "Proveedor 2",
-      resultado : false
-    },
-    {
-      id: 5,     
-      descripcion: "Enfermedades",      
-      height: 2,
-      section: 2,
-      answer: "",
-      tipo: 'text',
-      verified: "si",
-      date: new Date(),
-      por: "Proveedor 3",
-      resultado : false
-    },
-  ]
-*/
   preguntas: QuestionsEntity[];
   
   constructor(private respuestaService: RespuestaService,
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,    
     private preguntasService: PreguntasService, 
+    private answerService: RespuestaService,
     public dialog: MatDialog   
     ) { }
 
@@ -115,18 +53,35 @@ export class FormularioComponent implements OnInit {
     this.nombre = this.hojaDeVidaService.obtenerResume()?.name;
     if(this.hojaDeVidaService.estaEditando() !== null && this.hojaDeVidaService.estaEditando() == true) {      
       this.adding = 1;
+      //this.cargarRespuestas()
     }else{
       this.adding = 0;
     }
     this.cargarPreguntas(0);    
   }
 
-  cargarPreguntas(seccion: number){
-    this.preguntasService.findAll(seccion, this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId).subscribe((data)=>{
+  cargarRespuestas(){
+    this.answerService.findByResume(this.hojaDeVidaService.obtenerResume()).subscribe((data)=>{
+
+    })
+  }
+
+  //Cambiar servicio
+  getProfile() : string | undefined{
+    return this.hojaDeVidaService.obtenerResume()?.profile.substring(5);
+  }
+
+  cargarPreguntas(seccion: number){    
+    this.preguntasService.findAll(seccion, this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId, this.getProfile()).subscribe((data)=>{
       this.preguntas = data.result;
-      console.log(this.preguntas);
-      
       this.cargarDatosHojaDeVida();
+    })
+  }
+
+  cargarSeccionAnterior(seccion: number){
+    this.preguntasService.findAll(seccion, this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId, this.getProfile()).subscribe((data)=>{
+      this.preguntas = data.result;
+      this.cargarDatosHojaDeVidaAnterior();
     })
   }
 
@@ -138,23 +93,45 @@ export class FormularioComponent implements OnInit {
     })    
 
     if(this.section == this.seccionMayor){
-      this.registrar = true;
       this.btnText = "Finalizar";      
-    }
-
-    console.log("seccionMayor: " + this.seccionMayor);
-    
+    }    
   }
 
-  cargarDatosHojaDeVida(){    
+  cargarDatosHojaDeVida(){
+    if(this.hojaDeVidaService.obtenerResume() != undefined 
+        && this.hojaDeVidaService.obtenerResume() != null 
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities 
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities != undefined 
+        && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){  
 
-    this.preguntas.map((item)=>{          
-      if(item.section === 0 && item.description === "Nombre"){                      
-        item.answer = this.hojaDeVidaService.obtenerResume()!.name
-        //item.an
-      }
-    })    
-    
+      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
+        this.preguntas.map(itemP=>{
+          if(item.questions.questionId == itemP.questionId){
+            itemP.answerObjeto = new AnswerEntity();
+            itemP.answerObjeto.verified = item.verified == null || item.verified == undefined ? false : item.verified;
+            itemP.answerObjeto.userMod = item.userMod;
+            itemP.answerObjeto.verifiedDate = item.verifiedDate;
+            itemP.answerObjeto.result = item.result == null || item.result == undefined ? false : item.result;
+            itemP.answerObjeto.answerId = item.answerId;
+            itemP.answer = item.description;
+          }else{
+            itemP.answerObjeto = new AnswerEntity();
+            itemP.answerObjeto.result = false;
+            itemP.answerObjeto.verified = false;
+          }
+        })
+      })
+    }else{
+      this.preguntas.map(itemP=>{
+          itemP.answerObjeto = new AnswerEntity();
+          itemP.answerObjeto.result = false;
+          itemP.answerObjeto.verified = false;
+      })
+    }
+    this.cargarDatoUltimaSeccion();
+  }
+
+  cargarDatosHojaDeVidaAnterior(){
     if(this.hojaDeVidaService.obtenerResume() != undefined 
         && this.hojaDeVidaService.obtenerResume() != null 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities 
@@ -171,36 +148,88 @@ export class FormularioComponent implements OnInit {
             itemP.answerObjeto.result = item.result;
             itemP.answerObjeto.answerId = item.answerId;
             itemP.answer = item.description;
-  //          itemP.answerObjeto.
           }else{
             itemP.answerObjeto = new AnswerEntity();
             itemP.answerObjeto.result = false;
+            itemP.answerObjeto.verified = false;
           }
         })
         
       })
     }
-
-    this.cargarDatoUltimaSeccion();
-
+    else{
+      this.preguntas.map(itemP=>{
+          itemP.answerObjeto = new AnswerEntity();
+          itemP.answerObjeto.result = false;
+          itemP.answerObjeto.verified = false;
+      })
+    }
   }
 
   siguiente(){
     this.cargando = false;
-    console.log("seccion: " + this.section);
-    
     if(this.section >= this.seccionMayor){
         
     } else{
-      this.section++;  
+      this.guardarRespuestas();
     }
 
     if(this.section === this.seccionMayor){
-      this.registrar = true;
       this.btnText = "Finalizar";
     }
-
   }  
+
+  guardarRespuestas(){        
+    let resume = this.hojaDeVidaService.obtenerResume();
+    //Se inicia la lista de respuestas en caso que sea null
+    resume!.answerEntities = [];    
+    this.preguntas.map((item)=>{
+      if(item.section == this.section && item.answer != null && item.answer != ""){
+        let answerEntities = new AnswerEntity();
+        //Adding 1 es editar
+        if(this.adding === 1){
+          answerEntities.answerId = item.answerObjeto.answerId          
+          answerEntities.result = item.answerObjeto.result;  
+          answerEntities.verified = item.answerObjeto.verified;
+          resume!.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
+        }else{
+          answerEntities.verified = false;
+        }
+        //Se asigna el id de la pregunta
+        let questionsEntity = new QuestionsEntity();
+        questionsEntity.questionId = item.questionId;
+        answerEntities.questions = questionsEntity;
+        answerEntities.description = item.answer; //Asigna la respuesta
+        answerEntities.creationDate = new Date();
+        if(item.answerObjeto == null || item.answerObjeto == undefined || item.answerObjeto.answerId == null || item.answerObjeto.answerId){
+          
+        }else{
+          answerEntities.answerId = item.answerObjeto.answerId;
+        }
+        if(resume?.userCreate){
+          let user = new UserEntity();
+          user = resume?.userCreate;
+          answerEntities.userMod = user;
+        }
+        
+        resume!.answerEntities.push(answerEntities);
+        resume!.userAssign = null;
+        //resume?.userAssign = 
+        let resumeAnswerDTO = new ResumeAnswerDTO();
+        resumeAnswerDTO.answerEntity = answerEntities;
+        resumeAnswerDTO.resumeEntity = resume!;
+        this.answerService.update(resumeAnswerDTO).subscribe((data)=>{
+          if(data != null){
+            if(data.status === 200){
+              this.cargarPreguntas(this.section);
+            }
+          }
+        })
+        this.section++;
+      }
+    })
+   
+  }
 
   registrarPreguntas(){        
     let resume = this.hojaDeVidaService.obtenerResume();
@@ -209,6 +238,7 @@ export class FormularioComponent implements OnInit {
     this.preguntas.map((item)=>{
       if(item.answer != null && item.answer != ""){
         let answerEntities = new AnswerEntity();
+        //Adding 1 es editar
         if(this.adding === 1){
           answerEntities.answerId = item.answerObjeto.answerId          
           answerEntities.result = item.answerObjeto.result;  
@@ -236,7 +266,6 @@ export class FormularioComponent implements OnInit {
         }        
         resume!.answerEntities.push(answerEntities);
         resume!.userAssign = null;
-        //resume?.userAssign = 
       }
     })
     this.hojaDeVidaService.save(resume!).subscribe((data)=>{
@@ -252,11 +281,11 @@ export class FormularioComponent implements OnInit {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  anterior(){
+  anterior(){    
     this.btnText = "Siguiente";
     if(this.section !== 0){
       this.section--;
-      this.registrar = false;
+      this.cargarPreguntas(this.section);
     }       
   }
 
@@ -264,7 +293,7 @@ export class FormularioComponent implements OnInit {
     this.generalService.navegar("hojaDeVida")
   }
 
-  /*verObservacion(answer : AnswerEntity){
+  verObservacion(answer : AnswerEntity){
 
     const dialogRef = this.dialog.open(ObservacionDialog, {      
       data: {
@@ -276,9 +305,9 @@ export class FormularioComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });   
       
-  }   */
+  }
 }
-/*
+
 @Component({
   selector: 'observacion-dialog',
   templateUrl: 'observacion-dialog.html',
@@ -314,5 +343,4 @@ export class ObservacionDialog implements OnInit {
     this.cantInput = value.length;
   }
 
-}*/
-
+}

@@ -101,11 +101,17 @@
                     <td>{{h.costCenter}}</td>
                     <td>{{h.bussUnit}}</td>
                     <td>{{h.profile}}</td>
-                    <td>{{h.name}}</td>   
-                    <td *ngIf="h.verified" class="siLabel"> {{ h.verified }} / {{ totalQuestions }} </td>
-                    <td *ngIf="!h.verified" class="noLabel"> 0/{{ totalQuestions }} </td>
-                    <td *ngIf="h.userBy == null">{{h.creationDate | date:'short'}}</td>
-                    <td *ngIf="h.userBy != null">{{h.verificationDate | date:'short'}}</td>
+                    <td>{{h.name}}</td>
+                    <td *ngIf="h.verified && h.profile === 'TIPO A'" class="siLabel"> {{ h.verified }} / 12 </td>
+                    <td *ngIf="h.verified && h.profile === 'TIPO B'" class="siLabel"> {{ h.verified }} / 18 </td>
+                    <td *ngIf="h.verified && h.profile === 'TIPO C'" class="siLabel"> {{ h.verified }} / 29 </td>
+
+                    <td *ngIf="!h.verified && h.profile === 'TIPO A'" class="siLabel"> 0/ 12 </td>
+                    <td *ngIf="!h.verified && h.profile === 'TIPO B'" class="siLabel"> 0 / 18 </td>
+                    <td *ngIf="!h.verified && h.profile === 'TIPO C'" class="siLabel"> 0 / 19 </td>
+
+                    <td *ngIf="h.userBy == null">{{h.creationDate | date:'yyyy-MM-dd hh:ss'}}</td>
+                    <td *ngIf="h.userBy != null">{{h.verificationDate | date:'yyyy-MM-dd hh:ss'}}</td>
                     <td *ngIf="h.userAssign != null">{{h.userAssign.name}}</td>
                     <td *ngIf="h.userAssign == null">No ha sido asignado</td>
                     

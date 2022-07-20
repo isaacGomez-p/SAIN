@@ -16,12 +16,12 @@ export class PreguntasService {
 
   constructor(private http: HttpClient) { }
   
-  public findAll(seccion: number, rol: number | undefined) : Observable<ResponseService> {      
+  public findAll(seccion: number, rol: number | undefined, profile:string|undefined) : Observable<ResponseService> {      
     let RequestEntity = {
       id: seccion,
-      data: rol+""
+      data: rol+"",
+      data1: profile
     }
-    let question = new QuestionsEntity();
     return this.http.post<ResponseService>(this._findAll, RequestEntity);
   }
 

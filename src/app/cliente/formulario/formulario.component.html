@@ -77,7 +77,7 @@
                                 </div>
                             </td>
                             <td>
-                                <!--<button mat-button color="primary" (click)="verObservacion(h)">Ver</button>-->
+                                <button mat-button color="primary" (click)="verObservacion(p)">Ver</button>
                             </td>
                         </tr>
                     </ng-template>
@@ -89,14 +89,14 @@
                     <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==0 || cargando" class="botonSiguiente">Anterior</button>
                 </div>
                 <div class="col-1 md:col-1 lg:col-1 sm:col-2"></div>
-                <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar"  >
+                <!--<div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar"  >
+                    <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
+                </div>-->
+                <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar" >
                     <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
                 </div>
-                <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="registrar" >
-                    <button mat-raised-button color="primary" (click)="registrarPreguntas()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
-                </div>
         </p-fieldset>
-        <button (click)="back()" class="button"> 
+        <button mat-button (click)="back()" class="button"> 
             <i class="pi pi-arrow-left"> Volver </i>
           </button>
     </div>

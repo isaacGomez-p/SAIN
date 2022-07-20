@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  URL: 'http://52.67.27.252:8080/'
-  //URL: 'http://localhost:9191/'
+  //URL: 'http://52.67.27.252:8080/'
+  URL: 'http://localhost:9191/'
 };
 
 /*

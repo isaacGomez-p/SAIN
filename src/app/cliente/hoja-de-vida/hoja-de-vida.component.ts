@@ -75,6 +75,8 @@ export class HojaDeVidaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
+        console.log("AAA" + result);
+        
         if(result == "SI"){
           this.eliminar(hojaDeVida);
         }
@@ -91,7 +93,7 @@ export class HojaDeVidaComponent implements OnInit {
         this.generalService.mostrarMensaje("Se eliminó correctamente la hoja de vida.", "success");
         this.cargarDatos();
       }else{
-        this.generalService.mostrarMensaje("Error eliminado la hoja de vida.", "danger");
+        this.generalService.mostrarMensaje("Error eliminando la hoja de vida.", "danger");
       }
     })
   }
@@ -229,6 +231,7 @@ export class HojaDeVidaComponent implements OnInit {
     const dialogRef = this.dialog.open(RegistrarDialog);
 
     dialogRef.afterClosed().subscribe(result => {
+      this.cargarDatos();
     });    
     //window.localStorage.setItem("hv", JSON.stringify(this.hojasDeVida));
     //
@@ -407,12 +410,9 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
   private generalService: GeneralService,
   private router: Router){
     this.profiles = [
-      {name: 'Profesional Sin Experiencia'},
-      {name: 'Profesional'},
-      {name: 'Técnico'},
-      {name: 'Tecnólogo'},
-      {name: 'Administrativo'},
-      {name: 'Recursos Humanos'}
+      {name: 'TIPO A'},
+      {name: 'TIPO B'},
+      {name: 'TIPO C'}
   ];
 
   }
@@ -434,20 +434,19 @@ crear(){
   let user = new UserEntity();  
   user.userId = this.hojaDeVidaService.obtenerIdUser();
   resumeEntity.userCreate = user;
-  resumeEntity.userAssign = user;    
+  //resumeEntity.userAssign = user;    
   this.hojaDeVidaService.guardarUser(user);
   this.hojaDeVidaService.guardarResume(resumeEntity);
   this.hojaDeVidaService.guardarEstaEditando(false);
-  this.cerrarDialog();
-  this.generalService.navegar("formulario");    
-  /*this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
+  //this.cerrarDialog();
+  //this.generalService.navegar("formulario");    
+  this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
     if(data.status === 201){
       let objeto = JSON.parse(JSON.stringify(data.result));
       this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
-      this.cerrarDialog();
-      
+      this.cerrarDialog(); 
     }            
-  })*/
+  })
 }
 
 cerrarDialog(){
