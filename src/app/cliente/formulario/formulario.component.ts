@@ -81,7 +81,7 @@ export class FormularioComponent implements OnInit {
   cargarSeccionAnterior(seccion: number){
     this.preguntasService.findAll(seccion, this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId, this.getProfile()).subscribe((data)=>{
       this.preguntas = data.result;
-      this.cargarDatosHojaDeVidaAnterior();
+      this.cargarDatosHojaDeVida();
     })
   }
 
@@ -97,7 +97,15 @@ export class FormularioComponent implements OnInit {
     }    
   }
 
+  //Revisar que si la pregunta que ya tiene una respuesta
   cargarDatosHojaDeVida(){
+    //Inicia los valores negativos por defecto
+    this.preguntas.map(itemP=>{      
+      itemP.answerObjeto = new AnswerEntity();
+      itemP.answerObjeto.result = false;
+      itemP.answerObjeto.verified = false;      
+    })
+
     if(this.hojaDeVidaService.obtenerResume() != undefined 
         && this.hojaDeVidaService.obtenerResume() != null 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities 
@@ -105,7 +113,10 @@ export class FormularioComponent implements OnInit {
         && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){  
 
       this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
+        console.log(JSON.stringify(item));
+        
         this.preguntas.map(itemP=>{
+          //Verifica que el id pregunta este registrado en la hoja de vida, para asignar respuesta
           if(item.questions.questionId == itemP.questionId){
             itemP.answerObjeto = new AnswerEntity();
             itemP.answerObjeto.verified = item.verified == null || item.verified == undefined ? false : item.verified;
@@ -114,98 +125,62 @@ export class FormularioComponent implements OnInit {
             itemP.answerObjeto.result = item.result == null || item.result == undefined ? false : item.result;
             itemP.answerObjeto.answerId = item.answerId;
             itemP.answer = item.description;
-          }else{
-            itemP.answerObjeto = new AnswerEntity();
-            itemP.answerObjeto.result = false;
-            itemP.answerObjeto.verified = false;
+            console.log("___ asigno respuesta " + itemP.answerObjeto.answerId);
           }
         })
       })
-    }else{
-      this.preguntas.map(itemP=>{
-          itemP.answerObjeto = new AnswerEntity();
-          itemP.answerObjeto.result = false;
-          itemP.answerObjeto.verified = false;
-      })
     }
+
+    
+
     this.cargarDatoUltimaSeccion();
-  }
-
-  cargarDatosHojaDeVidaAnterior(){
-    if(this.hojaDeVidaService.obtenerResume() != undefined 
-        && this.hojaDeVidaService.obtenerResume() != null 
-        && this.hojaDeVidaService.obtenerResume()!.answerEntities 
-        && this.hojaDeVidaService.obtenerResume()!.answerEntities != undefined 
-        && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){  
-
-      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
-        this.preguntas.map(itemP=>{
-          if(item.questions.questionId == itemP.questionId){
-            itemP.answerObjeto = new AnswerEntity();
-            itemP.answerObjeto.verified = item.verified;
-            itemP.answerObjeto.userMod = item.userMod;
-            itemP.answerObjeto.verifiedDate = item.verifiedDate;
-            itemP.answerObjeto.result = item.result;
-            itemP.answerObjeto.answerId = item.answerId;
-            itemP.answer = item.description;
-          }else{
-            itemP.answerObjeto = new AnswerEntity();
-            itemP.answerObjeto.result = false;
-            itemP.answerObjeto.verified = false;
-          }
-        })
-        
-      })
-    }
-    else{
-      this.preguntas.map(itemP=>{
-          itemP.answerObjeto = new AnswerEntity();
-          itemP.answerObjeto.result = false;
-          itemP.answerObjeto.verified = false;
-      })
-    }
   }
 
   siguiente(){
     this.cargando = false;
-    if(this.section >= this.seccionMayor){
-        
-    } else{
-      this.guardarRespuestas();
-    }
+    
+    //Se llama al metodo para guardar las respuestas
+    this.guardarRespuestas();
 
     if(this.section === this.seccionMayor){
       this.btnText = "Finalizar";
     }
   }  
 
-  guardarRespuestas(){        
+  aumentarSeccion(){
+    this.section++;
+  }
+
+  guardarRespuestas(){                
+    //Obteniendo la hoja de vida
     let resume = this.hojaDeVidaService.obtenerResume();
     //Se inicia la lista de respuestas en caso que sea null
-    resume!.answerEntities = [];    
-    this.preguntas.map((item)=>{
+    resume!.answerEntities = [];
+
+    this.preguntas.map((item)=>{      
       if(item.section == this.section && item.answer != null && item.answer != ""){
         let answerEntities = new AnswerEntity();
         //Adding 1 es editar
-        if(this.adding === 1){
+        if(this.adding === 1){          
           answerEntities.answerId = item.answerObjeto.answerId          
-          answerEntities.result = item.answerObjeto.result;  
-          answerEntities.verified = item.answerObjeto.verified;
-          resume!.resumeId = this.hojaDeVidaService.obtenerIdHojaDeVida();
-        }else{
-          answerEntities.verified = false;
+          answerEntities.result = item.answerObjeto.result;                    
+          answerEntities.verified = item.answerObjeto.verified;          
         }
         //Se asigna el id de la pregunta
         let questionsEntity = new QuestionsEntity();
-        questionsEntity.questionId = item.questionId;
+        questionsEntity.questionId = item.questionId;        
         answerEntities.questions = questionsEntity;
+
         answerEntities.description = item.answer; //Asigna la respuesta
         answerEntities.creationDate = new Date();
+
         if(item.answerObjeto == null || item.answerObjeto == undefined || item.answerObjeto.answerId == null || item.answerObjeto.answerId){
           
         }else{
           answerEntities.answerId = item.answerObjeto.answerId;
         }
+
+        //Se asigna el usuario que modifico la respuesta
         if(resume?.userCreate){
           let user = new UserEntity();
           user = resume?.userCreate;
@@ -218,17 +193,23 @@ export class FormularioComponent implements OnInit {
         let resumeAnswerDTO = new ResumeAnswerDTO();
         resumeAnswerDTO.answerEntity = answerEntities;
         resumeAnswerDTO.resumeEntity = resume!;
-        this.answerService.update(resumeAnswerDTO).subscribe((data)=>{
+        //console.log("__________ 3 " + JSON.stringify(resumeAnswerDTO));
+        this.answerService.update(resumeAnswerDTO).subscribe((data)=>{          
           if(data != null){
             if(data.status === 200){
-              this.cargarPreguntas(this.section);
+              item.answerObjeto = JSON.parse(JSON.stringify(data.result));              
             }
           }
-        })
-        this.section++;
+        })        
       }
     })
-   
+
+    //Se valida que la sección que esta actualmente sea la ultima, si es así se retorna a la hoja de vida
+    if(this.section >= this.seccionMayor){
+      this.generalService.navegar("hojaDeVida")
+    } else{
+      this.aumentarSeccion();
+    }
   }
 
   registrarPreguntas(){        
@@ -285,11 +266,12 @@ export class FormularioComponent implements OnInit {
     this.btnText = "Siguiente";
     if(this.section !== 0){
       this.section--;
-      this.cargarPreguntas(this.section);
+      this.cargarSeccionAnterior(this.section);
     }       
   }
 
   back(){
+    this.guardarRespuestas();
     this.generalService.navegar("hojaDeVida")
   }
 

@@ -129,7 +129,7 @@ html {
   }
 
 .botonGuardar{
-    width: 532%;
+    width: 100%;
     font-size: 18px ;
 }
 .anchoInputNumber{
@@ -203,4 +203,8 @@ html {
 }
 .anchoInputBusqueda{
     width: 80%;
+}
+/*ANCHO DEL DROPDOWN*/
+.p-inputgroup .p-inputtext, .p-fluid .p-inputgroup .p-inputtext, .p-inputgroup .p-inputwrapper, .p-inputgroup .p-inputwrapper > .p-component {    
+    width: 100% !important;
 }

@@ -1,7 +1,14 @@
 <app-menu-principal></app-menu-principal>
 
 <div class="grid">
-    <div class="col-1 md:col-1 lg:col-1"></div>
+    <div class="col-1 md:col-1 lg:col-1"></div>    
+    <div class="col-10 md:col-10 lg:col-10">
+        <button mat-raised-button (click)="back()" color="primary" class="button"> 
+            <i class="pi pi-arrow-left"> Volver </i>
+          </button>
+    </div>
+    <div class="col-12 md:col-12 lg:col-12"></div>
+    <div class="col-1 md:col-1 lg:col-1"></div>    
     <div class="col-10 md:col-10 lg:col-10">
         <p-fieldset>
             <ng-template pTemplate="header">Hoja de Vida de : {{ nombre }}</ng-template>
@@ -85,20 +92,22 @@
                 
                 <div class="col-12 md:col-12 lg:col-12"></div>
                 <div class="col-1 md:col-6 lg:col-1"></div>
-                <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="left">
-                    <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==0 || cargando" class="botonSiguiente">Anterior</button>
-                </div>
+                <div class="col-12 centrar">
+                    <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="left">
+                        <button mat-stroked-button color="primary" (click)="anterior()" [disabled]="section==0 || cargando" class="botonSiguiente">Anterior</button>
+                    </div>   
+                    <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar" >
+                        <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
+                    </div>   
+                </div>       
+                
                 <div class="col-1 md:col-1 lg:col-1 sm:col-2"></div>
                 <!--<div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar"  >
                     <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
                 </div>-->
-                <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="!registrar" >
-                    <button mat-raised-button color="primary" (click)="siguiente()" [disabled]="cargando" class="botonSiguiente">{{btnText}}</button>        
-                </div>
+                
         </p-fieldset>
-        <button mat-button (click)="back()" class="button"> 
-            <i class="pi pi-arrow-left"> Volver </i>
-          </button>
+        
     </div>
     
     

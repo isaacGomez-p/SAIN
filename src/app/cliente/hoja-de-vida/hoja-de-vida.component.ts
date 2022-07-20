@@ -74,9 +74,7 @@ export class HojaDeVidaComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
-        console.log("AAA" + result);
-        
+      if(result != undefined){        
         if(result == "SI"){
           this.eliminar(hojaDeVida);
         }
@@ -90,12 +88,14 @@ export class HojaDeVidaComponent implements OnInit {
     request.id = hojaDeVida.resumeId;
     this.hojaDeVidaService.delete(request).subscribe((data)=>{
       if(data.status == 204){
-        this.generalService.mostrarMensaje("Se eliminó correctamente la hoja de vida.", "success");
+        this.messageService.add({severity:'success', summary:'Se eliminó correctamente la hoja de vida.'});        
         this.cargarDatos();
       }else{
-        this.generalService.mostrarMensaje("Error eliminando la hoja de vida.", "danger");
+        this.messageService.add({severity:'error', summary:'Esta hoja de vida está en proceso, no se ha podido eliminar.'});
       }
-    })
+    }, err => {
+      this.messageService.add({severity:'error', summary:'Esta hoja de vida está en proceso, no se ha podido eliminar.'});      
+  })
   }
 
   cargarContadores() {
