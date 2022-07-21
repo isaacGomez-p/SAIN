@@ -68,12 +68,14 @@
                             </td>             
                             <td *ngIf="adding > 0">
                                 <div>
-                                    <label>{{p.date | date:'short'}}</label>
+                                    <label *ngIf="p.answerObjeto.verifiedDate != null && p.answerObjeto.verifiedDate != undefined">{{p.answerObjeto.verifiedDate | date:'yyyy-MM-dd hh:mm'}}</label>
+                                    <label *ngIf="p.answerObjeto.verifiedDate == null || p.answerObjeto.verifiedDate == undefined"> - </label>
                                 </div>
                             </td>     
                             <td *ngIf="adding > 0">
                                 <div>
-                                    <label>{{p.por}}</label>
+                                    <label *ngIf="p.answerObjeto.userMod != null && p.answerObjeto.userMod != undefined">{{p.answerObjeto.userMod}}</label>
+                                    <label *ngIf="p.answerObjeto.userMod == null || p.answerObjeto.userMod == undefined"> - </label>
                                 </div>
                             </td>
                             <td *ngIf="adding > 0">

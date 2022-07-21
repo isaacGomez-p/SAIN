@@ -12,6 +12,11 @@ import { DialogData } from 'src/app/model/dialogData';
 import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
+import { FileUplodVM } from '../../model/fileUploadVM';
+import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
+import { FileService } from 'src/app/service/file/file.service';
+import { FileEntity } from 'src/app/model/fileEntity';
+
 
 
 @Component({
@@ -406,52 +411,145 @@ export class RegistrarDialog {
 
 constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
   @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
-  private hojaDeVidaService: HojaDeVidaService,
-  private generalService: GeneralService,
-  private router: Router){
-    this.profiles = [
-      {name: 'TIPO A'},
-      {name: 'TIPO B'},
-      {name: 'TIPO C'}
-  ];
+    private hojaDeVidaService: HojaDeVidaService,
+    private fileService: FileService,
+    
+    private router: Router){
+      this.profiles = [
+        {name: 'TIPO A'},
+        {name: 'TIPO B'},
+        {name: 'TIPO C'}
+    ];
 
+    }
+
+    //Variables de archivos
+
+    numeroIdentificacionRegistro: number;
+    nombre: string;
+    selectedProfile: any;
+    centro: string;
+    unidad: string;
+
+  crear(){  
+    let resumeEntity = new ResumeEntity();
+    resumeEntity.name = this.nombre;
+    resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
+    resumeEntity.verified = 0;  
+    resumeEntity.profile = this.selectedProfile.name;
+    resumeEntity.costCenter = this.centro;
+    resumeEntity.bussUnit = this.unidad;
+    let user = new UserEntity();  
+    user.userId = this.hojaDeVidaService.obtenerIdUser();
+    resumeEntity.userCreate = user;
+    //resumeEntity.userAssign = user;    
+    this.hojaDeVidaService.guardarUser(user);
+    this.hojaDeVidaService.guardarResume(resumeEntity);
+    this.hojaDeVidaService.guardarEstaEditando(false);
+    //this.cerrarDialog();
+    //this.generalService.navegar("formulario");    
+    console.log("ARCHIVO" + JSON.stringify(this.fileService.obtenerArregloDeArchivos()));
+    
+    this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
+      if(data.status === 201){
+        let objeto = JSON.parse(JSON.stringify(data.result));
+        this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
+        this.cerrarDialog(); 
+      }            
+    })
   }
 
-  numeroIdentificacionRegistro: number;
-  nombre: string;
-  selectedProfile: any;
-  centro: string;
-  unidad: string;
+  cerrarDialog(){
+    this.dialogRef.close();
+  } 
+  
+  //SUBIDA DE ARCHIVOS
+  imageError: string;
+    isImageSaved: boolean;
+    cardImageBase64: string;
+    ImageBaseData:string | ArrayBuffer | null;
+    fileArray: FileEntity[];
+    
+  splitted: string[] | undefined;
 
-crear(){  
-  let resumeEntity = new ResumeEntity();
-  resumeEntity.name = this.nombre;
-  resumeEntity.numberId = this.numeroIdentificacionRegistro+""; 
-  resumeEntity.verified = 0;  
-  resumeEntity.profile = this.selectedProfile.name;
-  resumeEntity.costCenter = this.centro;
-  resumeEntity.bussUnit = this.unidad;
-  let user = new UserEntity();  
-  user.userId = this.hojaDeVidaService.obtenerIdUser();
-  resumeEntity.userCreate = user;
-  //resumeEntity.userAssign = user;    
-  this.hojaDeVidaService.guardarUser(user);
-  this.hojaDeVidaService.guardarResume(resumeEntity);
-  this.hojaDeVidaService.guardarEstaEditando(false);
-  //this.cerrarDialog();
-  //this.generalService.navegar("formulario");    
-  this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
-    if(data.status === 201){
-      let objeto = JSON.parse(JSON.stringify(data.result));
-      this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
-      this.cerrarDialog(); 
-    }            
-  })
-}
+    fileChangeEvent(fileInput: any) {        
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            // Size Filter Bytes
+            const max_size = 20971520;
+            const allowed_types = ["application/pdf"];
+            //'application/msword '
+            //'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
-cerrarDialog(){
-  this.dialogRef.close();
-}
+            if (fileInput.target.files[0].size > max_size) {
+                this.imageError =
+                    'Maximum size allowed is ' + max_size / 1000 + 'Mb';
+            }else{
+              //ARREGLAR ESTE IF
+              if (!allowed_types.includes(fileInput.target.files[0].type)) {
+                console.log("-----" + fileInput.target.files[0].type);
+                console.log("Only Images are allowed ( JPG | PNG )");                
+              }            
+              const reader = new FileReader();
+              reader.readAsDataURL(fileInput.target.files[0]);
+              reader.onload = (e: any) => {
+                /*const image = new Image();
+                image.src = e.target.result;
+                image.onload = rs => {
+                    
+                        const imgBase64Path = e.target.result;
+                        this.cardImageBase64 = imgBase64Path;
+                        this.isImageSaved = true;
+                        console.log("AASSDD" + this.cardImageBase64);
+                        
+                        // this.previewImagePath = imgBase64Path;
+                    
+                };*/
+                this.ImageBaseData=reader.result;
+                this.splitted = this.ImageBaseData?.toString().split(",", 2); 
+                this.isImageSaved = true;
+                /*if(this.splitted?.[0]){
+                  if(!allowed_types.includes(this.splitted?.[0])){
+                    console.log("Only Images are allowedklujkjl ( JPG | PNG )");
+                  }
+                }  */
 
+                console.log(this.splitted?.[1]);
+                
+            };
+            reader.onerror = function (error) {
+              console.log('Error: ', error);
+            };
+          }
+        }
+    }
+
+    removeImage() {
+        this.cardImageBase64 = "";
+        this.ImageBaseData = null;
+        this.isImageSaved = false;
+    }
+
+    saveFile(){
+      if(this.splitted){
+        var fileEntity = new FileEntity();
+        if(this.fileService.obtenerArregloDeArchivos()){
+          this.fileArray = this.fileService.obtenerArregloDeArchivos();
+        }else{
+          this.fileArray = [];
+        }                 
+        fileEntity.file = this.splitted?.[1];
+        fileEntity.module = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.name;
+        fileEntity.type = "Hoja de Vida";
+        fileEntity.extension = "PDF";
+        console.log("AAA" + fileEntity);
+                                    
+        this.fileArray.push(fileEntity);
+
+        this.fileService.guardarArregloDeArchivos(this.fileArray);
+      }
+      
+    }
+
+ 
 }
 

@@ -118,6 +118,8 @@ export class FormularioComponent implements OnInit {
         this.preguntas.map(itemP=>{
           //Verifica que el id pregunta este registrado en la hoja de vida, para asignar respuesta
           if(item.questions.questionId == itemP.questionId){
+            
+            
             itemP.answerObjeto = new AnswerEntity();
             itemP.answerObjeto.verified = item.verified == null || item.verified == undefined ? false : item.verified;
             itemP.answerObjeto.userMod = item.userMod;
@@ -125,13 +127,11 @@ export class FormularioComponent implements OnInit {
             itemP.answerObjeto.result = item.result == null || item.result == undefined ? false : item.result;
             itemP.answerObjeto.answerId = item.answerId;
             itemP.answer = item.description;
-            console.log("___ asigno respuesta " + itemP.answerObjeto.answerId);
+            console.log("ITEM"+ JSON.stringify(itemP));
           }
         })
       })
-    }
-
-    
+    }   
 
     this.cargarDatoUltimaSeccion();
   }
@@ -189,11 +189,9 @@ export class FormularioComponent implements OnInit {
         
         resume!.answerEntities.push(answerEntities);
         resume!.userAssign = null;
-        //resume?.userAssign = 
         let resumeAnswerDTO = new ResumeAnswerDTO();
         resumeAnswerDTO.answerEntity = answerEntities;
         resumeAnswerDTO.resumeEntity = resume!;
-        //console.log("__________ 3 " + JSON.stringify(resumeAnswerDTO));
         this.answerService.update(resumeAnswerDTO).subscribe((data)=>{          
           if(data != null){
             if(data.status === 200){
