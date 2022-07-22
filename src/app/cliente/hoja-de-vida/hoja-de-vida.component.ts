@@ -12,7 +12,7 @@ import { DialogData } from 'src/app/model/dialogData';
 import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
-import { FileUplodVM } from '../../model/fileUploadVM';
+import { DomSanitizer } from '@angular/platform-browser';
 import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { FileService } from 'src/app/service/file/file.service';
 import { FileEntity } from 'src/app/model/fileEntity';
@@ -25,7 +25,6 @@ import { FileEntity } from 'src/app/model/fileEntity';
   styleUrls: ['./hoja-de-vida.component.css']
 })
 export class HojaDeVidaComponent implements OnInit {
-
   data1 : any;
   cargando: boolean = false;
   totalQuestions : number;
@@ -48,6 +47,9 @@ export class HojaDeVidaComponent implements OnInit {
   statusCount: Number[];
   chartOptions: any;
 
+  fileToDownload : any;
+  fileName: string;
+
   events: any[];
 
   items: MenuItem[];
@@ -59,12 +61,50 @@ export class HojaDeVidaComponent implements OnInit {
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,
     private preguntasService: PreguntasService,
+    private fileService: FileService,
+    private sanitizer:DomSanitizer,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {        
     this.cargarDatos();
     this.cargarContadores();    
+    this.blobBase64File();
   }
+
+  fileEntityList: FileEntity[];
+  file:FileEntity;
+  
+  blobBase64File() {
+    this.fileService.getFilesByModuleId().subscribe(data =>{
+      console.log("JSON" + JSON.stringify(data.result));
+      
+      this.fileEntityList = JSON.parse(JSON.stringify(data.result));
+      this.file = this.fileEntityList[0];
+      //console.log("FILE ENTITY" + JSON.stringify(fileEntity));
+      const imageName = 'name.pdf';
+      this.fileName = imageName;
+      const imageBlob = this.dataURItoBlob(this.file.filee);
+      const imageFile = new File([imageBlob], imageName, { type: 'application/pdf' });
+
+      this.fileToDownload = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(imageFile));
+      
+    })
+    
+    
+  }
+
+  dataURItoBlob(dataURI: any) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'application/pdf' });    
+    return blob;
+ }
+
+  
 
   changeFilterStatus(){
     this.showFilter = !this.showFilter;
@@ -453,10 +493,22 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
     this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
       if(data.status === 201){
         let objeto = JSON.parse(JSON.stringify(data.result));
-        this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId)
-        this.cerrarDialog(); 
+        this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId); 
+        console.log("Hoja de vida guardada");
+        this.fileService.obtenerArregloDeArchivos().map( file => {
+          file.moduleId = this.hojaDeVidaService.obtenerIdHojaDeVida();
+          //if(file.)
+          this.fileService.uploadFile(file).subscribe((data) =>{
+            if(data.status === 200){          
+              console.log("GUARDADO");
+              
+            }
+          })
+        })
+        this.cerrarDialog();        
       }            
     })
+    
   }
 
   cerrarDialog(){
@@ -537,18 +589,20 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
         }else{
           this.fileArray = [];
         }                 
-        fileEntity.file = this.splitted?.[1];
+        fileEntity.filee = this.splitted?.[1];
         fileEntity.module = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.name;
         fileEntity.type = "Hoja de Vida";
         fileEntity.extension = "PDF";
-        console.log("AAA" + fileEntity);
                                     
+        
         this.fileArray.push(fileEntity);
 
         this.fileService.guardarArregloDeArchivos(this.fileArray);
       }
       
     }
+
+    
 
  
 }

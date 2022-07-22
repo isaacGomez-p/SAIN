@@ -7,7 +7,8 @@ export class FileEntity {
     fileName: string; //Nombre del archivo
     location: string; //ubicacion del archivo
     module: string | undefined; //Modulo que lo inserto. ADMIN, PROVEEDOR, CLIENTE
-    moduleId: number; //Id del resume al que pertenece
+    moduleId: number | undefined; //Id del resume al que pertenece
     type: string; //tipo de archivo, si es hoja de vida, cedula, etc
-    file: string | undefined; //Arreglo de bytes en base 64 del archivo
+    file: any | undefined; //Arreglo de bytes en base 64 del archivo
+    filee: any |undefined;//ARREGLO DE BYTES DEL ARCHIVO
 }
