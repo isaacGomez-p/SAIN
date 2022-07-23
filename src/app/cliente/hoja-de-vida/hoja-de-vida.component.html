@@ -122,7 +122,7 @@
                     <td>
                         
                         <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="row">
-                            <button mat-button color="primary"  (click)="verHojaDeVida(h)">Ver</button>                            
+                            <button mat-button color="primary"  (click)="verHojaDeVida(h)" *ngIf="rol !== 2">Ver</button>                            
                             <button mat-button color="primary" (click)="asignar(h)" *ngIf="rol == 1 || rol == 3">Asignar</button> 
                             <button mat-button color="primary" (click)="eliminarDialog(h)" *ngIf="rol == 1 || rol == 2">Eliminar</button> 
                             <button mat-button color="primary" (click)="abrirDialogFile(h)">Ver archivos</button> 

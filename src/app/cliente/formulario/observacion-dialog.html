@@ -3,12 +3,23 @@
         <div class="col-11 md:col-11 lg:col-11">
             <label for="float-input">Observación</label>
         </div>
+        <div class="col-11 md:col-11 lg:col-11">        
+            <textarea pInputTextarea        
+                class="textAreaObservacion"                
+                [autoResize]=true
+                maxlength={{maxInput}}            
+                (ngModelChange)="validarCaracteres($event)"
+                [(ngModel)]="observacion">
+            </textarea>        
+        </div>
         <div class="col-11 md:col-11 lg:col-11">
-            {{observacion}}
+            <label>Carácteres actuales:{{cantInput}} - Carácteres permitidos: {{maxInput}}</label>
         </div>
     </div>
     
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" (click)="guardar()" cdkFocusInitial>Crear</button>
 </mat-dialog-actions>

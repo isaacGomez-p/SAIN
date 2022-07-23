@@ -85,7 +85,7 @@
                                     <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.result"> Negativo </label>
                                 </div>
                             </td>
-                            <td>
+                            <td *ngIf="p.answerObjeto.answerId">
                                 <button mat-button color="primary" (click)="verObservacion(p)">Ver</button>
                             </td>
                         </tr>

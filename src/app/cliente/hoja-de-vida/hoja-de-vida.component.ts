@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import {MenuItem, MessageService, PrimeIcons} from 'primeng/api';
 import { ResumeEntity } from 'src/app/model/resumeEntity';
 import { UserEntity } from 'src/app/model/userEntity';
@@ -12,8 +11,6 @@ import { DialogData } from 'src/app/model/dialogData';
 import { PreguntasService } from 'src/app/service/preguntas/preguntas.service';
 import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
-import { DomSanitizer } from '@angular/platform-browser';
-import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { FileService } from 'src/app/service/file/file.service';
 import { FileEntity } from 'src/app/model/fileEntity';
 
@@ -56,13 +53,11 @@ export class HojaDeVidaComponent implements OnInit {
   
   nombre: string | undefined;
 
-  constructor(private router: Router,
+  constructor(
     private messageService: MessageService,
     private hojaDeVidaService: HojaDeVidaService,
     private generalService: GeneralService,
     private preguntasService: PreguntasService,
-    private fileService: FileService,
-    private sanitizer:DomSanitizer,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {        
@@ -71,7 +66,19 @@ export class HojaDeVidaComponent implements OnInit {
     //this.blobBase64File();
   }
 
-  
+  loadButtons(){
+    /*this.items = [
+      {label: 'Update', icon: 'pi pi-refresh', command: (h) => {
+          this.verHojaDeVida(h);
+      },
+      {label: 'Delete', icon: 'pi pi-times', command: () => {
+          this.delete();
+      },
+      {label: 'Angular.io', icon: 'pi pi-info', url: 'http://angular.io'},
+      {separator: true},
+      {label: 'Setup', icon: 'pi pi-cog', routerLink: ['/setup']}
+  ];*/
+  }  
     
   abrirDialogFile(hojaDeVida: ResumeEntity){
     const dialogRef = this.dialog.open(FileDialog, {      
@@ -105,7 +112,6 @@ export class HojaDeVidaComponent implements OnInit {
         }
       }
     });  
-
   }
 
   eliminar(hojaDeVida: ResumeEntity){
@@ -292,7 +298,6 @@ export class HojaDeVidaComponent implements OnInit {
   }
 }
 
-
 @Component({
   selector: 'dialog-asignar',
   templateUrl: 'dialog-asignar.html',
@@ -366,8 +371,7 @@ export class ObservacionDialog implements OnInit {
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private hojaDeVidaService: HojaDeVidaService,
-    private generalService: GeneralService,
-    private router: Router){}
+    private generalService: GeneralService){}
 
   ngOnInit(): void {    
     this.rol = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId;
@@ -400,12 +404,13 @@ export class ObservacionDialog implements OnInit {
     if(this.habilitarRecomendacion){
       this.data.hojaDeVida.status = this.seleccionRecomendacion.name;
     }
-    this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe((data)=>{
+    /*this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe((data)=>{
       if(data.status === 201){
         this.generalService.mostrarMensaje("success", "Observación asignada correctamente.");
         this.cerrarDialog()
       }
-    })
+    })*/
+    this.cerrarDialog()
   }
 
   cerrarDialog(){
@@ -416,9 +421,7 @@ export class ObservacionDialog implements OnInit {
     //Cuenta el tamaño del texto ingresado   
     this.cantInput = value.length;
   }
-
 }
-
 
 
 @Component({
@@ -433,8 +436,7 @@ export class RegistrarDialog {
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
     private hojaDeVidaService: HojaDeVidaService,
-    private fileService: FileService,        
-    private router: Router,
+    private fileService: FileService,
     private generalService: GeneralService){
       this.profiles = [
         {name: 'TIPO A'},
@@ -442,9 +444,6 @@ export class RegistrarDialog {
         {name: 'TIPO C'}
     ];
   }
-
-    //Variables de archivos
-
     numeroIdentificacionRegistro: number;
     nombre: string;
     selectedProfile: any;
@@ -462,31 +461,26 @@ export class RegistrarDialog {
     let user = new UserEntity();  
     user.userId = this.hojaDeVidaService.obtenerIdUser();
     resumeEntity.userCreate = user;
-    //resumeEntity.userAssign = user;    
     this.hojaDeVidaService.guardarUser(user);
     this.hojaDeVidaService.guardarResume(resumeEntity);
     this.hojaDeVidaService.guardarEstaEditando(false);
-    //this.cerrarDialog();
-    //this.generalService.navegar("formulario");    
-    console.log("ARCHIVO" + JSON.stringify(this.fileService.obtenerArregloDeArchivos()));
-    
     this.hojaDeVidaService.save(resumeEntity).subscribe((data)=>{
       if(data.status === 201){
         let objeto = JSON.parse(JSON.stringify(data.result));
-        this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId); 
-        console.log("Hoja de vida guardada");
-        this.fileService.obtenerArregloDeArchivos().map( file => {
-          file.moduleId = this.hojaDeVidaService.obtenerIdHojaDeVida();
-          //if(file.)
-          this.fileService.uploadFile(file).subscribe((data) =>{
-            if(data.status === 200){          
-              console.log("GUARDADO");
-              this.limpiarFileService();
-            }
+        this.hojaDeVidaService.guardarIdHojaDevida(objeto.resumeId);
+        if(this.fileService.obtenerArregloDeArchivos()){
+          this.fileService.obtenerArregloDeArchivos().map( file => {
+            file.moduleId = this.hojaDeVidaService.obtenerIdHojaDeVida();
+            this.fileService.uploadFile(file).subscribe((data) =>{
+              if(data.status === 200){          
+                this.limpiarFileService();
+              }
+            })
           })
-        })
-        this.cerrarDialog();        
-      }            
+        }       
+               
+      }
+      this.cerrarDialog();             
     })
     
   }
@@ -501,13 +495,13 @@ export class RegistrarDialog {
   } 
   
   //SUBIDA DE ARCHIVOS
-  imageError: string;
+    imageError: string;
     isImageSaved: boolean;
     cardImageBase64: string;
     ImageBaseData:string | ArrayBuffer | null;
     fileArray: FileEntity[];
     fileArrayAux: FileEntity[];
-  splitted: string[] | undefined;
+    splitted: string[] | undefined;
 
     fileChangeEvent(fileInput: any) {      
       
@@ -524,12 +518,7 @@ export class RegistrarDialog {
             if (fileInput.files[i].size > max_size) {
                 this.imageError =
                     'Maximum size allowed is ' + max_size / 1000 + 'Mb';
-            }else{
-              //ARREGLAR ESTE IF
-              if (!allowed_types.includes(fileInput.files[i].type)) {
-                console.log("-----" + fileInput.files[i].type);
-                console.log("Only Images are allowed ( JPG | PNG )");                
-              }            
+            }else{   
               const reader = new FileReader();
               reader.readAsDataURL(fileInput.files[i]);
               reader.onload = (e: any) => {              
@@ -544,20 +533,11 @@ export class RegistrarDialog {
             };
           }
         }
-      }
-
-      console.log("_______________________________________________");      
-      console.log(this.fileService.obtenerArregloDeArchivos());
-      console.log("_______________________________________________");
-
+      }    
     }
 
     clearFile(){     
       this.limpiarFileService();     
-    }
-
-    removeFile() {
-       
     }
 
     saveFile(nombreArchivo: string){
@@ -587,18 +567,9 @@ export class RegistrarDialog {
           this.fileArray.push(fileEntity);
           console.log("entro");
           this.fileService.guardarArregloDeArchivos(this.fileArray);
-        }                        
-        
-      }
-      
+        }  
+      }      
     }
-    
-    validarFiles(){
-      
-    }
-    
-
- 
 }
 
 @Component({
@@ -647,18 +618,12 @@ export class FileDialog implements OnInit{
 
   cargarArchivos(hojaDeVida: ResumeEntity) {
     console.log(hojaDeVida.resumeId);
-    
     this.fileService.getFilesByModuleId(hojaDeVida).subscribe(data =>{      
-      console.log("JSON" + JSON.stringify(data.result));
-      
+      console.log("JSON" + JSON.stringify(data.result));      
       this.fileEntityList = JSON.parse(JSON.stringify(data.result));
-      
-      
       //this.fileToDownload = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(imageFile));
-      
     })        
   }
-
 
   cerrarDialog(){
     this.dialogRef.close();
