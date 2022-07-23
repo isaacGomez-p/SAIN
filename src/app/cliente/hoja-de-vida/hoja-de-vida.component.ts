@@ -48,7 +48,7 @@ export class HojaDeVidaComponent implements OnInit {
   chartOptions: any;
 
   fileToDownload : any;
-  fileName: string;
+  
 
   events: any[];
 
@@ -68,43 +68,23 @@ export class HojaDeVidaComponent implements OnInit {
   ngOnInit(): void {        
     this.cargarDatos();
     this.cargarContadores();    
-    this.blobBase64File();
+    //this.blobBase64File();
   }
 
-  fileEntityList: FileEntity[];
-  file:FileEntity;
   
-  blobBase64File() {
-    this.fileService.getFilesByModuleId().subscribe(data =>{
-      console.log("JSON" + JSON.stringify(data.result));
-      
-      this.fileEntityList = JSON.parse(JSON.stringify(data.result));
-      this.file = this.fileEntityList[0];
-      //console.log("FILE ENTITY" + JSON.stringify(fileEntity));
-      const imageName = 'name.pdf';
-      this.fileName = imageName;
-      const imageBlob = this.dataURItoBlob(this.file.filee);
-      const imageFile = new File([imageBlob], imageName, { type: 'application/pdf' });
+    
+  abrirDialogFile(hojaDeVida: ResumeEntity){
+    const dialogRef = this.dialog.open(FileDialog, {      
+      data: {
+        hojaDeVida: hojaDeVida
+      },
+      width: '50%'
+    });
 
-      this.fileToDownload = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(imageFile));
-      
-    })
-    
-    
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });  
   }
-
-  dataURItoBlob(dataURI: any) {
-    const byteString = window.atob(dataURI);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const int8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteString.length; i++) {
-      int8Array[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([int8Array], { type: 'application/pdf' });    
-    return blob;
- }
-
-  
 
   changeFilterStatus(){
     this.showFilter = !this.showFilter;
@@ -448,20 +428,20 @@ export class ObservacionDialog implements OnInit {
 export class RegistrarDialog {
 
   profiles : any[];
+  private maxFiles: number = 5;
 
-constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
-  @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
+  constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
+    @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
     private hojaDeVidaService: HojaDeVidaService,
-    private fileService: FileService,
-    
-    private router: Router){
+    private fileService: FileService,        
+    private router: Router,
+    private generalService: GeneralService){
       this.profiles = [
         {name: 'TIPO A'},
         {name: 'TIPO B'},
         {name: 'TIPO C'}
     ];
-
-    }
+  }
 
     //Variables de archivos
 
@@ -501,7 +481,7 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
           this.fileService.uploadFile(file).subscribe((data) =>{
             if(data.status === 200){          
               console.log("GUARDADO");
-              
+              this.limpiarFileService();
             }
           })
         })
@@ -509,6 +489,11 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
       }            
     })
     
+  }
+
+  limpiarFileService(){
+    this.fileArray = [];
+    this.fileService.guardarArregloDeArchivos(this.fileArray);
   }
 
   cerrarDialog(){
@@ -521,67 +506,61 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
     cardImageBase64: string;
     ImageBaseData:string | ArrayBuffer | null;
     fileArray: FileEntity[];
-    
+    fileArrayAux: FileEntity[];
   splitted: string[] | undefined;
 
-    fileChangeEvent(fileInput: any) {        
-        if (fileInput.target.files && fileInput.target.files[0]) {
+    fileChangeEvent(fileInput: any) {      
+      
+      console.log(fileInput);
+      for(let i = 0; i < this.maxFiles; i++){          
+        
+        if (fileInput.files && fileInput.files[i]) {
             // Size Filter Bytes
             const max_size = 20971520;
             const allowed_types = ["application/pdf"];
             //'application/msword '
             //'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
-            if (fileInput.target.files[0].size > max_size) {
+            if (fileInput.files[i].size > max_size) {
                 this.imageError =
                     'Maximum size allowed is ' + max_size / 1000 + 'Mb';
             }else{
               //ARREGLAR ESTE IF
-              if (!allowed_types.includes(fileInput.target.files[0].type)) {
-                console.log("-----" + fileInput.target.files[0].type);
+              if (!allowed_types.includes(fileInput.files[i].type)) {
+                console.log("-----" + fileInput.files[i].type);
                 console.log("Only Images are allowed ( JPG | PNG )");                
               }            
               const reader = new FileReader();
-              reader.readAsDataURL(fileInput.target.files[0]);
-              reader.onload = (e: any) => {
-                /*const image = new Image();
-                image.src = e.target.result;
-                image.onload = rs => {
-                    
-                        const imgBase64Path = e.target.result;
-                        this.cardImageBase64 = imgBase64Path;
-                        this.isImageSaved = true;
-                        console.log("AASSDD" + this.cardImageBase64);
-                        
-                        // this.previewImagePath = imgBase64Path;
-                    
-                };*/
-                this.ImageBaseData=reader.result;
-                this.splitted = this.ImageBaseData?.toString().split(",", 2); 
-                this.isImageSaved = true;
-                /*if(this.splitted?.[0]){
-                  if(!allowed_types.includes(this.splitted?.[0])){
-                    console.log("Only Images are allowedklujkjl ( JPG | PNG )");
-                  }
-                }  */
-
-                console.log(this.splitted?.[1]);
-                
+              reader.readAsDataURL(fileInput.files[i]);
+              reader.onload = (e: any) => {              
+              this.ImageBaseData=reader.result;
+              this.splitted = this.ImageBaseData?.toString().split(",", 2); 
+              this.isImageSaved = true;                
+              this.generalService.mostrarMensaje("success", "Archivo " + fileInput.files[i].name + " cargado correctamente.");                
+              this.saveFile(fileInput.files[i].name);
             };
             reader.onerror = function (error) {
               console.log('Error: ', error);
             };
           }
         }
+      }
+
+      console.log("_______________________________________________");      
+      console.log(this.fileService.obtenerArregloDeArchivos());
+      console.log("_______________________________________________");
+
     }
 
-    removeImage() {
-        this.cardImageBase64 = "";
-        this.ImageBaseData = null;
-        this.isImageSaved = false;
+    clearFile(){     
+      this.limpiarFileService();     
     }
 
-    saveFile(){
+    removeFile() {
+       
+    }
+
+    saveFile(nombreArchivo: string){
       if(this.splitted){
         var fileEntity = new FileEntity();
         if(this.fileService.obtenerArregloDeArchivos()){
@@ -591,19 +570,98 @@ constructor(public dialogRef: MatDialogRef<RegistrarDialog>,
         }                 
         fileEntity.filee = this.splitted?.[1];
         fileEntity.module = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.name;
-        fileEntity.type = "Hoja de Vida";
+        fileEntity.type = nombreArchivo;
         fileEntity.extension = "PDF";
-                                    
-        
-        this.fileArray.push(fileEntity);
+                    
+        var validacion: number = 1;
+                
+        this.fileArray.map((item)=>{
+          if(item.type === nombreArchivo){
+            validacion = 0;
+          }
+        })
 
-        this.fileService.guardarArregloDeArchivos(this.fileArray);
+        console.log(validacion);        
+
+        if(validacion !== 0){
+          this.fileArray.push(fileEntity);
+          console.log("entro");
+          this.fileService.guardarArregloDeArchivos(this.fileArray);
+        }                        
+        
       }
       
     }
-
+    
+    validarFiles(){
+      
+    }
     
 
  
 }
 
+@Component({
+  selector: 'dialog-file',
+  templateUrl: 'dialog-file.html',
+})
+export class FileDialog implements OnInit{
+
+  profiles : any[];
+  private maxFiles: number = 5;
+  fileEntityList: FileEntity[];
+  file:FileEntity;
+  fileName: string;
+
+  archivoSeleccionado: any;
+
+  constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private fileService: FileService ){ }
+
+  ngOnInit(): void {
+    this.cargarArchivos(this.data.hojaDeVida);
+  }
+
+  dataURItoBlob(dataURI: any) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'application/pdf' });    
+    return blob;
+ }
+
+ abrirArchivo(fileEntity: FileEntity){
+  this.file = fileEntity
+  //console.log("FILE ENTITY" + JSON.stringify(fileEntity));
+  const imageName = 'name.pdf';
+  this.fileName = imageName;
+  const imageBlob = this.dataURItoBlob(this.file.filee);
+  const imageFile = new File([imageBlob], imageName, { type: 'application/pdf' });
+  const url = URL.createObjectURL(imageFile);
+  window.open(url)
+ }
+
+  cargarArchivos(hojaDeVida: ResumeEntity) {
+    console.log(hojaDeVida.resumeId);
+    
+    this.fileService.getFilesByModuleId(hojaDeVida).subscribe(data =>{      
+      console.log("JSON" + JSON.stringify(data.result));
+      
+      this.fileEntityList = JSON.parse(JSON.stringify(data.result));
+      
+      
+      //this.fileToDownload = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(imageFile));
+      
+    })        
+  }
+
+
+  cerrarDialog(){
+    this.dialogRef.close();
+  } 
+
+}

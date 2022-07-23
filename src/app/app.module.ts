@@ -16,7 +16,7 @@ import {TimelineModule} from 'primeng/timeline';
 import {CheckboxModule} from 'primeng/checkbox';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {RadioButtonModule} from 'primeng/radiobutton';
-
+import { FileUploadModule } from 'primeng/fileupload';
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -42,6 +42,9 @@ import {FieldsetModule} from 'primeng/fieldset';
 import {DividerModule} from 'primeng/divider';
 import { ChartModule } from 'primeng/chart';
 import { ChipModule } from 'primeng/chip';
+import { UploadFileComponent } from './utils/upload-file/upload-file.component';
+//import { UploadFileModule } from './utils/upload-file/upload-file.module';
+import {ListboxModule} from 'primeng/listbox';
 
 
 @NgModule({
@@ -54,7 +57,8 @@ import { ChipModule } from 'primeng/chip';
     VerificacionComponent,
     InicioComponent,
     MenuPrincipalComponent,
-    HojaDeVidaComponent
+    HojaDeVidaComponent,
+    //UploadFileComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +87,10 @@ import { ChipModule } from 'primeng/chip';
     ChartModule,
     ChipModule,
     SplitButtonModule,
-    RadioButtonModule
+    RadioButtonModule,
+    //UploadFileModule,
+    FileUploadModule,
+    ListboxModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

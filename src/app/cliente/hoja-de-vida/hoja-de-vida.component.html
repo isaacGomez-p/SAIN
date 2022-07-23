@@ -122,10 +122,10 @@
                     <td>
                         
                         <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="row">
-                            <button *ngIf="h.verified && rol == 1" mat-button color="primary"  (click)="verHojaDeVida(h)">Ver</button>
-                            <button *ngIf="rol == 3" mat-button color="primary"  (click)="verHojaDeVida(h)">Ver</button>
+                            <button mat-button color="primary"  (click)="verHojaDeVida(h)">Ver</button>                            
                             <button mat-button color="primary" (click)="asignar(h)" *ngIf="rol == 1 || rol == 3">Asignar</button> 
                             <button mat-button color="primary" (click)="eliminarDialog(h)" *ngIf="rol == 1 || rol == 2">Eliminar</button> 
+                            <button mat-button color="primary" (click)="abrirDialogFile(h)">Ver archivos</button> 
                         </mat-button-toggle-group>
                         
                     </td>   
@@ -136,12 +136,6 @@
             <button mat-raised-button color="primary" (click)="agregar()" [disabled]="cargando" class="botonSiguiente"> <i class="fa-thin fa-plus"></i>Agregar</button>
         
         </div>
-    </div>
-
-    <a href="C:/home/ec2-user/files\_\\21__Hoja de Vida.PDF"
-class="btn"
-target="_blank"
-download="{{fileName}}"
->Download Now</a>
+    </div>    
 </div>
 

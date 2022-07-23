@@ -278,7 +278,8 @@ export class FormularioComponent implements OnInit {
     const dialogRef = this.dialog.open(ObservacionDialog, {      
       data: {
         answer: answer
-      }
+      },
+      width: '50%'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -294,7 +295,7 @@ export class FormularioComponent implements OnInit {
 })
 export class ObservacionDialog implements OnInit {
   seleccionRecomendacion: any;
-  rol: number | undefined;
+  rol: number | undefined;  
 
   //maxInput: number = 255;
   maxInput: number = 255;
@@ -308,6 +309,7 @@ export class ObservacionDialog implements OnInit {
 
   ngOnInit(): void {    
     //Cargar observacion de acuerdo con rol
+    this.observacion = this.data.answer.observation;
   }
 
   guardar(){

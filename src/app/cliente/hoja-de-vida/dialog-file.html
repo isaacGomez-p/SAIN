@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Archivos</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="grid">        
+        <div class="col-11 md:col-11 lg:col-11">
+           <p-listbox [options]="fileEntityList" [(ngModel)]="archivoSeleccionado" optionLabel="type" (onChange)="abrirArchivo(archivoSeleccionado)"></p-listbox>
+        </div>
+                               
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Cerrar</button>  
+</mat-dialog-actions>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HojaDeVidaComponentRoutingModule } from './hoja-de-vida-routing.module';
 import {TimelineModule} from 'primeng/timeline';
-import { AsignarDialog, ObservacionDialog, RegistrarDialog } from './hoja-de-vida.component';
+import { AsignarDialog, FileDialog, ObservacionDialog, RegistrarDialog } from './hoja-de-vida.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -11,8 +11,12 @@ import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import {FileUploadModule} from 'primeng/fileupload';
+import { UploadFileComponent } from 'src/app/utils/upload-file/upload-file.component';
+import {ListboxModule} from 'primeng/listbox';
+
 @NgModule({
-  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog],
+  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog, UploadFileComponent, FileDialog],
   imports: [
     CommonModule,
     HojaDeVidaComponentRoutingModule,    
@@ -23,7 +27,10 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     TableModule,
     MatButtonModule,
     DropdownModule,
-    RadioButtonModule
+    RadioButtonModule,
+    FileUploadModule,
+    ListboxModule
+  //  UploadFileModule
   ]
 })
 export class HojaDeVidaModule { }

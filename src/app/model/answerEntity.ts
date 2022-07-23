@@ -13,4 +13,5 @@ export class AnswerEntity{
     questions: QuestionsEntity;
     verifiedDate: Date;
     result: boolean;
+    observation: string;
 }

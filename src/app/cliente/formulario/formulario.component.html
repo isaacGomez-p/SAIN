@@ -33,7 +33,7 @@
                                     <textarea [rows]="p.height" pInputTextarea 
                                     [autoResize]=true 
                                     style="width: 100%;"
-                                    
+                                    [disabled]="!habilitarEditar"
                                     [(ngModel)]="p.answer"                                    
                                     ></textarea>
                                 </div>
@@ -44,7 +44,7 @@
                                         [minFractionDigits]="0" 
                                         [maxFractionDigits]="0"
                                         [useGrouping]="false"
-                                    
+                                        [disabled]="!habilitarEditar"
                                         [maxlength]="10"  
                                         autocomplete="off" ></p-inputNumber>                           
                                 </div>
@@ -54,7 +54,7 @@
                                         mode="currency" currency="COP" locale="es-CO"
                                         [minFractionDigits]="0" 
                                         [maxFractionDigits]="0"
-                                    
+                                        [disabled]="!habilitarEditar"
                                         [maxlength]="12"  
                                         autocomplete="off" ></p-inputNumber>                           
                                 </div>

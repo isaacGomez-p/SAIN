@@ -4,6 +4,7 @@ import { FileEntity } from 'src/app/model/fileEntity';
 import { environment } from 'src/environments/environment';
 import { ResponseService } from 'src/app/model/responseService';
 import { Observable } from 'rxjs';
+import { ResumeEntity } from 'src/app/model/resumeEntity';
 
 @Injectable({
   providedIn: 'root'
@@ -41,29 +42,11 @@ export class FileService {
     return this.http.post<ResponseService>(this._save, fileEntity);
   }
 
-  getFilesByModuleId(): Observable<ResponseService> {
+  getFilesByModuleId(resumeEntity: ResumeEntity): Observable<ResponseService> {
     let requestEntity = {
-      id: 20
+      id: resumeEntity.resumeId
     }
-    // Note that setting a content-type header
-    // for mutlipart forms breaks some built in
-    // request parsers like multer in express.
-    //const options = {} as any; // Set any options you like
-    //const formData = new FormData();
-  
-    // Append files to the virtual form.    
-      //formData.append("file", fileEntity.file)
-    
-  
-    // Optional, append other kev:val rest data to the form.
-    
-      //formData.append("data", JSON.stringify(fileEntity));
-      //formData.append(
-      //  'data',
-      //  new Blob([JSON.stringify(fileEntity)], {type: 'application/json'}))
-    
-  
-    // Send it.
+   
     return this.http.post<ResponseService>(this._findByModuleId, requestEntity);
   }
     

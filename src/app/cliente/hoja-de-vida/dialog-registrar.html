@@ -112,21 +112,26 @@
                 </div>-->
             </div>                    
         </div>
-            <div class="col-11 md:col-11 lg:col-11">
-                <label>Subir archivos</label>
-            </div>
-            <div class="p-inputgroup anchoInput">
-                <fieldset class="form-group">    
-                    <label>Upload Logo</label>
-                    <div class="custom-file fileInputProfileWrap ">
-                        <input type="file" (change)="fileChangeEvent($event)" class="fileInputProfile">
-    
-                    </div>
-                </fieldset>
-            </div>
-            <a class="btn btn-danger" (click)="removeImage()" *ngIf="isImageSaved">Remove</a>
 
-            <button mat-raised-button color="primary" (click)="saveFile()" cdkFocusInitial>Agregar Archivo</button>
+        <div class="col-12 md:col-12 lg:col-12">
+            <label>Subir archivos</label>
+        </div>
+
+        <div class="col-12 md:col-12 lg:col-12">
+            <p-fileUpload 
+                name="myfile[]" 
+                [multiple]=true
+                accept="application/pdf/*"
+                [maxFileSize]="500000"
+                (uploadHandler)="fileChangeEvent($event)"
+                [customUpload]="true"
+                [fileLimit]=5
+                (onClear)="clearFile()"
+            ></p-fileUpload>
+        </div>
+
+            
+           
     </div>
 
 </mat-dialog-content>
