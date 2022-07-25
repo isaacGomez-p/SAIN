@@ -16,7 +16,7 @@ import { UploadFileComponent } from 'src/app/utils/upload-file/upload-file.compo
 import {ListboxModule} from 'primeng/listbox';
 
 @NgModule({
-  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog, UploadFileComponent, FileDialog],
+  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog, FileDialog, UploadFileComponent],
   imports: [
     CommonModule,
     HojaDeVidaComponentRoutingModule,    
@@ -31,6 +31,9 @@ import {ListboxModule} from 'primeng/listbox';
     FileUploadModule,
     ListboxModule
   //  UploadFileModule
+  ],
+  exports: [
+    UploadFileComponent
   ]
 })
 export class HojaDeVidaModule { }

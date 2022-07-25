@@ -21,8 +21,7 @@
                             <th *ngIf="adding > 0">Verificado</th>   
                             <th *ngIf="adding > 0">Fec. Verificación</th>  
                             <th *ngIf="adding > 0">Verificado Por</th>   
-                            <th *ngIf="adding > 0">Resultado</th>           
-                            <th *ngIf="adding > 0">Observación</th> 
+                            <th *ngIf="adding > 0">Resultado</th>                                       
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-p>
@@ -74,8 +73,8 @@
                             </td>     
                             <td *ngIf="adding > 0">
                                 <div>
-                                    <label *ngIf="p.answerObjeto.userMod != null && p.answerObjeto.userMod != undefined">{{p.answerObjeto.userMod}}</label>
-                                    <label *ngIf="p.answerObjeto.userMod == null || p.answerObjeto.userMod == undefined"> - </label>
+                                    <label *ngIf="p.verified === true && (p.answerObjeto.userMod != null && p.answerObjeto.userMod != undefined)">{{p.answerObjeto.userMod.name}}</label>
+                                    <label *ngIf="p.verified === false"> - </label>
                                 </div>
                             </td>
                             <td *ngIf="adding > 0">
@@ -84,10 +83,7 @@
                                     <label for="binary" *ngIf="p.answerObjeto != undefined && p.answerObjeto.result"> Positivo </label>
                                     <label for="binary" *ngIf="p.answerObjeto == undefined || !p.answerObjeto.result"> Negativo </label>
                                 </div>
-                            </td>
-                            <td *ngIf="p.answerObjeto.answerId">
-                                <button mat-button color="primary" (click)="verObservacion(p)">Ver</button>
-                            </td>
+                            </td>                           
                         </tr>
                     </ng-template>
                 </p-table>

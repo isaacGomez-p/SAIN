@@ -58,7 +58,7 @@ import {ListboxModule} from 'primeng/listbox';
     InicioComponent,
     MenuPrincipalComponent,
     HojaDeVidaComponent,
-    //UploadFileComponent
+    
   ],
   imports: [
     BrowserModule,

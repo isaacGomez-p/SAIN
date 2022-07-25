@@ -110,6 +110,8 @@ export class FormularioComponent implements OnInit {
             itemP.answerObjeto = new AnswerEntity();
             itemP.answerObjeto.verified = item.verified == null || item.verified == undefined ? false : item.verified;
             itemP.answerObjeto.userMod = item.userMod;
+            console.log(itemP.answerObjeto.userMod);
+            
             itemP.answerObjeto.verifiedDate = item.verifiedDate;
             itemP.answerObjeto.result = item.result == null || item.result == undefined ? false : item.result;
             itemP.answerObjeto.answerId = item.answerId;
@@ -126,7 +128,7 @@ export class FormularioComponent implements OnInit {
   siguiente(){
     this.cargando = false;    
     //Se llama al metodo para guardar las respuestas
-    this.guardarRespuestas();
+    this.guardarRespuestas(true);
 
     if(this.section === this.seccionMayor){
       this.btnText = "Finalizar";
@@ -137,14 +139,21 @@ export class FormularioComponent implements OnInit {
     this.section++;
   }
 
-  guardarRespuestas(){                
+  disminuirSeccion(){
+    this.section--;
+  }
+
+  guardarRespuestas(permisoAumentar: boolean){                
     //Obteniendo la hoja de vida
     let resume = this.hojaDeVidaService.obtenerResume();
     //Se inicia la lista de respuestas en caso que sea null
     resume!.answerEntities = [];
 
-    this.preguntas.map((item)=>{      
-      if(item.section == this.section && item.answer != null && item.answer != ""){
+    this.preguntas.map((item)=>{
+
+      if(item.section == this.section && ((item.answer != null && item.answer != "") || item.answerObjeto.verified === true)){
+        console.log("___entro");
+        
         let answerEntity = new AnswerEntity();
         //Adding 1 es editar
         if(this.adding === 1){          
@@ -187,11 +196,15 @@ export class FormularioComponent implements OnInit {
       }
     })
 
-    //Se valida que la sección que esta actualmente sea la ultima, si es así se retorna a la hoja de vida
-    if(this.section >= this.seccionMayor){
-      this.generalService.navegar("hojaDeVida")
-    } else{
-      this.aumentarSeccion();
+    if(permisoAumentar){
+      //Se valida que la sección que esta actualmente sea la ultima, si es así se retorna a la hoja de vida
+      if(this.section >= this.seccionMayor){
+        this.generalService.navegar("hojaDeVida")
+      } else{      
+        this.aumentarSeccion();            
+      }
+    }else{
+      this.disminuirSeccion();
     }
   }
 /*
@@ -247,15 +260,22 @@ export class FormularioComponent implements OnInit {
   }
 
   anterior(){    
-    this.btnText = "Siguiente";
-    if(this.section !== 0){
-      this.section--;
-      this.cargarSeccionAnterior(this.section);
+    this.btnText = "Siguiente";    
+    
+    console.log("__________ antes: " + this.section);
+    
+
+    this.guardarRespuestas(false);
+
+    if(this.section !== 0){      
+      this.cargarSeccionAnterior(this.section);      
     }       
+    
+    console.log("__________ despues: " + this.section);
   }
 
   back(){
-    this.guardarRespuestas();
+    this.guardarRespuestas(false);
     this.generalService.navegar("hojaDeVida")
   }
 

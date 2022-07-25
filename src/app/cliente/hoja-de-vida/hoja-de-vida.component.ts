@@ -437,8 +437,7 @@ export class ObservacionDialog implements OnInit {
 })
 export class RegistrarDialog {
 
-  profiles : any[];
-  private maxFiles: number = 5;
+  profiles : any[];  
 
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
@@ -493,90 +492,15 @@ export class RegistrarDialog {
   }
 
   limpiarFileService(){
-    this.fileArray = [];
-    this.fileService.guardarArregloDeArchivos(this.fileArray);
+    let file: FileEntity[]  = [];
+    this.fileService.guardarArregloDeArchivos(file);
   }
 
   cerrarDialog(){
     this.dialogRef.close();
   } 
   
-  //SUBIDA DE ARCHIVOS
-    imageError: string;
-    isImageSaved: boolean;
-    cardImageBase64: string;
-    ImageBaseData:string | ArrayBuffer | null;
-    fileArray: FileEntity[];
-    fileArrayAux: FileEntity[];
-    splitted: string[] | undefined;
-
-    fileChangeEvent(fileInput: any) {      
-      
-      console.log(fileInput);
-      for(let i = 0; i < this.maxFiles; i++){          
-        
-        if (fileInput.files && fileInput.files[i]) {
-            // Size Filter Bytes
-            const max_size = 20971520;
-            const allowed_types = ["application/pdf"];
-            //'application/msword '
-            //'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-
-            if (fileInput.files[i].size > max_size) {
-                this.imageError =
-                    'Maximum size allowed is ' + max_size / 1000 + 'Mb';
-            }else{   
-              const reader = new FileReader();
-              reader.readAsDataURL(fileInput.files[i]);
-              reader.onload = (e: any) => {              
-              this.ImageBaseData=reader.result;
-              this.splitted = this.ImageBaseData?.toString().split(",", 2); 
-              this.isImageSaved = true;                
-              this.generalService.mostrarMensaje("success", "Archivo " + fileInput.files[i].name + " cargado correctamente.");                
-              this.saveFile(fileInput.files[i].name);
-            };
-            reader.onerror = function (error) {
-              console.log('Error: ', error);
-            };
-          }
-        }
-      }    
-    }
-
-    clearFile(){     
-      this.limpiarFileService();     
-    }
-
-    saveFile(nombreArchivo: string){
-      if(this.splitted){
-        var fileEntity = new FileEntity();
-        if(this.fileService.obtenerArregloDeArchivos()){
-          this.fileArray = this.fileService.obtenerArregloDeArchivos();
-        }else{
-          this.fileArray = [];
-        }                 
-        fileEntity.filee = this.splitted?.[1];
-        fileEntity.module = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.name;
-        fileEntity.type = nombreArchivo;
-        fileEntity.extension = "PDF";
-                    
-        var validacion: number = 1;
-                
-        this.fileArray.map((item)=>{
-          if(item.type === nombreArchivo){
-            validacion = 0;
-          }
-        })
-
-        console.log(validacion);        
-
-        if(validacion !== 0){
-          this.fileArray.push(fileEntity);
-          console.log("entro");
-          this.fileService.guardarArregloDeArchivos(this.fileArray);
-        }  
-      }      
-    }
+  
 }
 
 @Component({
@@ -595,9 +519,12 @@ export class FileDialog implements OnInit{
 
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private fileService: FileService ){ }
+    private fileService: FileService,
+    private hojaDeVidaService: HojaDeVidaService,
+    private generalService: GeneralService ){ }
 
   ngOnInit(): void {
+    this.limpiarFileService();
     this.cargarArchivos(this.data.hojaDeVida);
   }
 
@@ -612,28 +539,52 @@ export class FileDialog implements OnInit{
     return blob;
  }
 
- abrirArchivo(fileEntity: FileEntity){
-  this.file = fileEntity
-  //console.log("FILE ENTITY" + JSON.stringify(fileEntity));
-  const imageName = 'name.pdf';
-  this.fileName = imageName;
-  const imageBlob = this.dataURItoBlob(this.file.filee);
-  const imageFile = new File([imageBlob], imageName, { type: 'application/pdf' });
-  const url = URL.createObjectURL(imageFile);
-  window.open(url)
- }
+  abrirArchivo(fileEntity: FileEntity){
+    this.file = fileEntity
+    //console.log("FILE ENTITY" + JSON.stringify(fileEntity));
+    const imageName = 'name.pdf';
+    this.fileName = imageName;
+    const imageBlob = this.dataURItoBlob(this.file.filee);
+    const imageFile = new File([imageBlob], imageName, { type: 'application/pdf' });
+    const url = URL.createObjectURL(imageFile);
+    window.open(url)
+  }
 
-  cargarArchivos(hojaDeVida: ResumeEntity) {
-    console.log(hojaDeVida.resumeId);
+  cargarArchivos(hojaDeVida: ResumeEntity) {    
     this.fileService.getFilesByModuleId(hojaDeVida).subscribe(data =>{      
-      console.log("JSON" + JSON.stringify(data.result));      
       this.fileEntityList = JSON.parse(JSON.stringify(data.result));
-      //this.fileToDownload = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(imageFile));
-    })        
+    })
   }
 
   cerrarDialog(){
     this.dialogRef.close();
   } 
+
+  guardarArchivos(){
+    if(this.fileService.obtenerArregloDeArchivos()){
+      console.log("_____ entro");
+      
+      this.fileService.obtenerArregloDeArchivos().map( file => {
+        console.log("_____ entro 1");
+        file.moduleId = this.data.hojaDeVida.resumeId
+        console.log(file);
+        this.fileService.uploadFile(file).subscribe((data) =>{
+          console.log("_____ entro 2");
+          if(data.status === 200){    
+            this.generalService.mostrarMensaje("success", "Archivos cargados correctamente.");      
+            this.limpiarFileService();
+          }
+        })
+      })
+    }else{
+      this.generalService.mostrarMensaje("warning", "No se han encontrado archivos nuevos para subir.");
+    }
+    this.cerrarDialog();
+  }
+
+  limpiarFileService(){
+    let file: FileEntity[]  = [];
+    this.fileService.guardarArregloDeArchivos(file);
+  }
 
 }
