@@ -109,6 +109,8 @@ export class HojaDeVidaComponent implements OnInit {
       if(result != undefined){        
         if(result == "SI"){
           this.eliminar(hojaDeVida);
+          this.cargarDatos();
+          this.cargarContadores();    
         }
       }
     });  
@@ -278,6 +280,8 @@ export class HojaDeVidaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      this.cargarDatos();
+      this.cargarContadores();    
     });   
       
   }
@@ -294,6 +298,8 @@ export class HojaDeVidaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      this.cargarDatos();
+      this.cargarContadores();    
     });   
   }
 }
@@ -387,7 +393,7 @@ export class ObservacionDialog implements OnInit {
         this.validarCaracteres(this.observacion);
       }      
     }else{
-      this.data.hojaDeVida.provObservation = this.data.hojaDeVida.provObservation == null || this.data.hojaDeVida.provObservation == '' ? "" : this.data.hojaDeVida.provObservation; 
+      this.data.hojaDeVida.provObservation = this.data.hojaDeVida.provObservation == null || this.data.hojaDeVida.provObservation == '' ? this.data.hojaDeVida.adminObservation : this.data.hojaDeVida.provObservation; 
       if(this.data.hojaDeVida.provObservation.length > 0){
         this.observacion = this.data.hojaDeVida.provObservation;
         this.validarCaracteres(this.observacion);
@@ -400,16 +406,17 @@ export class ObservacionDialog implements OnInit {
       this.data.hojaDeVida.provObservation = this.observacion;
     } else if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 1){
       this.data.hojaDeVida.adminObservation = this.observacion;
+      this.data.hojaDeVida.provObservation = "";
     }
     if(this.habilitarRecomendacion){
       this.data.hojaDeVida.status = this.seleccionRecomendacion.name;
     }
-    /*this.hojaDeVidaService.save(this.data.hojaDeVida).subscribe((data)=>{
-      if(data.status === 201){
+    this.hojaDeVidaService.update(this.data.hojaDeVida).subscribe((data)=>{
+      if(data.status === 200){
         this.generalService.mostrarMensaje("success", "Observación asignada correctamente.");
         this.cerrarDialog()
       }
-    })*/
+    })
     this.cerrarDialog()
   }
 

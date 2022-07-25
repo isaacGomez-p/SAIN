@@ -25,7 +25,6 @@
         
     </div>
 </div>
-
 <br>
 
 <div class="grid">
@@ -110,8 +109,8 @@
                     <td *ngIf="!h.verified && h.profile === 'TIPO B'" class="siLabel"> 0 / 18 </td>
                     <td *ngIf="!h.verified && h.profile === 'TIPO C'" class="siLabel"> 0 / 19 </td>
 
-                    <td *ngIf="h.userBy == null && h.verificationDate == null">No ha sido verificado</td>
-                    <td *ngIf="h.userBy != null && h.verificationDate != null">{{h.verificationDate | date:'yyyy-MM-dd hh:mm'}}</td>
+                    <td *ngIf="h.verificationDate == null">No ha sido verificado</td>
+                    <td *ngIf="h.verificationDate != null">{{h.verificationDate | date:'yyyy-MM-dd hh:mm'}}</td>
 
                     <td *ngIf="h.userAssign != null">{{h.userAssign.name}}</td>
                     <td *ngIf="h.userAssign == null">No ha sido asignado</td>

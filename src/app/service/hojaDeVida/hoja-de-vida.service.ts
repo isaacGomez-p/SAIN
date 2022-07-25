@@ -15,6 +15,7 @@ export class HojaDeVidaService {
 
   private _controller = environment.URL + "resume/";
   private _save = this._controller + "save";
+  private _update = this._controller + "update";
   private _findByUserAssign = this._controller + "findByUserAssign";
   private _findByUserCreate = this._controller + "findByUserCreate";
   private _findAll = this._controller + "findAll";
@@ -42,6 +43,10 @@ export class HojaDeVidaService {
 
   public save(user: ResumeEntity) : Observable<ResponseService> {  
     return this.http.post<ResponseService>(this._save, user);
+  }
+
+  public update(user: ResumeEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._update, user);
   }
 
   public findAll(user: UserEntity) : Observable<ResponseService> {  
