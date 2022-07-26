@@ -101,16 +101,13 @@ export class FormularioComponent implements OnInit {
         && this.hojaDeVidaService.obtenerResume()!.answerEntities != undefined 
         && this.hojaDeVidaService.obtenerResume()!.answerEntities.length > 0){  
 
-      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{
-        console.log(JSON.stringify(item));
-        
+      this.hojaDeVidaService.obtenerResume()?.answerEntities.map((item)=>{        
         this.preguntas.map(itemP=>{
           //Verifica que el id pregunta este registrado en la hoja de vida, para asignar respuesta
           if(item.questions.questionId == itemP.questionId){       
             itemP.answerObjeto = new AnswerEntity();
             itemP.answerObjeto.verified = item.verified == null || item.verified == undefined ? false : item.verified;
             itemP.answerObjeto.userMod = item.userMod;
-            console.log(itemP.answerObjeto.userMod);
             
             itemP.answerObjeto.verifiedDate = item.verifiedDate;
             itemP.answerObjeto.result = item.result == null || item.result == undefined ? false : item.result;
@@ -152,7 +149,6 @@ export class FormularioComponent implements OnInit {
     this.preguntas.map((item)=>{
 
       if(item.section == this.section && ((item.answer != null && item.answer != "") || item.answerObjeto.verified === true)){
-        console.log("___entro");
         
         let answerEntity = new AnswerEntity();
         //Adding 1 es editar
@@ -175,12 +171,12 @@ export class FormularioComponent implements OnInit {
         }
 
         //Se asigna el usuario que modifico la respuesta
-        if(resume?.userCreate){
+        if(resume?.userCreate){          
           let user = new UserEntity();
-          user = resume?.userCreate;
-          answerEntity.userMod = user;
+          user = resume?.userCreate;          
+          answerEntity.userMod = this.hojaDeVidaService.obtenerUserLogin();
         }
-        
+        //answerEntity.userMod = this.hojaDeVidaService.obtenerUserLogin();
         resume!.answerEntities.push(answerEntity);
         resume!.userBy = this.hojaDeVidaService.obtenerUserLogin();
         let resumeAnswerDTO = new ResumeAnswerDTO();
@@ -261,17 +257,10 @@ export class FormularioComponent implements OnInit {
 
   anterior(){    
     this.btnText = "Siguiente";    
-    
-    console.log("__________ antes: " + this.section);
-    
-
     this.guardarRespuestas(false);
-
     if(this.section !== 0){      
       this.cargarSeccionAnterior(this.section);      
-    }       
-    
-    console.log("__________ despues: " + this.section);
+    }
   }
 
   back(){

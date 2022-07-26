@@ -30,7 +30,7 @@
                             <td>
                                 <div *ngIf="p.type == 'text'">
                                     <textarea [rows]="p.height" pInputTextarea 
-                                    [autoResize]=true 
+                                    [autoResize]=tr 
                                     style="width: 100%;"
                                     [disabled]="!habilitarEditar"
                                     [(ngModel)]="p.answer"                                    
@@ -73,8 +73,8 @@
                             </td>     
                             <td *ngIf="adding > 0">
                                 <div>
-                                    <label *ngIf="p.verified === true && (p.answerObjeto.userMod != null && p.answerObjeto.userMod != undefined)">{{p.answerObjeto.userMod.name}}</label>
-                                    <label *ngIf="p.verified === false"> - </label>
+                                    <label *ngIf="p.answerObjeto.verified === true && (p.answerObjeto.userMod != null && p.answerObjeto.userMod != undefined)">{{p.answerObjeto.userMod.name}}</label>
+                                    <label *ngIf="p.answerObjeto.verified === false"> - </label>
                                 </div>
                             </td>
                             <td *ngIf="adding > 0">

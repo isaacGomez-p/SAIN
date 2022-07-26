@@ -8,6 +8,7 @@
                 <button mat-button color="warn" routerLink="/revision">Inicio</button>
                 <!--<button mat-button color="warn" routerLink="/estado">Estado</button>-->
                 <button mat-button color="primary" routerLink="/hojaDeVida">Lista de Hojas de Vida</button>              
+                <button *ngIf="showRegister" mat-button color="primary" routerLink="/registro">Registrar Proveedor</button>              
             </mat-card-actions>
         </mat-card>
         <p-divider></p-divider>

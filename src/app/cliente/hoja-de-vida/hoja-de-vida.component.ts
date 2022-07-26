@@ -464,6 +464,7 @@ export class RegistrarDialog {
     resumeEntity.profile = this.selectedProfile.name;
     resumeEntity.costCenter = this.centro;
     resumeEntity.bussUnit = this.unidad;
+    resumeEntity.provObservation = "En revisión";  
     let user = new UserEntity();  
     user.userId = this.hojaDeVidaService.obtenerIdUser();
     resumeEntity.userCreate = user;
@@ -478,7 +479,7 @@ export class RegistrarDialog {
           this.fileService.obtenerArregloDeArchivos().map( file => {
             file.moduleId = this.hojaDeVidaService.obtenerIdHojaDeVida();
             this.fileService.uploadFile(file).subscribe((data) =>{
-              if(data.status === 200){          
+              if(data.status === 200){
                 this.limpiarFileService();
               }
             })
@@ -541,7 +542,6 @@ export class FileDialog implements OnInit{
 
   abrirArchivo(fileEntity: FileEntity){
     this.file = fileEntity
-    //console.log("FILE ENTITY" + JSON.stringify(fileEntity));
     const imageName = 'name.pdf';
     this.fileName = imageName;
     const imageBlob = this.dataURItoBlob(this.file.filee);
@@ -562,14 +562,9 @@ export class FileDialog implements OnInit{
 
   guardarArchivos(){
     if(this.fileService.obtenerArregloDeArchivos()){
-      console.log("_____ entro");
-      
       this.fileService.obtenerArregloDeArchivos().map( file => {
-        console.log("_____ entro 1");
         file.moduleId = this.data.hojaDeVida.resumeId
-        console.log(file);
         this.fileService.uploadFile(file).subscribe((data) =>{
-          console.log("_____ entro 2");
           if(data.status === 200){    
             this.generalService.mostrarMensaje("success", "Archivos cargados correctamente.");      
             this.limpiarFileService();

@@ -8,7 +8,7 @@ export class AnswerEntity{
     description: string; //Respuesta
     verified: boolean;
     creationDate: Date;
-    userMod: UserEntity;
+    userMod : UserEntity | null;
     resumes: ResumeEntity;
     questions: QuestionsEntity;
     verifiedDate: Date;

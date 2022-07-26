@@ -45,6 +45,7 @@ import { ChipModule } from 'primeng/chip';
 import { UploadFileComponent } from './utils/upload-file/upload-file.component';
 //import { UploadFileModule } from './utils/upload-file/upload-file.module';
 import {ListboxModule} from 'primeng/listbox';
+import { RegistroComponent } from './registro/registro.component';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import {ListboxModule} from 'primeng/listbox';
     InicioComponent,
     MenuPrincipalComponent,
     HojaDeVidaComponent,
+    RegistroComponent,
     
   ],
   imports: [

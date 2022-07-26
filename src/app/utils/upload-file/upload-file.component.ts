@@ -42,13 +42,9 @@ export class UploadFileComponent implements OnInit {
   limpiarFileService(){
     this.fileArray = [];
     this.fileService.guardarArregloDeArchivos(this.fileArray);
-  }
-
- 
+  } 
 
   fileChangeEvent(fileInput: any) {      
-    
-    console.log(fileInput);
     for(let i = 0; i < this.maxFiles; i++){          
       
       if (fileInput.files && fileInput.files[i]) {
@@ -99,15 +95,10 @@ export class UploadFileComponent implements OnInit {
           validacion = 0;
         }
       })
-
-      console.log(validacion);        
-
       if(validacion !== 0){
         this.fileArray.push(fileEntity);
-        console.log("entro");
         this.fileService.guardarArregloDeArchivos(this.fileArray);
       }  
     }      
   }
-
 }

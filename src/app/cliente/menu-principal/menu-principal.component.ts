@@ -12,6 +12,7 @@ export class MenuPrincipalComponent implements OnInit {
   user : UserEntity | null
   nombre: string = ""
   rol: string = ""
+  showRegister : boolean = false;
   constructor(private hojaDeVidaService: HojaDeVidaService) { }
 
   ngOnInit(): void {
@@ -29,9 +30,11 @@ export class MenuPrincipalComponent implements OnInit {
             break;
           case 3:
             this.rol = "Proveedor";
+            if(this.nombre === "PROTMARK"){
+              this.showRegister = true;
+            }            
             break;  
         }
       }
   }
-
 }
