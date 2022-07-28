@@ -42,10 +42,18 @@ export class RegistroComponent implements OnInit {
       user.roleEntity = roleEntity;
           
       this.generalService.save(user).subscribe(data=>{
-        this.messageService.add({severity:'success', summary:'Agregado Correctamente'});
-        this.limpiarCampos();
+        if(data.status === 201){
+          this.messageService.add({severity:'success', summary:'Agregado Correctamente'});
+          this.limpiarCampos();
+        }else{
+          if(data.message === 'Email'){
+            this.messageService.add({severity:'error', summary:'Correo ya registrado.'});
+          }
+          if(data.message === 'Identification'){
+            this.messageService.add({severity:'error', summary:'Cédula ya registrada.'});
+          }
+        }      
       })
-
     }else{
       this.messageService.add({severity:'error', summary:'Contraseña incorrecta'});
     }

@@ -24,7 +24,6 @@ import { FileEntity } from 'src/app/model/fileEntity';
 export class HojaDeVidaComponent implements OnInit {
   data1 : any;
   cargando: boolean = false;
-  totalQuestions : number;
   rol: number = 0;
   label1: string;
   label2: string;
@@ -42,6 +41,7 @@ export class HojaDeVidaComponent implements OnInit {
   lista: AnswerEntity[] = [];
   preguntas: QuestionsEntity[];
   statusCount: Number[];
+  totalQuestions : Number[];
   chartOptions: any;
 
   fileToDownload : any;
@@ -139,6 +139,9 @@ export class HojaDeVidaComponent implements OnInit {
       this.label4 = this.statusCount[3] === undefined || this.statusCount[3] === null ? 'Revisado: ' +  0 : 'Revisado: ' + this.statusCount[3];
       this.label5 = this.statusCount[4] === undefined || this.statusCount[4] === null ? 'Terminado: ' +  0 : 'Terminado: ' + this.statusCount[4];
     })
+    this.preguntasService.findCount().subscribe((data)=>{
+      this.totalQuestions = data.result;
+    })
   }
 
   cargarDatos(){    
@@ -149,9 +152,7 @@ export class HojaDeVidaComponent implements OnInit {
     this.rol = this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId ;
 
     //Se busca las pregunta
-    this.preguntasService.findCount().subscribe((data)=>{
-      this.totalQuestions = parseInt(data.result.toString(), 10);
-    })
+    
     
     let user = new UserEntity();
     user.userId = this.hojaDeVidaService.obtenerIdUser();    

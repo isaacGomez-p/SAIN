@@ -105,13 +105,13 @@
                     <td>{{h.bussUnit}}</td>
                     <td>{{h.profile}}</td>
                     <td>{{h.name}}</td>
-                    <td *ngIf="h.verified && h.profile === 'TIPO A'" class="siLabel"> {{ h.verified }} / 12 </td>
-                    <td *ngIf="h.verified && h.profile === 'TIPO B'" class="siLabel"> {{ h.verified }} / 18 </td>
-                    <td *ngIf="h.verified && h.profile === 'TIPO C'" class="siLabel"> {{ h.verified }} / 19 </td>
+                    <td *ngIf="h.verified && h.profile === 'TIPO A'" class="siLabel"> {{ h.verified }} / {{ totalQuestions[0] }} </td>
+                    <td *ngIf="h.verified && h.profile === 'TIPO B'" class="siLabel"> {{ h.verified }} / {{ totalQuestions[1] }} </td>
+                    <td *ngIf="h.verified && h.profile === 'TIPO C'" class="siLabel"> {{ h.verified }} / {{ totalQuestions[2] }} </td>
 
-                    <td *ngIf="!h.verified && h.profile === 'TIPO A'" class="siLabel"> 0/ 12 </td>
-                    <td *ngIf="!h.verified && h.profile === 'TIPO B'" class="siLabel"> 0 / 18 </td>
-                    <td *ngIf="!h.verified && h.profile === 'TIPO C'" class="siLabel"> 0 / 19 </td>
+                    <td *ngIf="!h.verified && h.profile === 'TIPO A'" class="siLabel"> 0/ {{ totalQuestions[0] }} </td>
+                    <td *ngIf="!h.verified && h.profile === 'TIPO B'" class="siLabel"> 0 / {{ totalQuestions[1] }} </td>
+                    <td *ngIf="!h.verified && h.profile === 'TIPO C'" class="siLabel"> 0 / {{ totalQuestions[2] }} </td>
 
                     <td *ngIf="h.verificationDate == null">No ha sido verificado</td>
                     <td *ngIf="h.verificationDate != null">{{h.verificationDate | date:'yyyy-MM-dd hh:mm'}}</td>
