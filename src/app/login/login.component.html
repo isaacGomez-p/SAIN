@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-12 centrar">
                     <div class="p-inputgroup anchoInput">
-                        <span class="p-inputgroup-addon"><i class="pi pi-at"></i></span>
+                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
                         <input  
                             #inputLoginEmail="ngModel"
                             name="inputLoginEmail"
@@ -33,6 +33,8 @@
                             [maxlength]="60"
                             pInputText
                             (keyup.enter)="iniciarSesion()"
+                            placeholder="correo@ejemplo.com"
+                            
                             required />
                         <!--<div *ngIf="inputLoginEmail.errors && (inputLoginEmail.invalid || inputLoginEmail.touched)">
                             <small [class.ocultar]="inputLoginEmail.errors && inputLoginEmail.errors.required"> Campo Requerido </small>
@@ -216,7 +218,7 @@
                                 </div>
                                 <div class="col-12">
                                     <span class="ui-float-label">
-                                        <input 
+                                        <input                                             
                                             #inputClave="ngModel"
                                             name="inputClave"
                                             id="id-inputClave"

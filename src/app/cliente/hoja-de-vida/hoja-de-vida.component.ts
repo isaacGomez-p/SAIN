@@ -61,25 +61,14 @@ export class HojaDeVidaComponent implements OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit(): void {        
-    this.cargarDatos();
-    this.cargarContadores();    
-    //this.blobBase64File();
-  }
-
-  loadButtons(){
-    /*this.items = [
-      {label: 'Update', icon: 'pi pi-refresh', command: (h) => {
-          this.verHojaDeVida(h);
-      },
-      {label: 'Delete', icon: 'pi pi-times', command: () => {
-          this.delete();
-      },
-      {label: 'Angular.io', icon: 'pi pi-info', url: 'http://angular.io'},
-      {separator: true},
-      {label: 'Setup', icon: 'pi pi-cog', routerLink: ['/setup']}
-  ];*/
+    this.refresh();        
   }  
-    
+
+  refresh(){
+    this.cargarDatos();
+    this.cargarContadores();   
+  }
+  
   abrirDialogFile(hojaDeVida: ResumeEntity){
     const dialogRef = this.dialog.open(FileDialog, {      
       data: {
@@ -191,6 +180,8 @@ export class HojaDeVidaComponent implements OnInit {
       this.hojaDeVidaService.findByUserAssign(user).subscribe((data)=>{
         if(data.result.length === 0){
           this.messageService.add({severity:'info', summary:'Ups! No se encontraron hojas de vidas para revisar.'});
+          this.hojasDeVida = data.result;
+          this.hojasDeVidaAll = this.hojasDeVida;
         }else{
           this.hojasDeVida = data.result;
           this.hojasDeVidaAll = this.hojasDeVida;
@@ -408,9 +399,19 @@ export class ObservacionDialog implements OnInit {
       this.data.hojaDeVida.adminObservation = this.observacion;
       this.data.hojaDeVida.provObservation = "";
     }
-    if(this.habilitarRecomendacion){
-      this.data.hojaDeVida.status = this.seleccionRecomendacion.name;
-    }
+    if(this.habilitarRecomendacion && this.rol == 1){
+      if(this.seleccionRecomendacion === undefined){
+        this.generalService.mostrarMensaje("error", "Por favor seleccione una recomendación.");
+      }else{
+        this.data.hojaDeVida.status = this.seleccionRecomendacion.name;
+        this.actualizarHojaDeVida();
+      }      
+    }else{
+      this.actualizarHojaDeVida();
+    }    
+  }
+
+  actualizarHojaDeVida(){
     this.hojaDeVidaService.update(this.data.hojaDeVida).subscribe((data)=>{
       if(data.status === 200){
         this.generalService.mostrarMensaje("success", "Observación asignada correctamente.");
@@ -419,6 +420,7 @@ export class ObservacionDialog implements OnInit {
     })
     this.cerrarDialog()
   }
+
 
   cerrarDialog(){
     this.dialogRef.close();

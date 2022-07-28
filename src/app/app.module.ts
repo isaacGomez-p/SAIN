@@ -21,7 +21,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
-
+import {MatIconModule} from '@angular/material/icon';
 //Components
 import { FormularioComponent } from './cliente/formulario/formulario.component';
 import { RevisionComponent } from './cliente/revision/revision.component';
@@ -46,6 +46,7 @@ import { UploadFileComponent } from './utils/upload-file/upload-file.component';
 //import { UploadFileModule } from './utils/upload-file/upload-file.module';
 import {ListboxModule} from 'primeng/listbox';
 import { RegistroComponent } from './registro/registro.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -92,7 +93,9 @@ import { RegistroComponent } from './registro/registro.component';
     RadioButtonModule,
     //UploadFileModule,
     FileUploadModule,
-    ListboxModule
+    ListboxModule,
+    MatIconModule,
+    MatMenuModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

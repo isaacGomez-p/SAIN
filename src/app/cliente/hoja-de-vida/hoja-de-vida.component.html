@@ -39,13 +39,17 @@
                         <div class="col-10 md:col-10 lg:col-9 letraMediana">
                             Personas registradas - {{mostrando}}
                         </div>
-                        <div class="col-10 md:col-10 lg:col-3" style="align: right;">
+                        <div class="col-10 md:col-10 lg:col-2" style="align: right;">
                             <span class="p-button-icon-left">
                                 <i class="pi pi-search"></i>
                                 <button mat-button color="primary"  (click)="changeFilterStatus()">{{showFilterText}}</button>                                
                             </span>
                         </div>
-                    </div>                                        
+                        <div class="col-10 md:col-10 lg:col-1" style="align: right;">
+                            <p-button (click)="refresh()" icon="pi pi-refresh"></p-button>
+                        </div>
+                    </div>   
+                                                         
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -120,13 +124,35 @@
                     </td>
                     <td>
                         
-                        <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="row">
-                            <button mat-button color="primary"  (click)="verHojaDeVida(h)" *ngIf="rol !== 2">Ver</button>                            
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon>menu</mat-icon>
+                          </button>
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="verHojaDeVida(h)" *ngIf="rol !== 2">
+                              <mat-icon>chrome_reader_mode</mat-icon>
+                              <span>Ver</span>
+                            </button>
+                            <button mat-menu-item (click)="asignar(h)" *ngIf="rol == 1 || rol == 3">
+                              <mat-icon>assessment</mat-icon>
+                              <span>Asignar</span>
+                            </button>
+                            <button mat-menu-item (click)="eliminarDialog(h)" *ngIf="rol == 1 || rol == 2">
+                              <mat-icon>delete</mat-icon>
+                              <span>Eliminar</span>
+                            </button>
+                            <button mat-menu-item (click)="abrirDialogFile(h)">
+                                <mat-icon>attach_file</mat-icon>
+                                <span>Ver archivos</span>
+                            </button>
+                          </mat-menu>
+
+                       <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="row">
+                            <button mat-button color="primary"  (click)="verHojaDeVida(h)" *ngIf="rol !== 2">Ver</button>
                             <button mat-button color="primary" (click)="asignar(h)" *ngIf="rol == 1 || rol == 3">Asignar</button> 
                             <button mat-button color="primary" (click)="eliminarDialog(h)" *ngIf="rol == 1 || rol == 2">Eliminar</button> 
                             <button mat-button color="primary" (click)="abrirDialogFile(h)">Ver archivos</button> 
                         </mat-button-toggle-group>
-                        
+                        -->
                     </td>   
                 </tr>
             </ng-template>

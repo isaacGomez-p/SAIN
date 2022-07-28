@@ -66,6 +66,7 @@ html {
 .letraHeader{
     color: var(--colorLetraTitulo);
     font-size: var(--tamanoLetraHeader);
+    text-decoration: none
 }
 .letraPequena{
     font-size: var(--tamanoLetraPequena);
@@ -207,4 +208,8 @@ html {
 /*ANCHO DEL DROPDOWN*/
 .p-inputgroup .p-inputtext, .p-fluid .p-inputgroup .p-inputtext, .p-inputgroup .p-inputwrapper, .p-inputgroup .p-inputwrapper > .p-component {    
     width: 100% !important;
+}
+.matCardHeader{
+    background-color: transparent !important;
+    
 }

@@ -3,35 +3,35 @@
 <div class="cuadroHeader">
   <div class="grid">
     <div class="col-12 md:col-12 lg:col-3 imagenLogo">
-      <img src="./../assets/img/logo/logoSain.png" style="width: 50%;">
+      <br>
+      <img src="./../assets/img/logo/logoSain.jpg" style="width: 50%;">
     </div>
-    <div class="col-12 md:col-3 lg:col-1 centrarTextoVertical">
-      <label class="letraHeader centrarTexto" routerLink="/inicio">
-        Inicio
-      </label>
-    </div>    
-    <div class="col-12 md:col-5 lg:col-2 centrarTextoVertical">
-      <label class="letraHeader centrarTexto" routerLink="">
-        Sobre nosotros
-      </label>
-    </div>    
-    <div class="col-12 md:col-4 lg:col-2 centrarTextoVertical">
-      <label class="letraHeader centrarTexto">
-        Servicios
-      </label>
-    </div>    
-    <div class="col-12 md:col-6 lg:col-2 centrarTextoVertical">
-      <label class="letraHeader centrarTexto">
-        Contactos
-      </label>
-    </div>    
-    <div class="col-12 md:col-6 lg:col-1 centrarTextoVertical">
-      <label class="letraHeader centrarTexto" routerLink="/login" *ngIf="!inicionSesiada">
-        Login
-      </label>
-      <label class="letraHeader centrarTexto" (click)="cerrarSesion()" *ngIf="inicionSesiada">
-        Cerrar Sesión
-      </label>
+    <div class="col-12 md:col-12 lg:col-8 centrarTextoVertical">
+      <mat-card class="matCardHeader">        
+        <mat-card-actions align="end">                      
+          <a class="letraHeader centrarTexto"  href="https://www.sain.com.co/">
+            Inicio
+          </a>  
+          <a class="letraHeader centrarTexto" href="https://www.sain.com.co/Sobre-nosotros/">
+            Sobre nosotros
+          </a>
+          <a class="letraHeader centrarTexto" href="https://www.sain.com.co/Servicios/">
+            Servicios
+          </a>
+          <a class="letraHeader centrarTexto" href="https://www.sain.com.co/Contactos/">
+            Contactos
+          </a>
+          <a class="letraHeader centrarTexto" href="https://www.sain.com.co/Pol%C3%ADtica-de-Datos/">
+            Política de Datos
+          </a>
+          <label class="letraHeader centrarTexto" routerLink="/login" *ngIf="!inicionSesiada">
+            Login
+          </label>
+          <label class="letraHeader centrarTexto" (click)="cerrarSesion()" *ngIf="inicionSesiada">
+            Cerrar Sesión
+          </label>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>  
 </div>
