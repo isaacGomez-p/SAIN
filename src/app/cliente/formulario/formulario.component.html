@@ -20,7 +20,7 @@
                             <th>Respuesta</th> 
                             <th *ngIf="adding > 0">Verificado</th>   
                             <th *ngIf="adding > 0">Fec. Verificación</th>  
-                            <th *ngIf="adding > 0">Verificado Por</th>   
+                            <th *ngIf="adding > 0 && rol != 2 ">Verificado Por</th>   
                             <th *ngIf="adding > 0">Resultado</th>                                       
                         </tr>
                     </ng-template>
@@ -71,7 +71,7 @@
                                     <label *ngIf="p.answerObjeto.verifiedDate == null || p.answerObjeto.verifiedDate == undefined"> - </label>
                                 </div>
                             </td>     
-                            <td *ngIf="adding > 0">
+                            <td *ngIf="adding > 0 && rol != 2 ">
                                 <div>
                                     <label *ngIf="p.answerObjeto.verified === true && (p.answerObjeto.userMod != null && p.answerObjeto.userMod != undefined)">{{p.answerObjeto.userMod.name}}</label>
                                     <label *ngIf="p.answerObjeto.verified === false"> - </label>

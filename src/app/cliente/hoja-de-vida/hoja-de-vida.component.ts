@@ -241,6 +241,10 @@ export class HojaDeVidaComponent implements OnInit {
   }
 
   verHojaDeVida(hojaDeVida: ResumeEntity){
+    console.log("ENTRA Y" + hojaDeVida.resumeId);
+    console.log("ENTRA Y1" + JSON.stringify(hojaDeVida));
+    console.log("ENTRA Y2" + hojaDeVida.resumeId);
+    
     this.hojaDeVidaService.guardarIdHojaDevida(hojaDeVida.resumeId);
     this.hojaDeVidaService.guardarResume(hojaDeVida);
     this.hojaDeVidaService.guardarEstaEditando(true);
@@ -359,6 +363,10 @@ export class ObservacionDialog implements OnInit {
     {
       id: '2',
       name: 'No Apto'
+    },
+    {
+      id: '2',
+      name: 'P. Apto'
     }
   ];
 
@@ -374,11 +382,11 @@ export class ObservacionDialog implements OnInit {
   ngOnInit(): void {    
     this.rol = this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId;
     
-    if(this.data.hojaDeVida.recommendation === 'C'){
+    if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 1){
       this.habilitarRecomendacion = true;
     }
-    if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 2){
-      // entra como cliente
+    if(this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 2 || this.hojaDeVidaService.obtenerUserLogin()?.roleEntity.roleId == 1){
+      // entra como cliente o admin
       this.data.hojaDeVida.adminObservation = this.data.hojaDeVida.adminObservation == null || this.data.hojaDeVida.adminObservation == '' ? "" : this.data.hojaDeVida.adminObservation; 
       if(this.data.hojaDeVida.adminObservation.length > 0){
         this.observacion = this.data.hojaDeVida.adminObservation;

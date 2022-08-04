@@ -1,16 +1,7 @@
 <div class="grid">
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-10">
-
-        <p-sidebar [(visible)]="abrirMenu" position="left" [transitionOptions]="'0ms'" >
-            <h3 style="font-weight:normal">Left Sidebar</h3>
-                        
-        </p-sidebar>
-
-        <p-button type="text" (click)="abrirMenu = true" icon="pi pi-plus" label="Menú"></p-button>
-
-
-        <!--<mat-card>
+        <mat-card>
             <mat-card-title>Bienvenido </mat-card-title>
             <mat-card-subtitle>{{rol}}</mat-card-subtitle>
             <mat-card-actions align="end">                      
@@ -19,9 +10,9 @@
                 <button *ngIf="showRegister" mat-button color="primary" routerLink="/registro">Registrar Proveedor</button>              
             </mat-card-actions>
         </mat-card>
-        <p-divider></p-divider>-->
+        <p-divider></p-divider>
     </div>
-    
+    <!--
     <div class="col-1 md:col-1 lg:col-1"></div>
     <div class="col-10 md:col-10 lg:col-1"> 
         {{nombre}}
@@ -29,6 +20,6 @@
     <div class="col-10 md:col-10 lg:col-9"> 
         <div class="card">
         <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
-    </div>     
+    </div> ---->
 
 </div>
