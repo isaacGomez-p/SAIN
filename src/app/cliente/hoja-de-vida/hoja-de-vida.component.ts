@@ -555,7 +555,11 @@ export class FileDialog implements OnInit{
 
   cargarArchivos(hojaDeVida: ResumeEntity) {    
     this.fileService.getFilesByModuleId(hojaDeVida).subscribe(data =>{      
-      this.fileEntityList = JSON.parse(JSON.stringify(data.result));
+      if(data.result === undefined || data.result === null || data.result.length === 0){
+        this.fileEntityList = [];
+      }else{
+        this.fileEntityList = JSON.parse(JSON.stringify(data.result));
+      }      
     })
   }
 

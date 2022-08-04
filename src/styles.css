@@ -6,7 +6,7 @@
     --colorLetraTitulo: white;
     --colorBotonVolver: gray;
     --colorFondoPagina: rgb(230, 230, 255);
-    --tamanoLetraHeader: 30px;
+    --tamanoLetraHeader: 25px;
     --tamanoLetraFooter: 20px;
     --tamanoLetraGrande: 45px;
     --tamanoLetraMediana: 25px;
@@ -210,6 +210,9 @@ html {
     width: 100% !important;
 }
 .matCardHeader{
-    background-color: transparent !important;
-    
+    background-color: transparent !important;    
 }
+.v-line{
+    border-left: solid #000;  
+}
+   

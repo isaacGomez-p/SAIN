@@ -1,6 +1,4 @@
 <app-menu-principal></app-menu-principal>
-<br>
-<br>
 
 <div class="grid">
     <div class="col-1 md:col-1 lg:col-1"></div>
@@ -46,7 +44,7 @@
                             </span>
                         </div>
                         <div class="col-10 md:col-10 lg:col-1" style="align: right;">
-                            <p-button (click)="refresh()" icon="pi pi-refresh"></p-button>
+                            <p-button (click)="refresh()" icon="pi pi-refresh" pTooltip="Actualizar hojas de vida"></p-button>
                         </div>
                     </div>   
                                                          
@@ -61,7 +59,8 @@
                     <th pSortableColumn="name">Nombre Postulante<p-sortIcon field="name"></p-sortIcon></th>                                        
                     <th pSortableColumn="verified">Verificado<p-sortIcon field="verified"></p-sortIcon></th>
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
-                    <th pSortableColumn="userAssign.name">Asignado a<p-sortIcon field="userAssign.name"></p-sortIcon></th>                    
+                    <th pSortableColumn="userAssign.name" *ngIf="rol != 2">Asignado a<p-sortIcon field="userAssign.name"></p-sortIcon></th>
+                    <th pSortableColumn="creationDate">Fecha de creación<p-sortIcon field="creationDate"></p-sortIcon></th>
                     <th >Obs.</th>                    
                     <th style="text-align-last: center;">Acciones</th>
                 </tr>
@@ -85,10 +84,13 @@
                         
                     </th>                    
                     <th>
-                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">    
+                        <input pInputText type="date" (input)="dt.filter($any($event.target).value, 'verificationDate', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">    
+                    </th>
+                    <th *ngIf="rol != 2">
+                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'userAssign.name', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
                     </th>
                     <th>
-                        <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'userAssign.name', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
+                        <input pInputText type="date" (input)="dt.filter($any($event.target).value, 'creationDate', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
                     </th>
                     <th>
                         
@@ -116,9 +118,9 @@
                     <td *ngIf="h.verificationDate == null">No ha sido verificado</td>
                     <td *ngIf="h.verificationDate != null">{{h.verificationDate | date:'yyyy-MM-dd hh:mm'}}</td>
 
-                    <td *ngIf="h.userAssign != null">{{h.userAssign.name}}</td>
-                    <td *ngIf="h.userAssign == null">No ha sido asignado</td>
-                    
+                    <td *ngIf="h.userAssign != null && rol != 2">{{h.userAssign.name}}</td>
+                    <td *ngIf="h.userAssign == null && rol != 2">No ha sido asignado</td>
+                    <td>{{h.creationDate | date:'d/M/yy HH:mm' }}</td>
                     <td>
                         <button mat-button color="primary" (click)="verObservacion(h)">Ver</button>
                     </td>

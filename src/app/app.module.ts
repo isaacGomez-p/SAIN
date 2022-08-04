@@ -17,6 +17,8 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import { FileUploadModule } from 'primeng/fileupload';
+import {SidebarModule} from 'primeng/sidebar';
+import {TabMenuModule} from 'primeng/tabmenu';
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -95,7 +97,9 @@ import { MatMenuModule } from '@angular/material/menu';
     FileUploadModule,
     ListboxModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    SidebarModule,
+    TabMenuModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
