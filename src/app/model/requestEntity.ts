@@ -1,4 +1,4 @@
 export class RequestEntity {
-    id: number;
+    id: number | undefined;
     data: string;
 }
