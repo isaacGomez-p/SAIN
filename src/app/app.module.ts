@@ -19,6 +19,7 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import { FileUploadModule } from 'primeng/fileupload';
 import {SidebarModule} from 'primeng/sidebar';
 import {TabMenuModule} from 'primeng/tabmenu';
+import {CardModule} from 'primeng/card';
 //MATERIAL
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -49,6 +50,7 @@ import { UploadFileComponent } from './utils/upload-file/upload-file.component';
 import {ListboxModule} from 'primeng/listbox';
 import { RegistroComponent } from './registro/registro.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { PerfilComponent } from './registro/perfil/perfil.component';
 
 
 @NgModule({
@@ -63,7 +65,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MenuPrincipalComponent,
     HojaDeVidaComponent,
     RegistroComponent,
-    
+    PerfilComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +101,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatIconModule,
     MatMenuModule,
     SidebarModule,
-    TabMenuModule
+    TabMenuModule,
+    CardModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

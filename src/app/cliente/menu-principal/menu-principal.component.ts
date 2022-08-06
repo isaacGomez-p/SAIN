@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { UserEntity } from 'src/app/model/userEntity';
+import { GeneralService } from 'src/app/service/general/general.service';
 import { HojaDeVidaService } from 'src/app/service/hojaDeVida/hoja-de-vida.service';
 
 @Component({
@@ -19,21 +20,13 @@ export class MenuPrincipalComponent implements OnInit {
   nombre: string = ""
   rol: string = ""
   showRegister : boolean = false;
-  constructor(private hojaDeVidaService: HojaDeVidaService,
-    private primengConfig: PrimeNGConfig) { }
 
-  ngOnInit(): void {
+  seleccion: number = 1;
+  
+  constructor(private hojaDeVidaService: HojaDeVidaService, 
+    private generalService: GeneralService) { }
 
-    this.primengConfig.ripple = true;
-
-    this.items = [
-      {label: 'Inicio', icon: 'pi pi-fw pi-home'},
-      {label: 'Lista de Hojas de Vida', icon: 'pi pi-fw pi-calendar'},
-      /*{label: 'Edit', icon: 'pi pi-fw pi-pencil'},
-      {label: 'Documentation', icon: 'pi pi-fw pi-file'},*/
-      {label: 'Perfil', icon: 'pi pi-fw pi-cog'}
-  ];
-  this.activeItem = this.items[0];
+  ngOnInit(): void {    
 
     if(this.hojaDeVidaService.obtenerUserLogin() != undefined &&
       this.hojaDeVidaService.obtenerUserLogin() != null){
@@ -43,17 +36,77 @@ export class MenuPrincipalComponent implements OnInit {
         switch(this.user!.roleEntity.roleId){
           case 1:
             this.rol = "Admin";
+            this.menuAdmin();
             break;
           case 2:
             this.rol = "Cliente";
+            this.menuCliente();
             break;
           case 3:
             this.rol = "Proveedor";
             if(this.nombre === "PROTMARK"){
               this.showRegister = true;
             }            
+            this.menuProveedor();
             break;  
         }
       }
+                
+      
+
+      
   }
+  
+  perfil(){
+    this.seleccion = 0;
+    this.generalService.navegar("perfil")
+  }
+
+  hojasDeVida(){
+    this.seleccion = 1;
+    this.generalService.navegar("hojaDeVida")
+  }
+
+  proveedor(){
+    this.seleccion = 3;
+    this.generalService.navegar("registro")
+  }
+
+  menuProveedor(){
+    this.items = [
+      {label: this.rol + ": " + this.nombre, icon: 'pi pi-user', command: (event) => {
+        this.perfil();               
+      }},        
+      {label: 'Lista de Hojas de Vida', icon: 'pi pi-book', command: (event) => {
+        this.hojasDeVida();               
+      }},
+      {label: 'Registrar Proveedor', icon: 'pi pi-user-plus', command: (event) => {
+        this.proveedor();               
+      }},
+    ];    
+  }
+
+  menuCliente(){
+    this.items = [
+      {label: this.rol + ": " + this.nombre, icon: 'pi pi-user', command: (event) => {
+        this.perfil();               
+      }},        
+      {label: 'Lista de Hojas de Vida', icon: 'pi pi-book', command: (event) => {
+        this.hojasDeVida();               
+      }}        
+    ];
+    
+  }
+
+  menuAdmin(){
+    this.items = [
+      {label: this.rol + ": " + this.nombre, icon: 'pi pi-user', command: (event) => {
+        this.perfil();               
+      }},        
+      {label: 'Lista de Hojas de Vida', icon: 'pi pi-book', command: (event) => {
+        this.hojasDeVida();               
+      }}       
+    ];    
+  }
+
 }

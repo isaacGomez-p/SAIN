@@ -23,7 +23,7 @@ export class HojaDeVidaService {
   private _delete = this._controller + "delete";
 
   private idHojaDeVida: number;
-  private idUser: number;
+  private idUser: number | undefined;
   private user : UserEntity | null;
   private resume: ResumeEntity | null;
   private editar: boolean;
@@ -65,7 +65,7 @@ export class HojaDeVidaService {
     return this.http.post<ResponseService>(this._delete, request);
   }
 
-  public recCount(user: number | null, tipo: string) : Observable<ResponseService> {  
+  public recCount(user: number | undefined, tipo: string) : Observable<ResponseService> {  
     let requestEntity = {
       id: user,
       data: tipo
@@ -81,11 +81,11 @@ export class HojaDeVidaService {
     return this.idHojaDeVida;
   }
 
-  public guardarIdUser(id: number){
+  public guardarIdUser(id: number | undefined){
     this.idUser = id;
   }
 
-  public obtenerIdUser() : number{
+  public obtenerIdUser() : number | undefined{
     return this.idUser;
   }
 

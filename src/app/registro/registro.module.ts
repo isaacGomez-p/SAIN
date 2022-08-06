@@ -4,15 +4,15 @@ import { RegistroComponentRoutingModule } from './registro-routing.module';
 import { RevisionModule } from '../cliente/revision/revision.module';
 import { FormularioModule } from '../cliente/formulario/formulario.module';
 
-
-
 @NgModule({
-  declarations: [],
+  declarations: [
+//    PerfilComponent    
+  ],
   imports: [
     CommonModule,
     RegistroComponentRoutingModule,
     RevisionModule,
-    FormularioModule
+    FormularioModule,
   ],
   exports: []
 })

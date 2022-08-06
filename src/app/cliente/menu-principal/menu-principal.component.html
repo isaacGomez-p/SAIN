@@ -1,6 +1,5 @@
-<div class="grid">
-    <div class="col-1 md:col-1 lg:col-1"></div>
-    <div class="col-10 md:col-10 lg:col-10">
+<div class="grid">    
+   <!-- <div class="col-10 md:col-10 lg:col-10">
         <mat-card>
             <mat-card-title>Bienvenido </mat-card-title>
             <mat-card-subtitle>{{rol}}</mat-card-subtitle>
@@ -11,15 +10,15 @@
             </mat-card-actions>
         </mat-card>
         <p-divider></p-divider>
-    </div>
-    <!--
+    </div>-->
+    
     <div class="col-1 md:col-1 lg:col-1"></div>
-    <div class="col-10 md:col-10 lg:col-1"> 
-        {{nombre}}
-    </div>
-    <div class="col-10 md:col-10 lg:col-9"> 
+    
+    <div class="col-10 md:col-10 lg:col-10"> 
         <div class="card">
-        <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
-    </div> ---->
+        <p-tabMenu [model]="items" 
+            [activeItem]="activeItem" 
+            ></p-tabMenu>
+    </div>  
 
 </div>

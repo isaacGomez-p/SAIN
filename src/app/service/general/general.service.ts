@@ -15,8 +15,10 @@ export class GeneralService {
 
   private _controller =  environment.URL + "user/";
   private _save = this._controller + "save";
+  private _update = this._controller + "update";
   private _login = this._controller + "login";
   private _findByRole = this._controller + "findByRole";
+  private _findById = this._controller + "findById";
 
   constructor(private http: HttpClient,
     private router: Router,
@@ -30,6 +32,10 @@ export class GeneralService {
     return this.http.post<ResponseService>(this._save, user);
   }
 
+  public update(user: UserEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._update, user);
+  }
+
   public navegar(url: string){
     url = "/"+url;
     this.router.navigate([url], {skipLocationChange:true})
@@ -37,6 +43,10 @@ export class GeneralService {
 
   public findByRole(data: RequestEntity) : Observable<ResponseService> {  
     return this.http.post<ResponseService>(this._findByRole, data);
+  }
+
+  public findUser(data: RequestEntity) : Observable<ResponseService> {  
+    return this.http.post<ResponseService>(this._findById, data);
   }
 
   public mostrarMensaje(tipo: string, mensaje: string){

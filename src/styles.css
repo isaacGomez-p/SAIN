@@ -216,3 +216,15 @@ html {
     border-left: solid #000;  
 }
    
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    background: var(--colorHeader) !important;
+    border-radius: 30px;
+    border-color: #dee2e6 #dee2e6 #ffffff #dee2e6;
+    color: white !important;
+  }
+
+  .p-tabmenu .p-tabmenu-nav {
+    background: transparent;
+    border-bottom: 1px solid var(--colorHeader) !important;          
+  }
