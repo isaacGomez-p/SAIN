@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HojaDeVidaComponentRoutingModule } from './hoja-de-vida-routing.module';
 import {TimelineModule} from 'primeng/timeline';
-import { AsignarDialog, FileDialog, ObservacionDialog, RegistrarDialog } from './hoja-de-vida.component';
+import { AsignarDialog, FileDialog, ObservacionDialog, RegistrarDialog, ReportesDialog } from './hoja-de-vida.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ import { UploadFileComponent } from 'src/app/utils/upload-file/upload-file.compo
 import {ListboxModule} from 'primeng/listbox';
 
 @NgModule({
-  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog, FileDialog, UploadFileComponent],
+  declarations: [RegistrarDialog, AsignarDialog, ObservacionDialog, ConfirmacionDialog, FileDialog, UploadFileComponent, ReportesDialog],
   imports: [
     CommonModule,
     HojaDeVidaComponentRoutingModule,    

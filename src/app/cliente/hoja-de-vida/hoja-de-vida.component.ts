@@ -82,6 +82,19 @@ export class HojaDeVidaComponent implements OnInit {
     });  
   }
 
+  abrirDialogReportes(hojaDeVida: ResumeEntity){
+    const dialogRef = this.dialog.open(ReportesDialog, {      
+      data: {
+        hojaDeVida: hojaDeVida
+      },
+      width: '50%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });  
+  }
+
   changeFilterStatus(){
     this.showFilter = !this.showFilter;
     this.showFilterText = this.showFilter ? "Ocultar Filtros" : "Mostrar Filtros";
@@ -596,5 +609,56 @@ export class FileDialog implements OnInit{
     let file: FileEntity[]  = [];
     this.fileService.guardarArregloDeArchivos(file);
   }
+
+}
+
+@Component({
+  selector: 'dialog-file',
+  templateUrl: 'dialog-reportes.html',
+})
+export class ReportesDialog implements OnInit{
+  
+  reportePreEmpleo: string = "preEmpleo";
+  reportePreEmpleoConTabla: string = "preEmpleoConTabla";
+
+  reporteSeleccion: string;
+
+  ngOnInit() {
+      
+  }
+
+  constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,    
+    private generalService: GeneralService ){ }
+
+  
+
+  cerrarDialog(){
+    this.dialogRef.close();
+  } 
+
+  generarReporte(){
+
+    if(this.reporteSeleccion === undefined){
+      this.generalService.mostrarMensaje("error", "Por favor seleccione una opción valida.");
+      return;
+    }
+
+    console.log(this.reporteSeleccion);
+    
+
+    if(this.reporteSeleccion === this.reportePreEmpleo){
+      // Lógica para el reporte normal
+    }else if(this.reporteSeleccion === this.reportePreEmpleoConTabla){
+      // Lógica para el reporte con tabla
+    }
+    
+    //servicio para consumir
+    this.generalService.mostrarMensaje("success", "Reporte generado correctamente.");      
+    
+    
+    
+    this.cerrarDialog();
+  }  
 
 }
