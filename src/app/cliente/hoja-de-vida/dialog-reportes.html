@@ -2,11 +2,11 @@
 <mat-dialog-content class="mat-typography">
     <br>
     <div class="p-field-radiobutton">
-        <p-radioButton name="reporteSeleccion" value=reportePreEmpleo [(ngModel)]="reporteSeleccion" inputId="reporte1"></p-radioButton>
+        <p-radioButton name="reporteSeleccion" [value]=reportePreEmpleo [(ngModel)]="reporteSeleccion" inputId="reporte1"></p-radioButton>
         <label for="reporte1">Certificación Analisis PRE EMPLEO</label>
     </div>
     <div class="p-field-radiobutton">
-        <p-radioButton name="reporteSeleccion" value=reportePreEmpleoConTabla [(ngModel)]="reporteSeleccion" inputId="reporte2"></p-radioButton>
+        <p-radioButton name="reporteSeleccion" [value]=reportePreEmpleoConTabla [(ngModel)]="reporteSeleccion" inputId="reporte2"></p-radioButton>
         <label for="reporte2">Certificación Analisis PRE EMPLEO con tabla</label>
     </div>    
 </mat-dialog-content>

@@ -13,6 +13,7 @@ import { QuestionsEntity } from 'src/app/model/questionsEntity';
 import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
 import { FileService } from 'src/app/service/file/file.service';
 import { FileEntity } from 'src/app/model/fileEntity';
+import { ReportesService } from 'src/app/service/reportes/reportes.service';
 
 
 
@@ -157,8 +158,64 @@ export class HojaDeVidaComponent implements OnInit {
     })
   }
 
-  cargarDatos(){    
-    this.cargando = true;
+  cargarDatos(){         
+      this.cargando = true;
+  
+      this.nombre = this.hojaDeVidaService.obtenerUserLogin()?.name;
+      //Se asigna el rol del usuario
+      this.rol = this.hojaDeVidaService.obtenerUserLogin()!.roleEntity.roleId ;
+  
+      //Se busca las pregunta
+      
+      
+      let user = new UserEntity();
+      user.userId = this.hojaDeVidaService.obtenerIdUser();    
+      if(this.rol == 2){
+        this.hojaDeVidaService.findAll(user).subscribe((data)=>{
+          if(data.result.length === 0){
+            this.messageService.add({severity:'info', summary:'No hay hojas de vida para registradas.'});
+          }else{
+            this.hojasDeVida = data.result;
+            this.hojasDeVidaAll = this.hojasDeVida;        
+          }      
+          this.cargando = false;
+        })
+  
+        /*.hojaDeVidaService.findByUserCreate(user).subscribe((data)=>{
+          if(data.result.length === 0){
+            this.messageService.add({severity:'info', summary:'No se encontraron hojas de vidas registradas'});
+            this.hojasDeVida = data.result;
+          }else{
+            this.hojasDeVida = data.result;
+            this.hojasDeVidaAll = this.hojasDeVida;
+          }      
+          this.cargando = false;
+        })*/
+      } else if(this.rol == 1) {
+        this.hojaDeVidaService.findAll(user).subscribe((data)=>{
+          if(data.result.length === 0){
+            this.messageService.add({severity:'info', summary:'No hay hojas de vida para asignar.'});
+          }else{
+            this.hojasDeVida = data.result;
+            this.hojasDeVidaAll = this.hojasDeVida;        
+          }      
+          this.cargando = false;
+        })
+      }else if(this.rol == 3){
+        this.hojaDeVidaService.findByUserAssign(user).subscribe((data)=>{
+          if(data.result.length === 0){
+            this.messageService.add({severity:'info', summary:'Ups! No se encontraron hojas de vidas para revisar.'});
+            this.hojasDeVida = data.result;
+            this.hojasDeVidaAll = this.hojasDeVida;
+          }else{
+            this.hojasDeVida = data.result;
+            this.hojasDeVidaAll = this.hojasDeVida;
+          }
+          this.cargando = false;
+        })            
+      }
+
+    /*this.cargando = true;
 
     this.nombre = this.hojaDeVidaService.obtenerUserLogin()?.name;
     //Se asigna el rol del usuario
@@ -203,7 +260,7 @@ export class HojaDeVidaComponent implements OnInit {
         this.cargando = false;
       })
     }
-    
+    */
   }
 
   filtroPorEstados(filtro: number){    
@@ -618,8 +675,10 @@ export class FileDialog implements OnInit{
 })
 export class ReportesDialog implements OnInit{
   
-  reportePreEmpleo: string = "preEmpleo";
-  reportePreEmpleoConTabla: string = "preEmpleoConTabla";
+  file:FileEntity;
+
+  reportePreEmpleo: string = "reportePreEmpleo";
+  reportePreEmpleoConTabla: string = "reportePreEmpleoConTabla";
 
   reporteSeleccion: string;
 
@@ -629,7 +688,8 @@ export class ReportesDialog implements OnInit{
 
   constructor(public dialogRef: MatDialogRef<RegistrarDialog>, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData,    
-    private generalService: GeneralService ){ }
+    private generalService: GeneralService,
+    private reportesService: ReportesService ){ }
 
   
 
@@ -646,19 +706,57 @@ export class ReportesDialog implements OnInit{
 
     console.log(this.reporteSeleccion);
     
-
-    if(this.reporteSeleccion === this.reportePreEmpleo){
+    if(this.reporteSeleccion === this.reportePreEmpleo){      
+      this.reportesService.generateNoTable(this.data.hojaDeVida.resumeId).subscribe((res)=>{
+        if(res.status === 200){
+          this.file = new FileEntity();
+          this.file.fileName = new Date() + " " + this.data.hojaDeVida.name;
+          this.file.filee = JSON.parse(JSON.stringify(res.result));
+          this.abrirArchivo(this.file);
+          //servicio para consumir
+          this.generalService.mostrarMensaje("success", "Reporte generado correctamente.");
+        }
+      }, err => {
+        this.generalService.mostrarMensaje("error", "Error al generar el reporte.");
+      })
       // Lógica para el reporte normal
-    }else if(this.reporteSeleccion === this.reportePreEmpleoConTabla){
+    }else if(this.reporteSeleccion === this.reportePreEmpleoConTabla){      
       // Lógica para el reporte con tabla
+      this.reportesService.generate(this.data.hojaDeVida.resumeId).subscribe((res)=>{
+        if(res.status === 200){
+          this.file = new FileEntity();
+          this.file.fileName = new Date() + " " + this.data.hojaDeVida.name;
+          this.file.filee = JSON.parse(JSON.stringify(res.result));
+          this.abrirArchivo(this.file);
+          //servicio para consumir
+          this.generalService.mostrarMensaje("success", "Reporte generado correctamente.");      
+        }
+      }, err => {
+        this.generalService.mostrarMensaje("error", "Error al generar el reporte.");      
+      })
     }
-    
-    //servicio para consumir
-    this.generalService.mostrarMensaje("success", "Reporte generado correctamente.");      
-    
-    
-    
+                    
     this.cerrarDialog();
   }  
+
+  abrirArchivo(fileEntity: FileEntity){
+    this.file = fileEntity
+    const imageName = 'name.pdf';    
+    const imageBlob = this.dataURItoBlob(this.file.filee);
+    const imageFile = new File([imageBlob], imageName, { type: 'application/pdf' });
+    const url = URL.createObjectURL(imageFile);
+    window.open(url)
+  }
+
+  dataURItoBlob(dataURI: any) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'application/pdf' });    
+    return blob;
+ }
 
 }
