@@ -3,12 +3,13 @@
     <div class="col-12 md:col-12 lg:col-12">
         <label>Subir archivos</label>
     </div>
+    <!-- 5 MB-->
     <div class="col-12 md:col-12 lg:col-12">
         <p-fileUpload 
         name="myfile[]" 
         [multiple]=true
         accept="application/pdf/*"
-        [maxFileSize]="500000"
+        [maxFileSize]="5000000" 
         (uploadHandler)="fileChangeEvent($event)"
         [customUpload]="true"
         [fileLimit]=5

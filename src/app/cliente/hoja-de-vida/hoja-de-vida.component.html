@@ -152,7 +152,7 @@
                                 <mat-icon>attach_file</mat-icon>
                                 <span>Ver archivos</span>
                             </button>
-                            <button mat-menu-item (click)="abrirDialogReportes(h)">
+                            <button mat-menu-item (click)="abrirDialogReportes(h)" *ngIf="h.status != null && h.status != undefined && rol != 3">
                                 <mat-icon>attach_file</mat-icon>
                                 <span>Reportes</span>
                             </button>
