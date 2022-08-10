@@ -105,7 +105,10 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-h>
-                <tr>
+                <tr  
+                [ngClass]="{'new-resume': rol !== 3 && (h.userAssign == null || h.userAssign == undefined), 
+                            'new-assign' : rol === 3 && (h.userAssign != null || h.userAssign == undefined) && h.verified === 0 }">
+            
                     <td>{{h.numberId}}</td>
                     <td>{{h.costCenter}}</td>
                     <td>{{h.bussUnit}}</td>
@@ -153,7 +156,7 @@
                                 <span>Ver archivos</span>
                             </button>
                             <button mat-menu-item (click)="abrirDialogReportes(h)" *ngIf="h.status != null && h.status != undefined && rol != 3">
-                                <mat-icon>attach_file</mat-icon>
+                                <mat-icon>list_alt</mat-icon>
                                 <span>Reportes</span>
                             </button>
                           </mat-menu>

@@ -228,3 +228,11 @@ html {
     background: transparent;
     border-bottom: 1px solid var(--colorHeader) !important;          
   }
+
+  .new-resume {
+    background-color: rgba(255, 145, 0, 0.685) !important;
+  }
+
+  .new-assign {
+    background-color: rgba(255, 145, 0, 0.685) !important;
+  }
