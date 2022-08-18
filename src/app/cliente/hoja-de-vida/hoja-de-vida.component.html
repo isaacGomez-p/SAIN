@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-10 md:col-10 lg:col-1" style="align: right;">
                             <p-button (click)="refresh()" icon="pi pi-refresh" pTooltip="Actualizar hojas de vida"></p-button>
-                        </div>
+                        </div>                    
                     </div>   
                                                          
                 </div>
@@ -158,7 +158,7 @@
                             <button mat-menu-item (click)="abrirDialogReportes(h)" *ngIf="h.status != null && h.status != undefined && rol != 3">
                                 <mat-icon>list_alt</mat-icon>
                                 <span>Reportes</span>
-                            </button>
+                            </button>                    
                           </mat-menu>
 
                        <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="row">
@@ -175,6 +175,9 @@
         <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="rol === 2">
             <button mat-raised-button color="primary" (click)="agregar()" [disabled]="cargando" class="botonSiguiente"> <i class="fa-thin fa-plus"></i>Agregar</button>
         
+        </div>
+        <div class="col-10 md:col-10 lg:col-4 sm:col-3" id="right" *ngIf="rol === 1">
+            <button mat-raised-button color="primary" (click)="abrirDialogFactura()" [disabled]="cargando" class="botonSiguiente"> <i class="cloud_download"></i>Generar Factura</button>
         </div>
     </div>    
 </div>

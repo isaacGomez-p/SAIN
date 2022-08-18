@@ -14,6 +14,7 @@ import { ConfirmacionDialog } from '../dialog/confirmacionDialog';
 import { FileService } from 'src/app/service/file/file.service';
 import { FileEntity } from 'src/app/model/fileEntity';
 import { ReportesService } from 'src/app/service/reportes/reportes.service';
+import {FormGroup, FormControl} from '@angular/forms';
 
 
 
@@ -87,6 +88,19 @@ export class HojaDeVidaComponent implements OnInit {
     const dialogRef = this.dialog.open(ReportesDialog, {      
       data: {
         hojaDeVida: hojaDeVida
+      },
+      width: '50%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });  
+  }
+
+  abrirDialogFactura(){
+    const dialogRef = this.dialog.open(FacturaDialog, {      
+      data: {
+        id : 0
       },
       width: '50%'
     });
@@ -759,4 +773,94 @@ export class ReportesDialog implements OnInit{
     return blob;
  }
 
+}
+
+@Component({
+  selector: 'dialog-factura',
+  templateUrl: 'dialog-factura.html',
+})
+export class FacturaDialog {
+
+  status : any[];  
+  range : any;
+  seleccionRecomendacion : any = "";
+  href: string;
+
+  constructor(public dialogRef: MatDialogRef<FacturaDialog>, 
+    @Inject(MAT_DIALOG_DATA) public data: MatDialogModule,
+    private hojaDeVidaService: HojaDeVidaService,
+    private reportesService: ReportesService,
+    private generalService: GeneralService){
+      this.status = [
+        {
+          id: '0',
+          name: 'Todos'
+        },
+        {
+          id: '1',
+          name: 'Apto'
+        },
+        {
+          id: '2',
+          name: 'No Apto'
+        },
+        {
+          id: '2',
+          name: 'P. Apto'
+        }
+      ];
+
+      this.range = new FormGroup({
+        start: new FormControl(null),
+        end: new FormControl(null),
+      });
+  }
+    rangeDates: Date[];
+
+  generarExcel(){
+    
+    let requestEntity = new RequestEntity();
+    requestEntity.startDate = this.rangeDates[0];
+    requestEntity.endDate = this.rangeDates[1];
+    requestEntity.data1 = this.seleccionRecomendacion.name;
+    
+    this.reportesService.generateExcel(requestEntity).subscribe((res)=>{
+      if(res.status === 200){
+        let file = new FileEntity();
+        file.fileName = "Factura" + new Date().getTime();
+        file.filee = JSON.parse(JSON.stringify(res.result));
+        this.abrirArchivo(file);
+        //servicio para consumir
+        this.generalService.mostrarMensaje("success", "Factura generada correctamente.");
+      }
+    }, err => {
+      this.generalService.mostrarMensaje("error", "Error al generar factura.");
+    })
+
+  }
+
+  abrirArchivo(fileEntity: FileEntity){
+    let file = fileEntity
+    const imageBlob = this.dataURItoBlob(file.filee);
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(imageBlob);
+    link.download = `Factura_${new Date().getDate()}.xlsx`;
+    link.click();
+  }
+
+  dataURItoBlob(dataURI: any) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'application/xlsx' });    
+    return blob;
+ }
+
+  cerrarDialog(){
+    this.dialogRef.close();
+  }  
+  
 }

@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Generar Factura</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="col-11 md:col-11 lg:col-11">
+        <label>Seleccione un Rango de Fechas:</label>
+    </div>
+    <div class="field col-12 md:col-4">
+        <div>
+            <label for="range">Fecha: </label>
+            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" inputId="range" class="p-inputgroup" ></p-calendar>
+        </div>
+    </div>
+    <br>
+    <div class="col-11 md:col-11 lg:col-11">
+        <label>Filtrar Por Situacion:</label>
+    </div>
+    <div class="col-11 md:col-11 lg:col-11" >
+        <div *ngFor="let r of status" class="p-field-checkbox">
+            <p-radioButton [inputId]="r.id" name="r" [value]="r" [(ngModel)]="seleccionRecomendacion" ></p-radioButton>
+            <label [for]="r.id">{{r.name}}</label>
+            <br>
+            <br>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Cerrar</button>  
+  <button mat-raised-button color="primary" (click)="generarExcel()" cdkFocusInitial>Generar</button>
+</mat-dialog-actions>
