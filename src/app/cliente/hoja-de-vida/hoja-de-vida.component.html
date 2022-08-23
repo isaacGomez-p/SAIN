@@ -61,6 +61,7 @@
                     <th pSortableColumn="verificationDate">Fecha Verificación<p-sortIcon field="verificationDate"></p-sortIcon></th>
                     <th pSortableColumn="userAssign.name" *ngIf="rol != 2">Asignado a<p-sortIcon field="userAssign.name"></p-sortIcon></th>
                     <th pSortableColumn="creationDate">Fecha de creación<p-sortIcon field="creationDate"></p-sortIcon></th>
+                    <th pSortableColumn="assignDate" *ngIf="rol == 1">Asignado en<p-sortIcon field="assignDate"></p-sortIcon></th>
                     <th pSortableColumn="status" *ngIf="rol != 3"> Situación <p-sortIcon field="status"></p-sortIcon></th>
                     <th >Obs.</th>
                     <th style="text-align-last: center;">Acciones</th>
@@ -92,6 +93,9 @@
                     </th>
                     <th>
                         <input pInputText type="date" (input)="dt.filter($any($event.target).value, 'creationDate', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
+                    </th>
+                    <th *ngIf="rol == 1">
+                        <input pInputText type="date" (input)="dt.filter($any($event.target).value, 'assignDate', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
                     </th>
                     <th *ngIf="rol != 3">
                         <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'status', 'startsWith')" placeholder="" class="p-column-filter anchoInputBusqueda">                
@@ -128,6 +132,9 @@
                     <td *ngIf="h.userAssign != null && rol != 2">{{h.userAssign.name}}</td>
                     <td *ngIf="h.userAssign == null && rol != 2">No ha sido asignado</td>
                     <td>{{h.creationDate | date:'yy-MM-dd HH:mm' }}</td>
+
+                    <td *ngIf="rol == 1 && h.assignDate != null && h.assignDate != undefined">{{h.assignDate | date:'yy-MM-dd HH:mm' }}</td>
+                    <td *ngIf="rol == 1 && (h.assignDate == null || h.assignDate == undefined)">{{h.assignDate | date:'yy-MM-dd HH:mm' }}</td>
 
                     <td *ngIf="h.status != null && h.status != undefined && rol != 3">{{ h.status }}</td>
                     <td *ngIf="(h.status == null || h.status == undefined) && rol != 3"> - </td>

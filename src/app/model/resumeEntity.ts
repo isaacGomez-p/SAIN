@@ -11,6 +11,7 @@ export class ResumeEntity {
     //Variables para el rol Proveedor
     verified: number; //Verificado boolean?
     verificationDate: Date; //Fecha de Verificación
+    assignDate: Date; //Fecha de asignacion
     userBy : UserEntity | null; //Verificado Por
     recommendation: string; //Recomendacion    
 
